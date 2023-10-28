@@ -1,4 +1,5 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import ActionButton from "../ActionButton";
 
 const WelcomeElement = () => {
   return (
@@ -32,13 +33,11 @@ const WelcomeElement = () => {
         consectetur nisi. In et diam a turpis lobortis pharetra. Vestibulum ante
         ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;
       </Typography>
-      <Button
-        variant="contained"
-        color="secondary"
+      <ActionButton
         sx={{ mt: "1.2rem", width: "15rem", p: "10px 0", fontSize: "1.3rem" }}
       >
         Dołącz do nas
-      </Button>
+      </ActionButton>
     </Box>
   );
 };
