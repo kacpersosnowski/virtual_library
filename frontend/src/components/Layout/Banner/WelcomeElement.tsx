@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import ActionButton from "../ActionButton";
+import ActionButton from "../../UI/ActionButton";
 
 const WelcomeElement = () => {
   return (
