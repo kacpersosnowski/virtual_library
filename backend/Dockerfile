@@ -6,7 +6,7 @@ COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
 RUN apk update && \
-    apk add dos2unix && \
+    apk --no-cache add dos2unix && \
     dos2unix mvnw && \
     ./mvnw dependency:go-offline
 
@@ -24,5 +24,7 @@ COPY --from=builder ${EXTRACTED}/dependencies/ ./
 COPY --from=builder ${EXTRACTED}/spring-boot-loader/ ./
 COPY --from=builder ${EXTRACTED}/snapshot-dependencies/ ./
 COPY --from=builder ${EXTRACTED}/application/ ./
+
+EXPOSE 8080
 
 ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
