@@ -3,6 +3,7 @@ import React from "react";
 
 type Props = {
   coverImage: string;
+  zIndex: number;
 };
 
 const BookCover: React.FC<Props> = (props) => {
@@ -16,7 +17,7 @@ const BookCover: React.FC<Props> = (props) => {
         left: 0,
         width: "100%",
         height: "100%",
-        zIndex: 2,
+        zIndex: props.zIndex,
         objectFit: "cover",
       }}
     />

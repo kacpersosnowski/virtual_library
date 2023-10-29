@@ -10,6 +10,7 @@ type Props = {
   title: string;
   author: string;
   shortDescription: string;
+  zIndex: number;
 };
 
 const BookDetails: React.FC<Props> = (props) => {
@@ -19,7 +20,7 @@ const BookDetails: React.FC<Props> = (props) => {
         position: "absolute",
         top: 0,
         left: 0,
-        zIndex: 1,
+        zIndex: props.zIndex,
         width: "100%",
         height: "100%",
         bgcolor: "#816565",
@@ -28,8 +29,7 @@ const BookDetails: React.FC<Props> = (props) => {
         cursor: "default",
       }}
       component={motion.div}
-      className={classes["book-details"]}
-      id={`book-${props.id}`}
+      className={`${classes["book-details"]} book`}
     >
       <Typography
         paragraph
