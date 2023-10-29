@@ -1,43 +1,24 @@
-import BookItem from "./BookItem";
+import BookItem from "../BookItem";
 
-import React from "react";
-import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
+import { ScrollMenu } from "react-horizontal-scrolling-menu";
 import "react-horizontal-scrolling-menu/dist/styles.css";
 
-import { LeftArrow, RightArrow } from "./arrows";
-import usePreventBodyScroll from "./usePreventBodyScroll";
-import BookScrollCard from "./BookScrollCard";
-import Direction from "../../enums/Direction";
+import { LeftArrow, RightArrow } from "../arrows";
+import BookScrollCard from "../BookScrollCard";
+import Direction from "../../../enums/Direction";
+import { Box } from "@mui/material";
 
-type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
-
-function onWheel(apiObj: scrollVisibilityApiType, ev: React.WheelEvent): void {
-  const isThouchpad = Math.abs(ev.deltaX) !== 0 || Math.abs(ev.deltaY) < 15;
-
-  if (isThouchpad) {
-    ev.stopPropagation();
-    return;
-  }
-
-  if (ev.deltaY < 0) {
-    apiObj.scrollNext();
-  } else if (ev.deltaY > 0) {
-    apiObj.scrollPrev();
-  }
-}
+import classes from "./BooksList.module.css";
 
 const BooksList = () => {
-  const { disableScroll, enableScroll } = usePreventBodyScroll();
-
   return (
-    <div className="example" style={{ paddingTop: "100px" }}>
-      <div onMouseEnter={disableScroll} onMouseLeave={enableScroll}>
+    <Box className="example" style={{ paddingTop: "100px" }}>
+      <Box>
         <ScrollMenu
           LeftArrow={LeftArrow}
           RightArrow={RightArrow}
-          onWheel={onWheel}
-          wrapperClassName="test"
-          itemClassName="test2"
+          wrapperClassName={classes["horizonal-scroll-wrapper"]}
+          itemClassName={classes["horizonal-scroll-item"]}
         >
           <BookScrollCard>
             <BookItem priority={10} />
@@ -70,8 +51,8 @@ const BooksList = () => {
             <BookItem priority={1} animationDirection={Direction.Left} />
           </BookScrollCard>
         </ScrollMenu>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

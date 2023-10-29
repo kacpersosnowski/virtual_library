@@ -2,10 +2,11 @@ import { Box } from "@mui/material";
 
 import bookCover from "../../assets/osowski.png";
 import BookCover from "./BookCover";
-import BookDetails from "./BookDetails";
+import BookDetails from "./BookDetails/BookDetails";
 import { useAnimate } from "framer-motion";
 import Direction from "../../enums/Direction";
 import { useState } from "react";
+import { BOOK_HEIGHT, BOOK_WITDH } from "../../constants/common";
 
 type Props = {
   priority: number;
@@ -19,14 +20,14 @@ const BookItem: React.FC<Props> = (props) => {
   const [coverZIndex, setCoverZIndex] = useState(baseCoverZIndex);
 
   // Default animation - to the right
-  let moveProperties: { x?: number; y?: number } = { x: 200 };
+  let moveProperties: { x?: number; y?: number } = { x: BOOK_WITDH };
 
   if (props?.animationDirection === Direction.Left) {
-    moveProperties = { x: -200 };
+    moveProperties = { x: -BOOK_WITDH };
   } else if (props?.animationDirection === Direction.Up) {
-    moveProperties = { y: -250 };
+    moveProperties = { y: -BOOK_HEIGHT };
   } else if (props?.animationDirection === Direction.Down) {
-    moveProperties = { y: 250 };
+    moveProperties = { y: BOOK_HEIGHT };
   }
 
   const mouseEnterHandler = () => {
@@ -53,8 +54,8 @@ const BookItem: React.FC<Props> = (props) => {
     <Box
       sx={{
         position: "relative",
-        width: "200px",
-        height: "250px",
+        width: `${BOOK_WITDH}px`,
+        height: `${BOOK_HEIGHT}px`,
         cursor: "pointer",
       }}
       ref={scope}

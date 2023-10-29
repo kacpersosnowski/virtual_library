@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
-import ActionButton from "../UI/ActionButton";
+import ActionButton from "../../UI/ActionButton";
 import { motion } from "framer-motion";
 
 import classes from "./BookDetails.module.css";

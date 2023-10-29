@@ -1,0 +1,8 @@
+.horizonal-scroll-wrapper {
+  position: relative;
+  top: -250px;
+}
+
+.horizonal-scroll-item {
+  margin-top: 250px;
+}

@@ -12,15 +12,6 @@ code {
     monospace;
 }
 
-.test2 {
-  margin-top: 250px;
-}
-
-.test {
-  position: relative;
-  top: -250px;
-}
-
 .react-horizontal-scrolling-menu--scroll-container::-webkit-scrollbar {
   display: none;
 }
@@ -29,8 +20,3 @@ code {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
-
-/* .react-horizontal-scrolling-menu--item {
-  padding-top: 250px;
-  background-color: red;
-} */

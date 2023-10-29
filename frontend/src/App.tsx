@@ -1,8 +1,7 @@
 import "./App.css";
 import MainNavbar from "./components/Layout/MainNavbar";
 import Banner from "./components/Layout/Banner/Banner";
-import BooksList from "./components/Books/BooksList";
-import BookItem from "./components/Books/BookItem";
+import BooksList from "./components/Books/BooksList/BooksList";
 
 function App() {
   return (
@@ -10,7 +9,6 @@ function App() {
       <MainNavbar />
       <Banner />
       <BooksList />
-      <BookItem priority={10} />
     </>
   );
 }
