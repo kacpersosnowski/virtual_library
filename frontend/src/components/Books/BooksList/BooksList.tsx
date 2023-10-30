@@ -11,6 +11,7 @@ import { Box } from "@mui/material";
 import classes from "./BooksList.module.css";
 import { useState } from "react";
 import { BOOK_HEIGHT } from "../../../constants/common";
+import BooksHeader from "../BooksHeader";
 
 const BooksList = () => {
   const [bookAnimation, setBookAnimation] = useState<Direction>(
@@ -28,55 +29,58 @@ const BooksList = () => {
   );
 
   return (
-    <Box sx={{ pt: "100px" }}>
-      <Box sx={{ height: BOOK_HEIGHT + 25 + "px", mb: "3rem" }}>
-        <ScrollMenu
-          LeftArrow={LeftArrow}
-          RightArrow={RightArrow}
-          wrapperClassName={classes["horizonal-scroll-wrapper"]}
-          itemClassName={classes["horizonal-scroll-item"]}
-        >
-          {/* some dummy data for now */}
-          <BookScrollCard>
-            <BookItem priority={10} animationDirection={bookAnimation} />
-          </BookScrollCard>
-          <BookScrollCard>
-            <BookItem priority={9} animationDirection={bookAnimation} />
-          </BookScrollCard>
-          <BookScrollCard>
-            <BookItem priority={8} animationDirection={bookAnimation} />
-          </BookScrollCard>
-          <BookScrollCard>
-            <BookItem priority={7} animationDirection={bookAnimation} />
-          </BookScrollCard>
-          <BookScrollCard>
-            <BookItem priority={6} animationDirection={bookAnimation} />
-          </BookScrollCard>
-          <BookScrollCard>
-            <BookItem priority={5} animationDirection={bookAnimation} />
-          </BookScrollCard>
-          <BookScrollCard>
-            <BookItem priority={4} animationDirection={bookAnimation} />
-          </BookScrollCard>
-          <BookScrollCard>
-            <BookItem priority={3} animationDirection={bookAnimation} />
-          </BookScrollCard>
-          <BookScrollCard>
-            <BookItem priority={2} animationDirection={bookAnimation} />
-          </BookScrollCard>
-          <BookScrollCard>
-            <BookItem
-              priority={1}
-              animationDirection={
-                bookAnimation === Direction.Right
-                  ? Direction.Left
-                  : bookAnimation
-              }
-            />
-          </BookScrollCard>
-        </ScrollMenu>
+    <>
+      <BooksHeader text="Popularne w ostatnim czasie" />
+      <Box sx={{ pt: "4rem" }}>
+        <Box sx={{ height: BOOK_HEIGHT + 25 + "px", mb: "3rem" }}>
+          <ScrollMenu
+            LeftArrow={LeftArrow}
+            RightArrow={RightArrow}
+            wrapperClassName={classes["horizonal-scroll-wrapper"]}
+            itemClassName={classes["horizonal-scroll-item"]}
+          >
+            {/* some dummy data for now */}
+            <BookScrollCard>
+              <BookItem priority={10} animationDirection={bookAnimation} />
+            </BookScrollCard>
+            <BookScrollCard>
+              <BookItem priority={9} animationDirection={bookAnimation} />
+            </BookScrollCard>
+            <BookScrollCard>
+              <BookItem priority={8} animationDirection={bookAnimation} />
+            </BookScrollCard>
+            <BookScrollCard>
+              <BookItem priority={7} animationDirection={bookAnimation} />
+            </BookScrollCard>
+            <BookScrollCard>
+              <BookItem priority={6} animationDirection={bookAnimation} />
+            </BookScrollCard>
+            <BookScrollCard>
+              <BookItem priority={5} animationDirection={bookAnimation} />
+            </BookScrollCard>
+            <BookScrollCard>
+              <BookItem priority={4} animationDirection={bookAnimation} />
+            </BookScrollCard>
+            <BookScrollCard>
+              <BookItem priority={3} animationDirection={bookAnimation} />
+            </BookScrollCard>
+            <BookScrollCard>
+              <BookItem priority={2} animationDirection={bookAnimation} />
+            </BookScrollCard>
+            <BookScrollCard>
+              <BookItem
+                priority={1}
+                animationDirection={
+                  bookAnimation === Direction.Right
+                    ? Direction.Left
+                    : bookAnimation
+                }
+              />
+            </BookScrollCard>
+          </ScrollMenu>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 
