@@ -12,11 +12,24 @@ code {
     monospace;
 }
 
-.react-horizontal-scrolling-menu--scroll-container::-webkit-scrollbar {
-  display: none;
+.body {
+  background-color: #ccc;
 }
 
-.react-horizontal-scrolling-menu--scroll-container {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+.react-horizontal-scrolling-menu--scroll-container::-webkit-scrollbar {
+  width: 12px;
+}
+
+.react-horizontal-scrolling-menu--scroll-container::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.react-horizontal-scrolling-menu--scroll-container::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }

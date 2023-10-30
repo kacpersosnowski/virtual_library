@@ -12,6 +12,8 @@ import "@fontsource/roboto/700.css";
 import { ThemeProvider } from "@emotion/react";
 import theme from "./palette/theme";
 
+document.body.classList.add("body");
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
