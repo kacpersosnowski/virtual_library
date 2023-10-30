@@ -1,47 +1,51 @@
-import React from "react";
+import { Button } from "@mui/material";
+import { ReactNode, useContext, useEffect, useState } from "react";
+
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 import { VisibilityContext } from "react-horizontal-scrolling-menu";
+import { BOOK_HEIGHT } from "../../constants/common";
 
-function Arrow({
+const Arrow = ({
   children,
   disabled,
   onClick,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   disabled: boolean;
   onClick: VoidFunction;
-}) {
+}) => {
   return (
-    <button
+    <Button
       disabled={disabled}
       onClick={onClick}
-      style={{
+      color="info"
+      sx={{
         cursor: "pointer",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         right: "1%",
-        opacity: disabled ? "0" : "1",
         userSelect: "none",
-        height: "250px",
+        height: `${BOOK_HEIGHT}px`,
         position: "relative",
-        top: "250px",
+        top: `${BOOK_HEIGHT}px`,
       }}
     >
       {children}
-    </button>
+    </Button>
   );
-}
+};
 
-export function LeftArrow() {
+export const LeftArrow = () => {
   const { isFirstItemVisible, scrollPrev, visibleElements, initComplete } =
-    React.useContext(VisibilityContext);
+    useContext(VisibilityContext);
 
-  const [disabled, setDisabled] = React.useState(
+  const [disabled, setDisabled] = useState(
     !initComplete || (initComplete && isFirstItemVisible)
   );
-  React.useEffect(() => {
-    // NOTE: detect if whole component visible
+  useEffect(() => {
     if (visibleElements.length) {
       setDisabled(isFirstItemVisible);
     }
@@ -49,20 +53,19 @@ export function LeftArrow() {
 
   return (
     <Arrow disabled={disabled} onClick={() => scrollPrev()}>
-      Left
+      <ArrowBackIosIcon />
     </Arrow>
   );
-}
+};
 
-export function RightArrow() {
+export const RightArrow = () => {
   const { isLastItemVisible, scrollNext, visibleElements } =
-    React.useContext(VisibilityContext);
+    useContext(VisibilityContext);
 
-  // console.log({ isLastItemVisible });
-  const [disabled, setDisabled] = React.useState(
+  const [disabled, setDisabled] = useState(
     !visibleElements.length && isLastItemVisible
   );
-  React.useEffect(() => {
+  useEffect(() => {
     if (visibleElements.length) {
       setDisabled(isLastItemVisible);
     }
@@ -70,7 +73,7 @@ export function RightArrow() {
 
   return (
     <Arrow disabled={disabled} onClick={() => scrollNext()}>
-      Right
+      <ArrowForwardIosIcon />
     </Arrow>
   );
-}
+};
