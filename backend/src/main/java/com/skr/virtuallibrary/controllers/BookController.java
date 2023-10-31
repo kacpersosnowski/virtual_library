@@ -26,7 +26,7 @@ public class BookController {
     @GetMapping("/{id}")
     public ResponseEntity<BookDto> findBookById(@PathVariable String id) {
         try {
-            BookDto bookDto = modelMapper.map(bookService.findBookById(id), BookDto.class);
+            BookDto bookDto = convertToDto(bookService.findBookById(id));
             return ResponseEntity.ok(bookDto);
         } catch (BookNotFoundException ex) {
             log.error("Failed to find book: ", ex);
