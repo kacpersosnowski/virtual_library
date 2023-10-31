@@ -1,11 +1,10 @@
 package com.skr.virtuallibrary.services;
 
 import com.skr.virtuallibrary.entities.Book;
+import com.skr.virtuallibrary.exceptions.BookNotFoundException;
 import com.skr.virtuallibrary.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -15,9 +14,11 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
-    public Book findBookById(String id) {
+    private static final String ERROR_MSG = "Not found book with id: ";
+
+    public Book findBookById(String id) throws BookNotFoundException {
         return bookRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found."));
+                .orElseThrow(() -> new BookNotFoundException(ERROR_MSG + id));
     }
 
     public List<Book> findAllBooks() {
@@ -28,7 +29,20 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public void deleteBook(String id) {
-        bookRepository.deleteById(id);
+    public void deleteBook(String id) throws BookNotFoundException {
+        if (bookRepository.findById(id).isPresent()) {
+            bookRepository.deleteById(id);
+        } else {
+            throw new BookNotFoundException(ERROR_MSG + id);
+        }
+    }
+
+    public Book updateBook(String id, Book book) throws BookNotFoundException {
+        if (bookRepository.findById(id).isPresent()) {
+            book.setId(id);
+            return bookRepository.save(book);
+        } else {
+            throw new BookNotFoundException(ERROR_MSG + id);
+        }
     }
 }
