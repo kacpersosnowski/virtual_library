@@ -19,11 +19,14 @@
   "settings": {
     "import/resolver": {
       "typescript": {}
-    }
+    },
+    "react": { "version": "detect" }
   },
   "rules": {
     "camelcase": "error",
     "spaced-comment": "error",
-    "no-duplicate-imports": "error"
+    "no-duplicate-imports": "error",
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off"
   }
 }

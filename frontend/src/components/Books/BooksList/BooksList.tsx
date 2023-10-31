@@ -12,22 +12,21 @@ import classes from "./BooksList.module.css";
 import { useState } from "react";
 import { BOOK_HEIGHT } from "../../../constants/common";
 import BooksHeader from "../BooksHeader";
-import ActionButton from "../../UI/ActionButton";
 import BooksFooter from "../BooksFooter";
 
 const BooksList = () => {
   const [bookAnimation, setBookAnimation] = useState<Direction>(
-    Direction.Right
+    Direction.Right,
   );
 
   window.addEventListener(
     "resize",
     () => {
       setBookAnimation(
-        window.innerWidth <= 750 ? Direction.Up : Direction.Right
+        window.innerWidth <= 750 ? Direction.Up : Direction.Right,
       );
     },
-    false
+    false,
   );
 
   return (
