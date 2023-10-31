@@ -7,7 +7,6 @@ import { useAnimate } from "framer-motion";
 import Direction from "../../enums/Direction";
 import { useState } from "react";
 import { BOOK_HEIGHT, BOOK_WITDH } from "../../constants/common";
-import { LeftArrow } from "../scrolling/arrows";
 
 type Props = {
   priority: number;
