@@ -17,7 +17,7 @@ const SearchForm = () => {
         id="search-input"
         label="Search"
         variant="standard"
-        sx={{ width: { xs: "12.5rem", md: "16rem" } }}
+        sx={{ width: { xs: "12.5rem" } }}
       />
     </Box>
   );

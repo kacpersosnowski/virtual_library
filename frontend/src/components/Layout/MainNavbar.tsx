@@ -15,6 +15,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import SearchForm from "../Forms/common/SearchForm";
+import ChangeLanguageForm from "../Forms/common/ChangeLanguageForm";
 
 const drawerWidth = 240; // in pixels
 const navItems = ["Zaloguj się", "Zarejestruj się"];
@@ -27,7 +28,7 @@ const MainNavbar = () => {
   };
 
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
+    <Box sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
         Liber Mundi
       </Typography>
@@ -35,12 +36,16 @@ const MainNavbar = () => {
       <List>
         {navItems.map((item) => (
           <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: "center" }}>
+            <ListItemButton
+              sx={{ textAlign: "center" }}
+              onClick={handleDrawerToggle}
+            >
               <ListItemText primary={item} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
+      <ChangeLanguageForm />
       <Box sx={{ display: "block", flexGrow: 1 }} />
     </Box>
   );
@@ -78,12 +83,19 @@ const MainNavbar = () => {
           </Typography>
           <Box sx={{ display: "block", flexGrow: 1 }} />
           <SearchForm />
-          <Box sx={{ display: { xs: "none", md: "block" } }}>
+          <Box
+            sx={{
+              display: { xs: "none", md: "flex" },
+            }}
+          >
             <Button sx={{ color: "#fff", mr: ".5rem" }}>{navItems[0]}</Button>
             <Button sx={{ color: "#fff", bgcolor: "primary.dark" }}>
               {navItems[1]}
             </Button>
           </Box>
+          <ChangeLanguageForm
+            sx={{ ml: "1rem", display: { xs: "none", md: "block" } }}
+          />
         </Toolbar>
       </AppBar>
       <nav>
