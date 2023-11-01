@@ -45,7 +45,7 @@ const MainNavbar = () => {
           </ListItem>
         ))}
       </List>
-      <ChangeLanguageForm />
+      <ChangeLanguageForm onClickLanguage={() => setMobileOpen(false)} />
       <Box sx={{ display: "block", flexGrow: 1 }} />
     </Box>
   );

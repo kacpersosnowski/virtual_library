@@ -1,7 +1,10 @@
 import { Box, Typography } from "@mui/material";
 import ActionButton from "../../UI/ActionButton";
+import { useTranslation } from "react-i18next";
 
 const WelcomeElement = () => {
+  const { t } = useTranslation();
+
   return (
     <Box
       sx={{
@@ -14,7 +17,7 @@ const WelcomeElement = () => {
       }}
     >
       <Typography variant="h2" sx={{ color: "white" }}>
-        Witaj!
+        {t("welcomeTitle")}
       </Typography>
       <Typography
         variant="body1"
