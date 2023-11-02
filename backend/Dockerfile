@@ -6,10 +6,6 @@ COPY mvnw .
 COPY .mvn .mvn
 RUN chmod +x mvnw
 COPY pom.xml .
-RUN apk update && \
-    apk --no-cache add dos2unix && \
-    dos2unix mvnw && \
-    ./mvnw dependency:go-offline
 
 COPY src src
 RUN ./mvnw package -DskipTests
