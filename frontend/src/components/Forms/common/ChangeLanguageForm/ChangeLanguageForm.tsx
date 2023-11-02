@@ -8,7 +8,9 @@ import {
 } from "@mui/material";
 
 import { useTranslation } from "react-i18next";
-import { LANGUAGES } from "../../../constants/languages";
+import { LANGUAGES } from "../../../../constants/languages";
+
+import classes from "./ChangeLanguageForm.module.css";
 
 type Props = {
   sx?: SxProps;
@@ -33,16 +35,6 @@ const ChangeLanguageForm: React.FC<Props> = (props) => {
           ".MuiOutlinedInput-notchedOutline": { border: 0 },
         }}
         onChange={onChangeLanguage}
-        MenuProps={{
-          sx: {
-            "&& .Mui-selected": {
-              backgroundColor: "primary.dark",
-            },
-            "&& .Mui-selected:hover": {
-              backgroundColor: "#024A72",
-            },
-          },
-        }}
       >
         {LANGUAGES.map((language) => {
           return (
@@ -50,6 +42,7 @@ const ChangeLanguageForm: React.FC<Props> = (props) => {
               key={language.code}
               value={language.code}
               onClick={props?.onClickLanguage}
+              classes={{ selected: classes.selected }}
             >
               <Box
                 sx={{

@@ -15,7 +15,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import SearchForm from "../Forms/common/SearchForm";
-import ChangeLanguageForm from "../Forms/common/ChangeLanguageForm";
+import ChangeLanguageForm from "../Forms/common/ChangeLanguageForm/ChangeLanguageForm";
 import { useTranslation } from "react-i18next";
 import mainPageMessages from "../../messages/mainPageMessages";
 
