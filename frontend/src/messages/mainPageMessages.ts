@@ -33,7 +33,7 @@ const mainPageMessages: Message = {
   },
   booksListHeader: {
     key: "main_page >> books_list >> header",
-    pl: "Popularne w ostanim czasie",
+    pl: "Popularne w ostatnim czasie",
     en: "Recently popular",
   },
   buttonsSeeMore: {
