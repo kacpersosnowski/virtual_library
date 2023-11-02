@@ -4,9 +4,8 @@ WORKDIR app
 
 COPY mvnw .
 COPY .mvn .mvn
-RUN chmod +x mvnw
 COPY pom.xml .
-RUN apk update && \
+RUN chmod +x mvnw && \
     apk --no-cache add dos2unix && \
     dos2unix mvnw && \
     ./mvnw dependency:go-offline
