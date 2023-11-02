@@ -14,7 +14,12 @@ import { BOOK_HEIGHT } from "../../../constants/common";
 import BooksHeader from "../BooksHeader";
 import BooksFooter from "../BooksFooter";
 
-const BooksList = () => {
+type Props = {
+  headerText: string;
+  footerText: string;
+};
+
+const BooksList: React.FC<Props> = (props) => {
   const [bookAnimation, setBookAnimation] = useState<Direction>(
     Direction.Right,
   );
@@ -31,7 +36,7 @@ const BooksList = () => {
 
   return (
     <>
-      <BooksHeader text="Popularne w ostatnim czasie" />
+      <BooksHeader text={props.headerText} />
       <Box sx={{ pt: "4rem" }}>
         <Box sx={{ height: BOOK_HEIGHT + 25 + "px", mb: "3rem" }}>
           <ScrollMenu
@@ -81,7 +86,7 @@ const BooksList = () => {
           </ScrollMenu>
         </Box>
       </Box>
-      <BooksFooter text="Zobacz więcej" />
+      <BooksFooter text={props.footerText} />
     </>
   );
 };

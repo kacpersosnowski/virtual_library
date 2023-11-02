@@ -16,16 +16,23 @@ import ListItemText from "@mui/material/ListItemText";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import SearchForm from "../Forms/common/SearchForm";
 import ChangeLanguageForm from "../Forms/common/ChangeLanguageForm";
+import { useTranslation } from "react-i18next";
+import mainPageMessages from "../../messages/mainPageMessages";
 
 const drawerWidth = 240; // in pixels
-const navItems = ["Zaloguj się", "Zarejestruj się"];
 
 const MainNavbar = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const { t } = useTranslation();
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
+
+  const navItems = [
+    t(mainPageMessages.buttonsLogin.key),
+    t(mainPageMessages.buttonsRegister.key),
+  ];
 
   const drawer = (
     <Box sx={{ textAlign: "center" }}>

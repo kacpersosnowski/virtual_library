@@ -1,7 +1,11 @@
 import { Box, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import { useTranslation } from "react-i18next";
+import mainPageMessages from "../../../messages/mainPageMessages";
 
 const SearchForm = () => {
+  const { t } = useTranslation();
+
   return (
     <Box
       sx={{
@@ -15,7 +19,7 @@ const SearchForm = () => {
       <TextField
         color="info"
         id="search-input"
-        label="Search"
+        label={t(mainPageMessages.searchPlaceholder.key)}
         variant="standard"
         sx={{ width: { xs: "12.5rem" } }}
       />
