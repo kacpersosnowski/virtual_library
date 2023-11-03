@@ -19,7 +19,7 @@ public class BookDto {
     private String title;
 
     @NotEmpty
-    private String authorId;
+    private List<String> authorIdList;
 
     @NotEmpty
     private String shortDescription;
