@@ -1,6 +1,10 @@
 import { Box, Container, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
+import mainPageMessages from "../../messages/mainPageMessages";
 
 const Footer = () => {
+  const { t } = useTranslation();
+
   return (
     <Box
       sx={{
@@ -20,7 +24,7 @@ const Footer = () => {
             pt: "1rem",
           }}
         >
-          Wszelkie prawa zastrzeżone &copy; {new Date().getFullYear()}
+          {t(mainPageMessages.footer.key)} &copy; {new Date().getFullYear()}
         </Typography>
       </Container>
     </Box>

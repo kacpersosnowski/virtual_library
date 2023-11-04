@@ -1,7 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import ActionButton from "../../UI/ActionButton";
+import { useTranslation } from "react-i18next";
+import mainPageMessages from "../../../messages/mainPageMessages";
 
 const WelcomeElement = () => {
+  const { t } = useTranslation();
+
   return (
     <Box
       sx={{
@@ -14,7 +18,7 @@ const WelcomeElement = () => {
       }}
     >
       <Typography variant="h2" sx={{ color: "white" }}>
-        Witaj!
+        {t(mainPageMessages.bannerHeader.key)}
       </Typography>
       <Typography
         variant="body1"
@@ -25,18 +29,12 @@ const WelcomeElement = () => {
           fontSize: "1.1rem",
         }}
       >
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam varius,
-        odio et bibendum dapibus, eros enim consectetur lectus, ac consequat
-        diam augue nec velit. Aenean tellus tortor, aliquam quis tellus et,
-        malesuada elementum dui. Aliquam gravida est sed auctor suscipit. Nulla
-        id molestie sapien. Donec mattis pulvinar bibendum. Vivamus a
-        consectetur nisi. In et diam a turpis lobortis pharetra. Vestibulum ante
-        ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;
+        {t(mainPageMessages.bannerText.key)}
       </Typography>
       <ActionButton
         sx={{ mt: "1.2rem", width: "15rem", p: "10px 0", fontSize: "1.3rem" }}
       >
-        Dołącz do nas
+        {t(mainPageMessages.buttonsJoinUs.key)}
       </ActionButton>
     </Box>
   );
