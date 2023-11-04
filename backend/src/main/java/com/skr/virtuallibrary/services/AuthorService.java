@@ -32,8 +32,9 @@ public class AuthorService {
     public void deleteAuthor(String id) throws AuthorNotFoundException {
         if (authorRepository.findById(id).isPresent()) {
             authorRepository.deleteById(id);
-        } else
+        } else {
             throw new AuthorNotFoundException(ERROR_MSG + id);
+        }
     }
 
     public Author updateAuthor(String id, Author author) throws AuthorNotFoundException {
