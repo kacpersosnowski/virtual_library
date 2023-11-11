@@ -8,9 +8,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 
 @Slf4j
@@ -30,7 +34,7 @@ public class BookController {
             return ResponseEntity.ok(bookDto);
         } catch (BookNotFoundException ex) {
             log.error("Failed to find book: ", ex);
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -40,11 +44,19 @@ public class BookController {
         return ResponseEntity.ok(bookDtoList);
     }
 
-    @PostMapping
-    public ResponseEntity<BookDto> addBook(@Valid @RequestBody BookDto bookDto) {
-        Book book = convertToEntity(bookDto);
-        BookDto bookCreated = convertToDto(bookService.addBook(book));
-        return ResponseEntity.ok(bookCreated);
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<BookDto> addBook(
+            @Valid @RequestPart("book") BookDto bookDto,
+            @RequestPart("cover") MultipartFile cover
+    ) {
+        try {
+            Book book = convertToEntity(bookDto);
+            BookDto bookCreated = convertToDto(bookService.addBook(book, cover));
+            return ResponseEntity.ok(bookCreated);
+        } catch (IOException ex) {
+            log.error("Failed to add book: " + ex);
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -54,24 +66,34 @@ public class BookController {
             return ResponseEntity.ok().build();
         } catch (BookNotFoundException ex) {
             log.error("Failed to delete book: ", ex);
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<BookDto> updateBook(@PathVariable String id, @Valid @RequestBody BookDto bookDto) {
+    @PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<BookDto> updateBook(
+            @PathVariable String id,
+            @Valid @RequestPart("book") BookDto bookDto,
+            @RequestPart("cover") MultipartFile cover
+    ) {
         try {
             Book book = convertToEntity(bookDto);
-            BookDto bookUpdated = convertToDto(bookService.updateBook(id, book));
+            BookDto bookUpdated = convertToDto(bookService.updateBook(id, book, cover));
             return ResponseEntity.ok(bookUpdated);
         } catch (BookNotFoundException ex) {
             log.error("Failed to update book: ", ex);
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
+        } catch (IOException ex) {
+            log.error("Failed to update book: ", ex);
+            return ResponseEntity.internalServerError().build();
         }
     }
 
     private BookDto convertToDto(Book book) {
-        return modelMapper.map(book, BookDto.class);
+        String cover = Base64.getEncoder().encodeToString(book.getCover().getData());
+        BookDto bookDto = modelMapper.map(book, BookDto.class);
+        bookDto.setCover(cover);
+        return bookDto;
     }
 
     private Book convertToEntity(BookDto bookDto) {

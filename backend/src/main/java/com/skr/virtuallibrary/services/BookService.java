@@ -4,8 +4,12 @@ import com.skr.virtuallibrary.entities.Book;
 import com.skr.virtuallibrary.exceptions.BookNotFoundException;
 import com.skr.virtuallibrary.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
+import org.bson.BsonBinarySubType;
+import org.bson.types.Binary;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -25,7 +29,8 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public Book addBook(Book book) {
+    public Book addBook(Book book, MultipartFile cover) throws IOException {
+        book.setCover(new Binary(BsonBinarySubType.BINARY, cover.getBytes()));
         return bookRepository.save(book);
     }
 
@@ -37,10 +42,10 @@ public class BookService {
         }
     }
 
-    public Book updateBook(String id, Book book) throws BookNotFoundException {
+    public Book updateBook(String id, Book book, MultipartFile cover) throws BookNotFoundException, IOException {
         if (bookRepository.findById(id).isPresent()) {
             book.setId(id);
-            return bookRepository.save(book);
+            return addBook(book, cover);
         } else {
             throw new BookNotFoundException(ERROR_MSG + id);
         }
