@@ -2,10 +2,8 @@ package com.skr.virtuallibrary.controllers.dto;
 
 import com.skr.virtuallibrary.entities.enums.Genre;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.bson.types.Binary;
 
 import java.util.List;
 
@@ -33,7 +31,6 @@ public class BookDto {
     @NotEmpty
     private List<String> tagList;
 
-    @NotNull
-    private Binary cover;
+    private String cover;
 
 }
