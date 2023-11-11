@@ -13,11 +13,12 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import SearchForm from "../Forms/common/SearchForm";
 import ChangeLanguageForm from "../Forms/common/ChangeLanguageForm/ChangeLanguageForm";
 import { useTranslation } from "react-i18next";
 import mainPageMessages from "../../messages/mainPageMessages";
+
+import logo from "../../assets/logo.png";
 
 const drawerWidth = 240; // in pixels
 
@@ -71,7 +72,13 @@ const MainNavbar = () => {
           >
             <MenuIcon />
           </IconButton>
-          <AutoStoriesIcon sx={{ display: "flex", mr: 1.3 }} />
+          <Box
+            component="img"
+            src={logo}
+            width="auto"
+            height={50}
+            style={{ marginRight: "10px" }}
+          />
           <Typography
             variant="h6"
             component="div"
