@@ -13,8 +13,6 @@ public class Author {
     @Id
     private String id;
 
-    private String firstName;
-
-    private String lastName;
+    private String name;
 
 }

@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -20,7 +21,7 @@ public class AuthorService {
 
     private static final String ERROR_NOT_FOUND_MSG = "Not found author with id: ";
 
-    public AuthorDto findAuthorById(String id) throws AuthorNotFoundException {
+    public AuthorDto findAuthorById(String id) {
         return authorRepository.findById(id).map(this::convertToDto)
                 .orElseThrow(() -> new AuthorNotFoundException(ERROR_NOT_FOUND_MSG + id));
     }
@@ -48,6 +49,10 @@ public class AuthorService {
         } else {
             throw new AuthorNotFoundException(ERROR_NOT_FOUND_MSG + id);
         }
+    }
+
+    public Optional<Author> findAuthorByName(String name) {
+        return authorRepository.findByName(name);
     }
 
     private AuthorDto saveAuthor(AuthorDto authorDto) {

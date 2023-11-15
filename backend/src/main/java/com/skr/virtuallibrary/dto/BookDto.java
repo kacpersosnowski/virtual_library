@@ -1,5 +1,6 @@
 package com.skr.virtuallibrary.dto;
 
+import com.skr.virtuallibrary.entities.Author;
 import com.skr.virtuallibrary.entities.enums.Genre;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class BookDto {
     @NotEmpty(message = "Title is mandatory.")
     private String title;
 
-    @NotEmpty(message = "Author id list is mandatory.")
+    @NotEmpty(message = "Author name list is mandatory.")
     private List<AuthorDto> authorList;
 
     @NotEmpty(message = "Short description is mandatory.")

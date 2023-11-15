@@ -2,6 +2,7 @@ package com.skr.virtuallibrary.services;
 
 import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.dto.BookDto;
+import com.skr.virtuallibrary.entities.Author;
 import com.skr.virtuallibrary.entities.Book;
 import com.skr.virtuallibrary.exceptions.BookNotFoundException;
 import com.skr.virtuallibrary.exceptions.InternalException;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -65,7 +67,9 @@ public class BookService {
 
     private BookDto saveBook(BookDto bookDto, MultipartFile cover) {
         try {
+            List<Author> authorList = bookDto.getAuthorList().stream().map(this::findOrCreateAuthor).toList();
             Book book = convertToEntity(bookDto);
+            book.setAuthorList(authorList);
             book.setCover(new Binary(BsonBinarySubType.BINARY, cover.getBytes()));
             return convertToDto(bookRepository.save(book));
         } catch (IOException ex) {
@@ -73,18 +77,24 @@ public class BookService {
         }
     }
 
+    private Author findOrCreateAuthor(AuthorDto authorDto) {
+        Optional<Author> existingAuthor = authorService.findAuthorByName(authorDto.getName());
+        return existingAuthor.orElseGet(() -> modelMapper.map(authorService.addAuthor(authorDto), Author.class));
+    }
+
     private BookDto convertToDto(Book book) {
+        List<AuthorDto> authorDtoList = book.getAuthorList().stream().map(author -> modelMapper.map(author, AuthorDto.class)).toList();
         String cover = Base64.getEncoder().encodeToString(book.getCover().getData());
-        List<String> authorIdList = book.getAuthorIdList();
-        List<AuthorDto> authorList = authorIdList.stream().map(authorService::findAuthorById).toList();
-
         BookDto bookDto = modelMapper.map(book, BookDto.class);
-
+        bookDto.setAuthorList(authorDtoList);
         bookDto.setCover(cover);
         return bookDto;
     }
 
     private Book convertToEntity(BookDto bookDto) {
-        return modelMapper.map(bookDto, Book.class);
+        List<Author> authorList = bookDto.getAuthorList().stream().map(authorDto -> modelMapper.map(authorDto, Author.class)).toList();
+        Book book = modelMapper.map(bookDto, Book.class);
+        book.setAuthorList(authorList);
+        return book;
     }
 }
