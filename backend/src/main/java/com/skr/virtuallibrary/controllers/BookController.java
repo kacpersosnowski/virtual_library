@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
 
@@ -53,13 +52,8 @@ public class BookController {
             @Parameter(description = "Book id.", example = "1")
             @PathVariable String id
     ) {
-        try {
-            BookDto bookDto = convertToDto(bookService.findBookById(id));
-            return ResponseEntity.ok(bookDto);
-        } catch (BookNotFoundException ex) {
-            log.error("Failed to find book: ", ex);
-            return ResponseEntity.badRequest().build();
-        }
+        BookDto bookDto = convertToDto(bookService.findBookById(id));
+        return ResponseEntity.ok(bookDto);
     }
 
     @Operation(
@@ -81,14 +75,9 @@ public class BookController {
             @Valid @RequestPart("book") BookDto bookDto,
             @RequestPart("cover") MultipartFile cover
     ) {
-        try {
-            Book book = convertToEntity(bookDto);
-            BookDto bookCreated = convertToDto(bookService.addBook(book, cover));
-            return ResponseEntity.ok(bookCreated);
-        } catch (IOException ex) {
-            log.error("Failed to add book: " + ex);
-            return ResponseEntity.internalServerError().build();
-        }
+        Book book = convertToEntity(bookDto);
+        BookDto bookCreated = convertToDto(bookService.addBook(book, cover));
+        return ResponseEntity.ok(bookCreated);
     }
 
     @Operation(
@@ -100,13 +89,8 @@ public class BookController {
             @Parameter(description = "Book id.", example = "1")
             @PathVariable String id
     ) {
-        try {
-            bookService.deleteBook(id);
-            return ResponseEntity.ok().build();
-        } catch (BookNotFoundException ex) {
-            log.error("Failed to delete book: ", ex);
-            return ResponseEntity.badRequest().build();
-        }
+        bookService.deleteBook(id);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(
@@ -120,17 +104,10 @@ public class BookController {
             @RequestPart("cover") MultipartFile cover
 
     ) {
-        try {
-            Book book = convertToEntity(bookDto);
-            BookDto bookUpdated = convertToDto(bookService.updateBook(id, book, cover));
-            return ResponseEntity.ok(bookUpdated);
-        } catch (BookNotFoundException ex) {
-            log.error("Failed to update book: ", ex);
-            return ResponseEntity.badRequest().build();
-        } catch (IOException ex) {
-            log.error("Failed to update book: ", ex);
-            return ResponseEntity.internalServerError().build();
-        }
+        Book book = convertToEntity(bookDto);
+        BookDto bookUpdated = convertToDto(bookService.updateBook(id, book, cover));
+        return ResponseEntity.ok(bookUpdated);
+
     }
 
     private BookDto convertToDto(Book book) {

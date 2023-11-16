@@ -50,13 +50,8 @@ public class AuthorController {
             @Parameter(description = "Author id.", example = "1")
             @PathVariable String id
     ) {
-        try {
-            AuthorDto authorDto = convertToDto(authorService.findAuthorById(id));
-            return ResponseEntity.ok(authorDto);
-        } catch (AuthorNotFoundException ex) {
-            log.error("Failed to find author: ", ex);
-            return ResponseEntity.notFound().build();
-        }
+        AuthorDto authorDto = convertToDto(authorService.findAuthorById(id));
+        return ResponseEntity.ok(authorDto);
     }
 
     @Operation(
@@ -90,13 +85,8 @@ public class AuthorController {
             @Parameter(description = "Author id.", example = "1")
             @PathVariable String id
     ) {
-        try {
-            authorService.deleteAuthor(id);
-            return ResponseEntity.ok().build();
-        } catch (AuthorNotFoundException ex) {
-            log.error("Failed to delete author: ", ex);
-            return ResponseEntity.notFound().build();
-        }
+        authorService.deleteAuthor(id);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(
@@ -109,14 +99,10 @@ public class AuthorController {
             @PathVariable String id,
             @Valid @RequestBody AuthorDto authorDto
     ) {
-        try {
-            Author author = convertToEntity(authorDto);
-            AuthorDto authorUpdated = convertToDto(authorService.updateAuthor(id, author));
-            return ResponseEntity.ok(authorUpdated);
-        } catch (AuthorNotFoundException ex) {
-            log.error("Failed to update author: ", ex);
-            return ResponseEntity.notFound().build();
-        }
+        Author author = convertToEntity(authorDto);
+        AuthorDto authorUpdated = convertToDto(authorService.updateAuthor(id, author));
+        return ResponseEntity.ok(authorUpdated);
+
     }
 
     private AuthorDto convertToDto(Author author) {
