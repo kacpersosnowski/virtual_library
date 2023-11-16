@@ -6,17 +6,16 @@ import com.skr.virtuallibrary.entities.Author;
 import com.skr.virtuallibrary.entities.Book;
 import com.skr.virtuallibrary.exceptions.BookNotFoundException;
 import com.skr.virtuallibrary.exceptions.InternalException;
+import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,12 +35,12 @@ public class BookService {
     private static final String ERROR_SAVE_MSG = "Error while trying to save book in database.";
 
     public BookDto findBookById(String id) {
-        return bookRepository.findById(id).map(this::convertToDto)
+        return bookRepository.findById(id).map(modelMapper::toBookDto)
                 .orElseThrow(() -> new BookNotFoundException(ERROR_NOT_FOUND_MSG + id));
     }
 
     public List<BookDto> findAllBooks() {
-        return bookRepository.findAll().stream().map(this::convertToDto).toList();
+        return bookRepository.findAll().stream().map(modelMapper::toBookDto).toList();
     }
 
     public BookDto addBook(BookDto bookDto, MultipartFile cover) {
@@ -68,10 +67,10 @@ public class BookService {
     private BookDto saveBook(BookDto bookDto, MultipartFile cover) {
         try {
             List<Author> authorList = bookDto.getAuthorList().stream().map(this::findOrCreateAuthor).toList();
-            Book book = convertToEntity(bookDto);
+            Book book = modelMapper.toBookEntity(bookDto);
             book.setAuthorList(authorList);
             book.setCover(new Binary(BsonBinarySubType.BINARY, cover.getBytes()));
-            return convertToDto(bookRepository.save(book));
+            return modelMapper.toBookDto(bookRepository.save(book));
         } catch (IOException ex) {
             throw new InternalException(ERROR_SAVE_MSG, ex);
         }
@@ -79,22 +78,7 @@ public class BookService {
 
     private Author findOrCreateAuthor(AuthorDto authorDto) {
         Optional<Author> existingAuthor = authorService.findAuthorByName(authorDto.getName());
-        return existingAuthor.orElseGet(() -> modelMapper.map(authorService.addAuthor(authorDto), Author.class));
+        return existingAuthor.orElseGet(() -> modelMapper.toAuthorEntity(authorService.addAuthor(authorDto)));
     }
 
-    private BookDto convertToDto(Book book) {
-        List<AuthorDto> authorDtoList = book.getAuthorList().stream().map(author -> modelMapper.map(author, AuthorDto.class)).toList();
-        String cover = Base64.getEncoder().encodeToString(book.getCover().getData());
-        BookDto bookDto = modelMapper.map(book, BookDto.class);
-        bookDto.setAuthorList(authorDtoList);
-        bookDto.setCover(cover);
-        return bookDto;
-    }
-
-    private Book convertToEntity(BookDto bookDto) {
-        List<Author> authorList = bookDto.getAuthorList().stream().map(authorDto -> modelMapper.map(authorDto, Author.class)).toList();
-        Book book = modelMapper.map(bookDto, Book.class);
-        book.setAuthorList(authorList);
-        return book;
-    }
 }

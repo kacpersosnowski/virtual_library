@@ -3,9 +3,9 @@ package com.skr.virtuallibrary.services;
 import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.entities.Author;
 import com.skr.virtuallibrary.exceptions.AuthorNotFoundException;
+import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.AuthorRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,12 +22,12 @@ public class AuthorService {
     private static final String ERROR_NOT_FOUND_MSG = "Not found author with id: ";
 
     public AuthorDto findAuthorById(String id) {
-        return authorRepository.findById(id).map(this::convertToDto)
+        return authorRepository.findById(id).map(modelMapper::toAuthorDto)
                 .orElseThrow(() -> new AuthorNotFoundException(ERROR_NOT_FOUND_MSG + id));
     }
 
     public List<AuthorDto> findAllAuthors() {
-        return authorRepository.findAll().stream().map(this::convertToDto).toList();
+        return authorRepository.findAll().stream().map(modelMapper::toAuthorDto).toList();
     }
 
     public AuthorDto addAuthor(AuthorDto authorDto) {
@@ -56,15 +56,8 @@ public class AuthorService {
     }
 
     private AuthorDto saveAuthor(AuthorDto authorDto) {
-        Author author = convertToEntity(authorDto);
-        return convertToDto(authorRepository.save(author));
+        Author author = modelMapper.toAuthorEntity(authorDto);
+        return modelMapper.toAuthorDto(authorRepository.save(author));
     }
 
-    private AuthorDto convertToDto(Author author) {
-        return modelMapper.map(author, AuthorDto.class);
-    }
-
-    private Author convertToEntity(AuthorDto authorDto) {
-        return modelMapper.map(authorDto, Author.class);
-    }
 }
