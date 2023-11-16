@@ -9,7 +9,7 @@ export const parseAuthorsString = (data: Author[]): string => {
     result += authorString;
 
     if (i !== data.length - 1) {
-      result += " ,";
+      result += ", ";
     }
   }
   return result;

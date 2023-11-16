@@ -7,7 +7,7 @@ export const parseBookItems = (data: Book[]): BookItemData[] => {
       title: dataItem.title,
       authorList: dataItem.authorList,
       shortDescription: dataItem.shortDescription,
-      cover: dataItem.cover,
+      cover: `data:image/jpeg;base64,${dataItem.cover}`,
     };
   });
 };

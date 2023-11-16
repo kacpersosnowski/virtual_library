@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-import bookCover from "../../assets/osowski.png";
+// import bookCover from "../../assets/osowski.png";
 import BookCover from "./BookCover";
 import BookDetails from "./BookDetails/BookDetails";
 import { useAnimate } from "framer-motion";
@@ -65,7 +65,7 @@ const BookItem: React.FC<Props> = (props) => {
       onMouseEnter={mouseEnterHandler}
       onMouseLeave={mouseOverHandler}
     >
-      <BookCover coverImage={bookCover} zIndex={coverZIndex} />
+      <BookCover coverImage={props.details.cover} zIndex={coverZIndex} />
       <BookDetails
         zIndex={detailsZIndex}
         id={1}
