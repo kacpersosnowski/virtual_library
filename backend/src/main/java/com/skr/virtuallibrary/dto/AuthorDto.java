@@ -1,4 +1,4 @@
-package com.skr.virtuallibrary.controllers.dto;
+package com.skr.virtuallibrary.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
