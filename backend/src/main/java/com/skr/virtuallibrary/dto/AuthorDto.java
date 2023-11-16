@@ -1,4 +1,4 @@
-package com.skr.virtuallibrary.controllers.dto;
+package com.skr.virtuallibrary.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -10,10 +10,10 @@ public class AuthorDto {
 
     private String id;
 
-    @NotEmpty
+    @NotEmpty(message = "First name is mandatory.")
     private String firstName;
 
-    @NotEmpty
+    @NotEmpty(message = "Last name is mandatory.")
     private String lastName;
 
 }

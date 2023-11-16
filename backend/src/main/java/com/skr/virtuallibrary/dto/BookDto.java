@@ -1,4 +1,4 @@
-package com.skr.virtuallibrary.controllers.dto;
+package com.skr.virtuallibrary.dto;
 
 import com.skr.virtuallibrary.entities.enums.Genre;
 import jakarta.validation.constraints.NotEmpty;
@@ -13,22 +13,22 @@ public class BookDto {
 
     private String id;
 
-    @NotEmpty
+    @NotEmpty(message = "Title is mandatory.")
     private String title;
 
-    @NotEmpty
-    private List<String> authorIdList;
+    @NotEmpty(message = "Author name list is mandatory.")
+    private List<AuthorDto> authorList;
 
-    @NotEmpty
+    @NotEmpty(message = "Short description is mandatory.")
     private String shortDescription;
 
-    @NotEmpty
+    @NotEmpty(message = "Long description is mandatory.")
     private String longDescription;
 
-    @NotEmpty
+    @NotEmpty(message = "Genre list is mandatory.")
     private List<Genre> genreList;
 
-    @NotEmpty
+    @NotEmpty(message = "Tag list is mandatory.")
     private List<String> tagList;
 
     private String cover;

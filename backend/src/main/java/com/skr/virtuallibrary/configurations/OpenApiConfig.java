@@ -1,4 +1,4 @@
-package com.skr.virtuallibrary.config;
+package com.skr.virtuallibrary.configurations;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;

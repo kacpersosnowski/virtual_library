@@ -19,7 +19,7 @@ public class Book {
 
     private String title;
 
-    private List<String> authorIdList;
+    private List<Author> authorList;
 
     private String shortDescription;
 
