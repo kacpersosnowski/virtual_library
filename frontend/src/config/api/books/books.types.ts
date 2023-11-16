@@ -3,7 +3,7 @@ import { Author } from "../authors/authors.types";
 export type Book = {
   id: string;
   title: string;
-  authors: Author[];
+  authorList: Author[];
   shortDescription: string;
   longDescription: string;
   genreList: string[];
@@ -14,7 +14,7 @@ export type Book = {
 export type BookItemData = {
   id: string;
   title: string;
-  authors: Author[];
+  authorList: Author[];
   shortDescription: string;
   cover: string;
 };

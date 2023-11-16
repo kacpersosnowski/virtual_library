@@ -16,6 +16,7 @@ import BooksFooter from "../BooksFooter";
 import { useQuery } from "react-query";
 import { booksApi } from "../../../config/api/books/books";
 import LoadingSpinner from "../../UI/LoadingSpinner";
+import ErrorMessage from "../../UI/ErrorMessage";
 
 type Props = {
   headerText: string;
@@ -52,6 +53,9 @@ const BooksList: React.FC<Props> = (props) => {
     <>
       <BooksHeader text={props.headerText} />
       {isLoading && <LoadingSpinner />}
+      {isError && (
+        <ErrorMessage message="Failed to fetch recently popular books. Try again later." />
+      )}
       {!isLoading && !isError && (
         <Box sx={{ pt: "4rem" }}>
           <Box sx={{ height: BOOK_HEIGHT + 25 + "px", mb: "3rem" }}>

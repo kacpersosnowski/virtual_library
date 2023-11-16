@@ -5,7 +5,7 @@ export const parseBookItems = (data: Book[]): BookItemData[] => {
     return {
       id: dataItem.id,
       title: dataItem.title,
-      authors: dataItem.authors,
+      authorList: dataItem.authorList,
       shortDescription: dataItem.shortDescription,
       cover: dataItem.cover,
     };

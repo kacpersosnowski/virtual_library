@@ -70,7 +70,7 @@ const BookItem: React.FC<Props> = (props) => {
         zIndex={detailsZIndex}
         id={1}
         title={props.details.title}
-        author={parseAuthorsString(props.details.authors)}
+        author={parseAuthorsString(props.details.authorList)}
         shortDescription={props.details.shortDescription}
       />
     </Box>
