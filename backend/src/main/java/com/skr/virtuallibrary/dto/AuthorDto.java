@@ -10,7 +10,10 @@ public class AuthorDto {
 
     private String id;
 
-    @NotEmpty(message = "Name is mandatory.")
-    private String name;
+    @NotEmpty(message = "First name is mandatory.")
+    private String firstName;
+
+    @NotEmpty(message = "Last name is mandatory.")
+    private String lastName;
 
 }

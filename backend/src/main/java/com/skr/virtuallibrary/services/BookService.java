@@ -7,6 +7,7 @@ import com.skr.virtuallibrary.entities.Book;
 import com.skr.virtuallibrary.exceptions.BookNotFoundException;
 import com.skr.virtuallibrary.exceptions.InternalException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
+import com.skr.virtuallibrary.repositories.AuthorRepository;
 import com.skr.virtuallibrary.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
-    private final AuthorService authorService;
+    private final AuthorRepository authorRepository;
 
     private final ModelMapper modelMapper;
 
@@ -77,8 +78,8 @@ public class BookService {
     }
 
     private Author findOrCreateAuthor(AuthorDto authorDto) {
-        Optional<Author> existingAuthor = authorService.findAuthorByName(authorDto.getName());
-        return existingAuthor.orElseGet(() -> modelMapper.toAuthorEntity(authorService.addAuthor(authorDto)));
+        Optional<Author> existingAuthor = authorRepository.findByFirstNameAndLastName(authorDto.getFirstName(), authorDto.getLastName());
+        return existingAuthor.orElseGet(() -> authorRepository.save(modelMapper.toAuthorEntity(authorDto)));
     }
 
 }

@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -49,10 +48,6 @@ public class AuthorService {
         } else {
             throw new AuthorNotFoundException(ERROR_NOT_FOUND_MSG + id);
         }
-    }
-
-    public Optional<Author> findAuthorByName(String name) {
-        return authorRepository.findByName(name);
     }
 
     private AuthorDto saveAuthor(AuthorDto authorDto) {
