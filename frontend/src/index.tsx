@@ -13,17 +13,23 @@ import { ThemeProvider } from "@emotion/react";
 import theme from "./palette/theme";
 
 import "./i18n";
+import "./config/axios";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 document.body.classList.add("body");
+
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
 );
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    </QueryClientProvider>
   </React.StrictMode>,
 );
 

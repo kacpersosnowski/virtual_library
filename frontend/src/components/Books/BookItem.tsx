@@ -7,8 +7,11 @@ import { useAnimate } from "framer-motion";
 import Direction from "../../enums/Direction";
 import { useState } from "react";
 import { BOOK_HEIGHT, BOOK_WITDH } from "../../constants/common";
+import { BookItemData } from "../../config/api/books/books.types";
+import { parseAuthorsString } from "../../config/api/authors/authors.parsers";
 
 type Props = {
+  details: BookItemData;
   priority: number;
   animationDirection?: Direction;
 };
@@ -66,9 +69,9 @@ const BookItem: React.FC<Props> = (props) => {
       <BookDetails
         zIndex={detailsZIndex}
         id={1}
-        title="Teoria obwodów i sygnałów"
-        author="Osowski S."
-        shortDescription="Przeżyj niezwykłą przygodę w krainie kabelków i stanów nieustalonych!"
+        title={props.details.title}
+        author={parseAuthorsString(props.details.authors)}
+        shortDescription={props.details.shortDescription}
       />
     </Box>
   );

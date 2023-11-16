@@ -13,6 +13,9 @@ import { useState } from "react";
 import { BOOK_HEIGHT } from "../../../constants/common";
 import BooksHeader from "../BooksHeader";
 import BooksFooter from "../BooksFooter";
+import { useQuery } from "react-query";
+import { booksApi } from "../../../config/api/books/books";
+import LoadingSpinner from "../../UI/LoadingSpinner";
 
 type Props = {
   headerText: string;
@@ -20,6 +23,15 @@ type Props = {
 };
 
 const BooksList: React.FC<Props> = (props) => {
+  const {
+    data: books,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["books"],
+    queryFn: booksApi.getAllBooks,
+  });
+
   const [bookAnimation, setBookAnimation] = useState<Direction>(
     Direction.Right,
   );
@@ -34,58 +46,46 @@ const BooksList: React.FC<Props> = (props) => {
     false,
   );
 
+  const booksListLength = books?.length;
+
   return (
     <>
       <BooksHeader text={props.headerText} />
-      <Box sx={{ pt: "4rem" }}>
-        <Box sx={{ height: BOOK_HEIGHT + 25 + "px", mb: "3rem" }}>
-          <ScrollMenu
-            LeftArrow={LeftArrow}
-            RightArrow={RightArrow}
-            wrapperClassName={classes["horizonal-scroll-wrapper"]}
-            itemClassName={classes["horizonal-scroll-item"]}
-          >
-            {/* some dummy data for now */}
-            <BookScrollCard>
-              <BookItem priority={10} animationDirection={bookAnimation} />
-            </BookScrollCard>
-            <BookScrollCard>
-              <BookItem priority={9} animationDirection={bookAnimation} />
-            </BookScrollCard>
-            <BookScrollCard>
-              <BookItem priority={8} animationDirection={bookAnimation} />
-            </BookScrollCard>
-            <BookScrollCard>
-              <BookItem priority={7} animationDirection={bookAnimation} />
-            </BookScrollCard>
-            <BookScrollCard>
-              <BookItem priority={6} animationDirection={bookAnimation} />
-            </BookScrollCard>
-            <BookScrollCard>
-              <BookItem priority={5} animationDirection={bookAnimation} />
-            </BookScrollCard>
-            <BookScrollCard>
-              <BookItem priority={4} animationDirection={bookAnimation} />
-            </BookScrollCard>
-            <BookScrollCard>
-              <BookItem priority={3} animationDirection={bookAnimation} />
-            </BookScrollCard>
-            <BookScrollCard>
-              <BookItem priority={2} animationDirection={bookAnimation} />
-            </BookScrollCard>
-            <BookScrollCard>
-              <BookItem
-                priority={1}
-                animationDirection={
-                  bookAnimation === Direction.Right
-                    ? Direction.Left
-                    : bookAnimation
-                }
-              />
-            </BookScrollCard>
-          </ScrollMenu>
+      {isLoading && <LoadingSpinner />}
+      {!isLoading && !isError && (
+        <Box sx={{ pt: "4rem" }}>
+          <Box sx={{ height: BOOK_HEIGHT + 25 + "px", mb: "3rem" }}>
+            <ScrollMenu
+              LeftArrow={LeftArrow}
+              RightArrow={RightArrow}
+              wrapperClassName={classes["horizonal-scroll-wrapper"]}
+              itemClassName={classes["horizonal-scroll-item"]}
+            >
+              <>
+                {books.map((book, index) => {
+                  const priority = booksListLength - index;
+                  let animationDirection = bookAnimation;
+                  if (index === booksListLength - 1) {
+                    animationDirection =
+                      bookAnimation === Direction.Right
+                        ? Direction.Left
+                        : bookAnimation;
+                  }
+                  return (
+                    <BookScrollCard key={book.id}>
+                      <BookItem
+                        details={book}
+                        priority={priority}
+                        animationDirection={animationDirection}
+                      />
+                    </BookScrollCard>
+                  );
+                })}
+              </>
+            </ScrollMenu>
+          </Box>
         </Box>
-      </Box>
+      )}
       <BooksFooter text={props.footerText} />
     </>
   );

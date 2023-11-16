@@ -11,6 +11,14 @@ export type Book = {
   cover: string;
 };
 
+export type BookItemData = {
+  id: string;
+  title: string;
+  authors: Author[];
+  shortDescription: string;
+  cover: string;
+};
+
 export type BooksApi = {
-  getAllBooks: () => Promise<Book[]>;
+  getAllBooks: () => Promise<BookItemData[]>;
 };
