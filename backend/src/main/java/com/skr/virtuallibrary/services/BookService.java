@@ -75,11 +75,11 @@ public class BookService {
         String[] searchPhrases = searchPhrase.trim().split(" ");
         List<Book> books = new ArrayList<>();
 
-        for(String phrase: searchPhrases) {
+        for (String phrase : searchPhrases) {
             Query query = new Query().addCriteria(new Criteria().orOperator(
-                    Criteria.where("title").regex(phrase,"i"),
-                    Criteria.where("authorList.firstName").regex(phrase,"i"),
-                    Criteria.where("authorList.lastName").regex(phrase,"i")
+                    Criteria.where("title").regex(phrase, "i"),
+                    Criteria.where("authorList.firstName").regex(phrase, "i"),
+                    Criteria.where("authorList.lastName").regex(phrase, "i")
             ));
             books.addAll(mongoTemplate.find(query, Book.class));
         }
