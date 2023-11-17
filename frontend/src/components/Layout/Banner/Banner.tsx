@@ -2,11 +2,16 @@ import { Container } from "@mui/material";
 
 import banner from "../../../assets/banner.jpg";
 import WelcomeElement from "./WelcomeElement";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const Banner = () => {
+  const { scrollY } = useScroll();
+
+  const imageY = useTransform(scrollY, [0, 300], [0, -100]);
+  const imageOpacity = useTransform(scrollY, [0, 300], [1, 0.7]);
+
   return (
-    <Container
-      maxWidth={false}
+    <motion.div
       style={{
         backgroundImage: `url(${banner})`,
         backgroundSize: "cover",
@@ -15,10 +20,14 @@ const Banner = () => {
         marginTop: "64px",
         paddingTop: "15vh",
         paddingBottom: "5vh",
+        opacity: imageOpacity,
+        y: imageY,
       }}
     >
-      <WelcomeElement />
-    </Container>
+      <Container maxWidth={false}>
+        <WelcomeElement />
+      </Container>
+    </motion.div>
   );
 };
 
