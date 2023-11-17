@@ -17,6 +17,8 @@ import { useQuery } from "react-query";
 import { booksApi } from "../../../config/api/books/books";
 import LoadingSpinner from "../../UI/LoadingSpinner";
 import ErrorMessage from "../../UI/ErrorMessage";
+import { useTranslation } from "react-i18next";
+import errorMessages from "../../../messages/errorMessages";
 
 type Props = {
   headerText: string;
@@ -37,6 +39,8 @@ const BooksList: React.FC<Props> = (props) => {
     Direction.Right,
   );
 
+  const { t } = useTranslation();
+
   window.addEventListener(
     "resize",
     () => {
@@ -54,7 +58,7 @@ const BooksList: React.FC<Props> = (props) => {
       <BooksHeader text={props.headerText} />
       {isLoading && <LoadingSpinner />}
       {isError && (
-        <ErrorMessage message="Failed to fetch recently popular books. Try again later." />
+        <ErrorMessage message={t(errorMessages.fetchBookListError.key)} />
       )}
       {!isLoading && !isError && (
         <Box sx={{ pt: "4rem" }}>
@@ -84,80 +88,6 @@ const BooksList: React.FC<Props> = (props) => {
                   </BookScrollCard>
                 );
               })}
-              {/* <BookScrollCard>
-                <BookItem
-                  details={books[0]}
-                  priority={10}
-                  animationDirection={bookAnimation}
-                />
-              </BookScrollCard>
-              <BookScrollCard>
-                <BookItem
-                  details={books[1]}
-                  priority={9}
-                  animationDirection={bookAnimation}
-                />
-              </BookScrollCard>
-              <BookScrollCard>
-                <BookItem
-                  details={books[2]}
-                  priority={8}
-                  animationDirection={bookAnimation}
-                />
-              </BookScrollCard>
-              <BookScrollCard>
-                <BookItem
-                  details={books[3]}
-                  priority={7}
-                  animationDirection={bookAnimation}
-                />
-              </BookScrollCard>
-              <BookScrollCard>
-                <BookItem
-                  details={books[4]}
-                  priority={6}
-                  animationDirection={bookAnimation}
-                />
-              </BookScrollCard>
-              <BookScrollCard>
-                <BookItem
-                  details={books[5]}
-                  priority={5}
-                  animationDirection={bookAnimation}
-                />
-              </BookScrollCard>
-              <BookScrollCard>
-                <BookItem
-                  details={books[6]}
-                  priority={4}
-                  animationDirection={bookAnimation}
-                />
-              </BookScrollCard>
-              <BookScrollCard>
-                <BookItem
-                  details={books[7]}
-                  priority={3}
-                  animationDirection={bookAnimation}
-                />
-              </BookScrollCard>
-              <BookScrollCard>
-                <BookItem
-                  details={books[8]}
-                  priority={2}
-                  animationDirection={bookAnimation}
-                />
-              </BookScrollCard>
-              <BookScrollCard>
-                <BookItem
-                  details={books[9]}
-                  priority={1}
-                  animationDirection={
-                    bookAnimation === Direction.Right
-                      ? Direction.Left
-                      : bookAnimation
-                  }
-                />
-              </BookScrollCard> */}
             </ScrollMenu>
           </Box>
         </Box>

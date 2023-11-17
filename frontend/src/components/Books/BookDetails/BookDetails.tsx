@@ -4,6 +4,8 @@ import ActionButton from "../../UI/ActionButton";
 import { motion } from "framer-motion";
 
 import classes from "./BookDetails.module.css";
+import { useTranslation } from "react-i18next";
+import booksMessages from "../../../messages/booksMessages";
 
 type Props = {
   id: number;
@@ -13,6 +15,8 @@ type Props = {
 };
 
 const BookDetails: React.FC<Props> = (props) => {
+  const { t } = useTranslation();
+
   return (
     <Box
       sx={{
@@ -56,7 +60,7 @@ const BookDetails: React.FC<Props> = (props) => {
         <StarIcon />
       </Box>
       <Box sx={{ textAlign: "center" }}>
-        <ActionButton>Szczegóły</ActionButton>
+        <ActionButton>{t(booksMessages.bookItemDetails.key)}</ActionButton>
       </Box>
     </Box>
   );
