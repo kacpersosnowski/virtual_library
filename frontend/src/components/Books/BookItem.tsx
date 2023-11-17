@@ -71,7 +71,6 @@ const BookItem: React.FC<Props> = (props) => {
         id={1}
         title={props.details.title}
         author={parseAuthorsString(props.details.authorList)}
-        shortDescription={props.details.shortDescription}
       />
     </Box>
   );

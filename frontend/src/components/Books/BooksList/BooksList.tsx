@@ -65,27 +65,99 @@ const BooksList: React.FC<Props> = (props) => {
               wrapperClassName={classes["horizonal-scroll-wrapper"]}
               itemClassName={classes["horizonal-scroll-item"]}
             >
-              <>
-                {books.map((book, index) => {
-                  const priority = booksListLength - index;
-                  let animationDirection = bookAnimation;
-                  if (index === booksListLength - 1) {
-                    animationDirection =
-                      bookAnimation === Direction.Right
-                        ? Direction.Left
-                        : bookAnimation;
+              {books.map((book, index) => {
+                const priority = booksListLength - index;
+                let animationDirection = bookAnimation;
+                if (index === booksListLength - 1) {
+                  animationDirection =
+                    bookAnimation === Direction.Right
+                      ? Direction.Left
+                      : bookAnimation;
+                }
+                return (
+                  <BookScrollCard key={book.id}>
+                    <BookItem
+                      details={book}
+                      priority={priority}
+                      animationDirection={animationDirection}
+                    />
+                  </BookScrollCard>
+                );
+              })}
+              {/* <BookScrollCard>
+                <BookItem
+                  details={books[0]}
+                  priority={10}
+                  animationDirection={bookAnimation}
+                />
+              </BookScrollCard>
+              <BookScrollCard>
+                <BookItem
+                  details={books[1]}
+                  priority={9}
+                  animationDirection={bookAnimation}
+                />
+              </BookScrollCard>
+              <BookScrollCard>
+                <BookItem
+                  details={books[2]}
+                  priority={8}
+                  animationDirection={bookAnimation}
+                />
+              </BookScrollCard>
+              <BookScrollCard>
+                <BookItem
+                  details={books[3]}
+                  priority={7}
+                  animationDirection={bookAnimation}
+                />
+              </BookScrollCard>
+              <BookScrollCard>
+                <BookItem
+                  details={books[4]}
+                  priority={6}
+                  animationDirection={bookAnimation}
+                />
+              </BookScrollCard>
+              <BookScrollCard>
+                <BookItem
+                  details={books[5]}
+                  priority={5}
+                  animationDirection={bookAnimation}
+                />
+              </BookScrollCard>
+              <BookScrollCard>
+                <BookItem
+                  details={books[6]}
+                  priority={4}
+                  animationDirection={bookAnimation}
+                />
+              </BookScrollCard>
+              <BookScrollCard>
+                <BookItem
+                  details={books[7]}
+                  priority={3}
+                  animationDirection={bookAnimation}
+                />
+              </BookScrollCard>
+              <BookScrollCard>
+                <BookItem
+                  details={books[8]}
+                  priority={2}
+                  animationDirection={bookAnimation}
+                />
+              </BookScrollCard>
+              <BookScrollCard>
+                <BookItem
+                  details={books[9]}
+                  priority={1}
+                  animationDirection={
+                    bookAnimation === Direction.Right
+                      ? Direction.Left
+                      : bookAnimation
                   }
-                  return (
-                    <BookScrollCard key={book.id}>
-                      <BookItem
-                        details={book}
-                        priority={priority}
-                        animationDirection={animationDirection}
-                      />
-                    </BookScrollCard>
-                  );
-                })}
-              </>
+                />
+              </BookScrollCard> */}
             </ScrollMenu>
           </Box>
         </Box>
