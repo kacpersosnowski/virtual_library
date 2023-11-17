@@ -1,14 +1,15 @@
 import { Box } from "@mui/material";
 
-import bookCover from "../../assets/osowski.png";
 import BookCover from "./BookCover";
 import BookDetails from "./BookDetails/BookDetails";
 import { useAnimate } from "framer-motion";
 import Direction from "../../enums/Direction";
 import { useState } from "react";
 import { BOOK_HEIGHT, BOOK_WITDH } from "../../constants/common";
+import { BookItemData } from "../../config/api/books/books.types";
 
 type Props = {
+  details: BookItemData;
   priority: number;
   animationDirection?: Direction;
 };
@@ -62,13 +63,12 @@ const BookItem: React.FC<Props> = (props) => {
       onMouseEnter={mouseEnterHandler}
       onMouseLeave={mouseOverHandler}
     >
-      <BookCover coverImage={bookCover} zIndex={coverZIndex} />
+      <BookCover coverImage={props.details.cover} zIndex={coverZIndex} />
       <BookDetails
         zIndex={detailsZIndex}
         id={1}
-        title="Teoria obwodów i sygnałów"
-        author="Osowski S."
-        shortDescription="Przeżyj niezwykłą przygodę w krainie kabelków i stanów nieustalonych!"
+        title={props.details.title}
+        author={props.details.authorList}
       />
     </Box>
   );

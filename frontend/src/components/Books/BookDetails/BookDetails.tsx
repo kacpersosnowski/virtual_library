@@ -4,16 +4,19 @@ import ActionButton from "../../UI/ActionButton";
 import { motion } from "framer-motion";
 
 import classes from "./BookDetails.module.css";
+import { useTranslation } from "react-i18next";
+import booksMessages from "../../../messages/booksMessages";
 
 type Props = {
   id: number;
   title: string;
   author: string;
-  shortDescription: string;
   zIndex: number;
 };
 
 const BookDetails: React.FC<Props> = (props) => {
+  const { t } = useTranslation();
+
   return (
     <Box
       sx={{
@@ -27,6 +30,10 @@ const BookDetails: React.FC<Props> = (props) => {
         p: "0.4rem",
         color: "#cecece",
         cursor: "default",
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
       }}
       component={motion.div}
       className={`${classes["book-details"]} book`}
@@ -52,11 +59,8 @@ const BookDetails: React.FC<Props> = (props) => {
         <StarIcon />
         <StarIcon />
       </Box>
-      <Typography paragraph sx={{ fontSize: "0.85rem", textAlign: "center" }}>
-        {props.shortDescription}
-      </Typography>
       <Box sx={{ textAlign: "center" }}>
-        <ActionButton>Szczegóły</ActionButton>
+        <ActionButton>{t(booksMessages.bookItemDetails.key)}</ActionButton>
       </Box>
     </Box>
   );
