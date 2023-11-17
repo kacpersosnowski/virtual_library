@@ -14,7 +14,7 @@ export type Book = {
 export type BookItemData = {
   id: string;
   title: string;
-  authorList: Author[];
+  authorList: string;
   shortDescription: string;
   cover: string;
 };
