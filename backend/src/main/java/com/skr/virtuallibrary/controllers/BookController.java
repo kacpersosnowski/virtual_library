@@ -91,8 +91,19 @@ public class BookController {
             @PathVariable String id,
             @Valid @RequestPart("book") BookDto bookDto,
             @RequestPart("cover") MultipartFile cover
-
     ) {
         return bookService.updateBook(id, bookDto, cover);
+    }
+
+    @Operation(
+            summary = "Find Books by title or Author",
+            description = "Get all Book by title or authors' firstName or lastName."
+    )
+    @GetMapping("/search/{searchPhrase}")
+    public List<BookDto> findAllBooks(
+            @Parameter(description = "Search phrase", example = "teoria")
+            @PathVariable String searchPhrase
+    ) {
+        return bookService.findBooksByTitleOrAuthor(searchPhrase);
     }
 }
