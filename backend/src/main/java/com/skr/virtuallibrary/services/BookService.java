@@ -13,10 +13,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +34,8 @@ public class BookService {
     private final AuthorRepository authorRepository;
 
     private final ModelMapper modelMapper;
+
+    private final MongoTemplate mongoTemplate;
 
     private static final String ERROR_NOT_FOUND_MSG = "Not found book with id: ";
 
@@ -63,6 +69,24 @@ public class BookService {
         } else {
             throw new BookNotFoundException(ERROR_NOT_FOUND_MSG + id);
         }
+    }
+
+    public List<BookDto> findBooksByTitleOrAuthor(String searchPhrase) {
+        String[] searchPhrases = searchPhrase.trim().split(" ");
+        List<Book> books = new ArrayList<>();
+
+        for (String phrase : searchPhrases) {
+            Query query = new Query().addCriteria(new Criteria().orOperator(
+                    Criteria.where("title").regex(phrase, "i"),
+                    Criteria.where("authorList.firstName").regex(phrase, "i"),
+                    Criteria.where("authorList.lastName").regex(phrase, "i")
+            ));
+            books.addAll(mongoTemplate.find(query, Book.class));
+        }
+        return books.stream()
+                .map(modelMapper::toBookDto)
+                .distinct()
+                .toList();
     }
 
     private BookDto saveBook(BookDto bookDto, MultipartFile cover) {
