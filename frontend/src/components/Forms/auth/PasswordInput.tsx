@@ -7,9 +7,13 @@ import {
 } from "@mui/material";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useState } from "react";
+import React, { useState } from "react";
 
-const PasswordInput = () => {
+type Props = {
+  label: string;
+};
+
+const PasswordInput: React.FC<Props> = (props) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -19,7 +23,9 @@ const PasswordInput = () => {
       sx={{ width: "80%", mt: "0.5rem", mb: "0.5rem" }}
       variant="outlined"
     >
-      <InputLabel htmlFor="outlined-adornment-password">Hasło</InputLabel>
+      <InputLabel htmlFor="outlined-adornment-password">
+        {props.label}
+      </InputLabel>
       <OutlinedInput
         id="outlined-adornment-password"
         type={showPassword ? "text" : "password"}
@@ -34,7 +40,7 @@ const PasswordInput = () => {
             </IconButton>
           </InputAdornment>
         }
-        label="Hasło"
+        label={props.label}
       />
     </FormControl>
   );
