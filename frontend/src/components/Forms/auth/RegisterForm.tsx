@@ -1,13 +1,17 @@
 import { Box, Checkbox, FormControlLabel, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import PasswordInput from "./PasswordInput";
 import ActionButton from "../../UI/ActionButton";
 import Input from "../common/Input";
+import authMessages from "../../../messages/authMessages";
 
 import classes from "./AuthForms.module.css";
 
 const RegisterForm = () => {
+  const { t } = useTranslation();
+
   return (
     <Box
       className={classes["auth-form-wrapper"]}
@@ -20,18 +24,21 @@ const RegisterForm = () => {
         }}
       >
         <Typography sx={{ mb: "2rem" }} variant="h3">
-          Zacznij czytać już dziś
+          {t(authMessages.registerHeader.key)}
         </Typography>
-        <Input id="outlined-email-register" label="Adres e-mail" />
-        <PasswordInput label="Hasło" />
-        <PasswordInput label="Powtórz hasło" />
+        <Input
+          id="outlined-email-register"
+          label={t(authMessages.emailLabel.key)}
+        />
+        <PasswordInput label={t(authMessages.passwordLabel.key)} />
+        <PasswordInput label={t(authMessages.repeatPasswordLabel.key)} />
         <FormControlLabel
           control={<Checkbox />}
           label={
             <div>
-              <span>Akceptuję </span>{" "}
+              <span>{t(authMessages.acceptTerms.key)} </span>{" "}
               <Link to="/terms" className="primary-link">
-                regulamin portalu
+                {t(authMessages.acceptTermsLink.key)}
               </Link>
             </div>
           }
@@ -40,12 +47,12 @@ const RegisterForm = () => {
           sx={{ mt: "0.5rem", width: "80%", mb: "1rem" }}
           type="submit"
         >
-          Zarejestruj się
+          {t(authMessages.registerButton.key)}
         </ActionButton>
         <Typography paragraph>
-          Masz już konto?{" "}
+          {t(authMessages.loginPrompt.key)}{" "}
           <Link to="/login" className="primary-link">
-            Zaloguj się tutaj.
+            {t(authMessages.loginPromptLink.key)}
           </Link>
         </Typography>
       </Box>

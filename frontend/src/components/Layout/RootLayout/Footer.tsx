@@ -1,6 +1,6 @@
 import { Box, Container, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import mainPageMessages from "../../messages/mainPageMessages";
+import mainPageMessages from "../../../messages/mainPageMessages";
 
 const Footer = () => {
   const { t } = useTranslation();

@@ -13,14 +13,13 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import SearchForm from "../Forms/common/SearchForm";
-import ChangeLanguageForm from "../Forms/common/ChangeLanguageForm/ChangeLanguageForm";
+import SearchForm from "../../Forms/common/SearchForm";
+import ChangeLanguageForm from "../../Forms/common/ChangeLanguageForm/ChangeLanguageForm";
 import { useTranslation } from "react-i18next";
-import mainPageMessages from "../../messages/mainPageMessages";
+import mainPageMessages from "../../../messages/mainPageMessages";
 
-import logo from "../../assets/logo.png";
+import logo from "../../../assets/logo.png";
 import { Link } from "react-router-dom";
-// import { Link } from "react-router-dom";
 
 const drawerWidth = 240; // in pixels
 
