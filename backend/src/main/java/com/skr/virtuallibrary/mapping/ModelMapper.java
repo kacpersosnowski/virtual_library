@@ -2,10 +2,8 @@ package com.skr.virtuallibrary.mapping;
 
 import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.dto.BookDto;
-import com.skr.virtuallibrary.dto.UserDto;
 import com.skr.virtuallibrary.entities.Author;
 import com.skr.virtuallibrary.entities.Book;
-import com.skr.virtuallibrary.entities.User;
 import org.bson.types.Binary;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -25,10 +23,6 @@ public interface ModelMapper {
     AuthorDto toAuthorDto(Author author);
 
     Author toAuthorEntity(AuthorDto authorDto);
-
-    UserDto toUserDto(User user);
-
-    User toUser(UserDto userDto);
 
     @Named("bookCoverBinaryToString")
     static String bookCoverBinaryToString(Binary cover) {
