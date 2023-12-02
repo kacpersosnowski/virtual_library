@@ -1,4 +1,4 @@
-Cześć [imie_odbiorcy],
+Cześć %s,
 
 Dziękujemy za rejestrację w Liber Mundi! Aby potwierdzić swoje konto, prosimy kliknąć poniższy link:
 

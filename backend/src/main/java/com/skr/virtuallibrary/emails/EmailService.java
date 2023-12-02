@@ -26,10 +26,11 @@ public class EmailService {
         ClassPathResource resource = new ClassPathResource("/email_content/authentication_en.txt");
         String messageText = FileCopyUtils.copyToString(
                 new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
+        String username = recipient.substring(0, recipient.indexOf('@'));
 
         helper.setTo(recipient);
         helper.setSubject("Welcome to Liber Mundi");
-        helper.setText(String.format(messageText, token));
+        helper.setText(String.format(messageText, username, token));
 
         mailSender.send(message);
     }
@@ -41,10 +42,11 @@ public class EmailService {
         ClassPathResource resource = new ClassPathResource("/email_content/authentication_pl.txt");
         String messageText = FileCopyUtils.copyToString(
                 new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
+        String username = recipient.substring(0, recipient.indexOf('@'));
 
         helper.setTo(recipient);
         helper.setSubject("Witamy w Liber Mundi");
-        helper.setText(String.format(messageText, token));
+        helper.setText(String.format(messageText, username, token));
 
         mailSender.send(message);
     }
