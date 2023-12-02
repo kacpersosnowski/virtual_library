@@ -1,0 +1,11 @@
+Dear [Recipient's Name],
+
+Thank you for registering on Liber Mundi! To confirm your account, please click the link below:
+
+http://localhost:3000/token=%s
+
+If you did not sign up on our website, please disregard this message.
+
+Thank you for your trust!
+Best regards,
+Liber Mundi Team
