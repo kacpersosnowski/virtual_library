@@ -2,6 +2,7 @@ package com.skr.virtuallibrary.auth;
 
 import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.entities.enums.Authority;
+import com.skr.virtuallibrary.exceptions.UserNotFoundException;
 import com.skr.virtuallibrary.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +27,7 @@ public class AuthenticationService {
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .authority(Authority.USER)
+                .language(registerRequest.getLanguage())
                 .build();
         userRepository.save(user);
         return generateToken(user);
@@ -39,7 +41,7 @@ public class AuthenticationService {
                 )
         );
         User user = userRepository.findByEmail(authenticationRequest.getEmail())
-                .orElseThrow();
+                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + authenticationRequest.getEmail()));
         return generateToken(user);
     }
 

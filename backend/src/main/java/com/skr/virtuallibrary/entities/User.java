@@ -1,6 +1,7 @@
 package com.skr.virtuallibrary.entities;
 
 import com.skr.virtuallibrary.entities.enums.Authority;
+import com.skr.virtuallibrary.entities.enums.Language;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -25,6 +26,8 @@ public class User implements UserDetails {
     private String password;
 
     private Authority authority;
+
+    private Language language;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
