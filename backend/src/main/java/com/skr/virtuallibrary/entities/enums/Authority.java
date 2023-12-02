@@ -1,6 +1,6 @@
 package com.skr.virtuallibrary.entities.enums;
 
-public enum Role {
+public enum Authority {
     USER,
     ADMIN
 }

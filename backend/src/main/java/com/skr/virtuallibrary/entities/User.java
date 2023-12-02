@@ -1,6 +1,6 @@
 package com.skr.virtuallibrary.entities;
 
-import com.skr.virtuallibrary.entities.enums.Role;
+import com.skr.virtuallibrary.entities.enums.Authority;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -24,11 +24,11 @@ public class User implements UserDetails {
 
     private String password;
 
-    private Role role;
+    private Authority authority;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority(authority.name()));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.skr.virtuallibrary.auth;
 
 import com.skr.virtuallibrary.entities.User;
-import com.skr.virtuallibrary.entities.enums.Role;
+import com.skr.virtuallibrary.entities.enums.Authority;
 import com.skr.virtuallibrary.repositories.UserRepository;
 import com.skr.virtuallibrary.services.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class AuthenticationService {
         final User user = User.builder()
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .role(Role.USER)
+                .authority(Authority.USER)
                 .build();
         userRepository.save(user);
         return generateToken(user);
