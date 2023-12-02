@@ -13,12 +13,13 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import SearchForm from "../Forms/common/SearchForm";
-import ChangeLanguageForm from "../Forms/common/ChangeLanguageForm/ChangeLanguageForm";
+import SearchForm from "../../Forms/common/SearchForm";
+import ChangeLanguageForm from "../../Forms/common/ChangeLanguageForm/ChangeLanguageForm";
 import { useTranslation } from "react-i18next";
-import mainPageMessages from "../../messages/mainPageMessages";
+import mainPageMessages from "../../../messages/mainPageMessages";
 
-import logo from "../../assets/logo.png";
+import logo from "../../../assets/logo.png";
+import { Link } from "react-router-dom";
 
 const drawerWidth = 240; // in pixels
 
@@ -31,8 +32,8 @@ const MainNavbar = () => {
   };
 
   const navItems = [
-    t(mainPageMessages.buttonsLogin.key),
-    t(mainPageMessages.buttonsRegister.key),
+    { text: t(mainPageMessages.buttonsLogin.key), link: "/login" },
+    { text: t(mainPageMessages.buttonsRegister.key), link: "/register" },
   ];
 
   const drawer = (
@@ -43,12 +44,18 @@ const MainNavbar = () => {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
+          <ListItem key={item.text} disablePadding>
             <ListItemButton
               sx={{ textAlign: "center" }}
               onClick={handleDrawerToggle}
             >
-              <ListItemText primary={item} />
+              <ListItemText
+                primary={
+                  <Link to={item.link} className="clear-link">
+                    {item.text}
+                  </Link>
+                }
+              />
             </ListItemButton>
           </ListItem>
         ))}
@@ -72,16 +79,19 @@ const MainNavbar = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Box
-            component="img"
-            src={logo}
-            width="auto"
-            height={50}
-            style={{ marginRight: "10px" }}
-          />
+          <Link to="/" className="clear-link">
+            <Box
+              component="img"
+              src={logo}
+              width="auto"
+              height={50}
+              style={{ marginRight: "10px" }}
+            />
+          </Link>
           <Typography
             variant="h6"
-            component="div"
+            component={Link}
+            to="/"
             sx={{
               display: "block",
               fontFamily: "monospace",
@@ -102,10 +112,16 @@ const MainNavbar = () => {
               display: { xs: "none", md: "flex" },
             }}
           >
-            <Button sx={{ color: "#fff", mr: ".5rem" }}>{navItems[0]}</Button>
-            <Button sx={{ color: "#fff", bgcolor: "primary.dark" }}>
-              {navItems[1]}
-            </Button>
+            <Link to={navItems[0].link} className="clear-link">
+              <Button sx={{ color: "#fff", mr: ".5rem" }}>
+                {navItems[0].text}
+              </Button>
+            </Link>
+            <Link to={navItems[1].link} className="clear-link">
+              <Button sx={{ color: "#fff", bgcolor: "primary.dark" }}>
+                {navItems[1].text}
+              </Button>
+            </Link>
           </Box>
           <ChangeLanguageForm
             sx={{ ml: "1rem", display: { xs: "none", md: "block" } }}

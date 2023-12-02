@@ -1,6 +1,6 @@
 import { Box, Container, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import mainPageMessages from "../../messages/mainPageMessages";
+import mainPageMessages from "../../../messages/mainPageMessages";
 
 const Footer = () => {
   const { t } = useTranslation();
@@ -9,10 +9,12 @@ const Footer = () => {
     <Box
       sx={{
         width: "100%",
-        height: "6rem",
+        height: "5rem",
         bgcolor: "primary.dark",
         mt: "3rem",
         boxShadow: "3px -5px 24px 0px rgba(66, 68, 90, 1)",
+        position: "absolute",
+        bottom: 0,
       }}
     >
       <Container maxWidth="lg">
