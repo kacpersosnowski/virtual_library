@@ -1,5 +1,6 @@
 package com.skr.virtuallibrary.configurations;
 
+import com.skr.virtuallibrary.exceptions.InternalException;
 import com.skr.virtuallibrary.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -34,8 +35,12 @@ public class AuthConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
+        try {
+            return config.getAuthenticationManager();
+        } catch (Exception ex) {
+            throw new InternalException("Error while trying to get authentication manager.", ex);
+        }
     }
 
     @Bean

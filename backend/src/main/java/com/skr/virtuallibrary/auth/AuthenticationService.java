@@ -3,7 +3,6 @@ package com.skr.virtuallibrary.auth;
 import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.entities.enums.Authority;
 import com.skr.virtuallibrary.repositories.UserRepository;
-import com.skr.virtuallibrary.services.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

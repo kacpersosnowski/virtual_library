@@ -1,4 +1,4 @@
-package com.skr.virtuallibrary.services;
+package com.skr.virtuallibrary.auth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
