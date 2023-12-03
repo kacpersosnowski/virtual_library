@@ -10,13 +10,13 @@ import lombok.*;
 @Builder
 public class RegisterRequest {
 
-    @Email
+    @Email(message = "Email should be valid")
     private String email;
 
-    @NotEmpty
+    @NotEmpty(message = "Password should not be empty")
     private String password;
 
-    @NotNull
+    @NotNull(message = "Language should not be null")
     private Language language;
 
 }
