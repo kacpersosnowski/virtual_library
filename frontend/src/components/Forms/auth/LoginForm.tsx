@@ -11,6 +11,7 @@ import authMessages from "../../../messages/authMessages";
 import emailValidator from "../../../config/validators/emailValidator";
 import validationMessages from "../../../messages/validationMessages";
 import useFormikLanguage from "../../../hooks/useFormikLanguage";
+import passwordTranslatableSchema from "../../../config/validators/passwordTranslatableSchema";
 
 const LoginForm = () => {
   const { t } = useTranslation();
@@ -22,7 +23,7 @@ const LoginForm = () => {
         invalid: t(validationMessages.emailInvalid.key),
         required: t(validationMessages.fieldRequired.key),
       }),
-      password: Yup.string().required("This field is required"),
+      password: passwordTranslatableSchema(t),
     }),
     onSubmit: (values) => {
       console.log("Login", JSON.stringify(values));

@@ -7,12 +7,13 @@ import PasswordInput from "./PasswordInput";
 import ActionButton from "../../UI/ActionButton";
 import Input from "../common/Input";
 import authMessages from "../../../messages/authMessages";
-
-import classes from "./AuthForms.module.css";
 import Checkbox from "../common/Checkbox";
 import useFormikLanguage from "../../../hooks/useFormikLanguage";
 import emailValidator from "../../../config/validators/emailValidator";
 import validationMessages from "../../../messages/validationMessages";
+
+import classes from "./AuthForms.module.css";
+import passwordTranslatableSchema from "../../../config/validators/passwordTranslatableSchema";
 
 const RegisterForm = () => {
   const { t } = useTranslation();
@@ -29,9 +30,14 @@ const RegisterForm = () => {
         invalid: t(validationMessages.emailInvalid.key),
         required: t(validationMessages.fieldRequired.key),
       }),
-      password1: Yup.string().required("This field is required"),
-      password2: Yup.string().required("This field is required"),
-      acceptTerms: Yup.boolean().isTrue("You have to accept our terms"),
+      password1: passwordTranslatableSchema(t),
+      password2: Yup.string()
+        .required(t(validationMessages.fieldRequired.key))
+        .oneOf(
+          [Yup.ref("password1")],
+          t(validationMessages.passwordsNotMatch.key),
+        ),
+      acceptTerms: Yup.boolean().isTrue(t(validationMessages.acceptTerms.key)),
     }),
     onSubmit: (values) => {
       console.log("Register", JSON.stringify(values));
