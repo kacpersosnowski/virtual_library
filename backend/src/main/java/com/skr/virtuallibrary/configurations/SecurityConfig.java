@@ -32,8 +32,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth
                                 .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/books/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/books/**").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/authors/**").hasAuthority("ADMIN")
+                                .requestMatchers("/error").anonymous()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->
