@@ -1,7 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import classes from "./AuthForms.module.css";
@@ -9,16 +8,20 @@ import ActionButton from "../../UI/ActionButton";
 import PasswordInput from "./PasswordInput";
 import Input from "../common/Input";
 import authMessages from "../../../messages/authMessages";
+import emailValidator from "../../../config/validators/emailValidator";
+import validationMessages from "../../../messages/validationMessages";
+import useFormikLanguage from "../../../hooks/useFormikLanguage";
 
 const LoginForm = () => {
   const { t } = useTranslation();
 
-  const formik = useFormik({
+  const formik = useFormikLanguage({
     initialValues: { email: "", password: "" },
     validationSchema: Yup.object({
-      email: Yup.string()
-        .email("Invalid email address")
-        .required("This field is required"),
+      email: emailValidator({
+        invalid: t(validationMessages.emailInvalid.key),
+        required: t(validationMessages.fieldRequired.key),
+      }),
       password: Yup.string().required("This field is required"),
     }),
     onSubmit: (values) => {
