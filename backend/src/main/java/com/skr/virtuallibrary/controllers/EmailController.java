@@ -22,7 +22,7 @@ public class EmailController {
     private final EmailService emailService;
 
     @PostMapping("/send")
-    @Operation(summary = "Send verification email in English.")
+    @Operation(summary = "Send verification email.")
     public String sendEmailEn(
             @RequestParam Language language,
             @RequestParam String to,
