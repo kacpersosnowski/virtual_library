@@ -7,7 +7,7 @@ type Props = {
 
 const BooksFooter: React.FC<Props> = (props) => {
   return (
-    <Box sx={{ textAlign: "center" }}>
+    <Box sx={{ textAlign: "center", mb: "2.5rem" }}>
       <ActionButton
         sx={{ mt: "1.2rem", width: "15rem", p: "10px 0", fontSize: "1.3rem" }}
       >
