@@ -1,7 +1,8 @@
+import { ReactNode } from "react";
 import {
+  FormControlLabel,
+  Checkbox as MUICheckbox,
   FormControl,
-  InputLabel,
-  OutlinedInput,
   SxProps,
   Theme,
 } from "@mui/material";
@@ -10,26 +11,22 @@ import ErrorMessage from "../../UI/ErrorMessage";
 
 type Props = {
   id: string;
-  label: string;
+  label: ReactNode;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formik: FormikProps<any>;
-  type?: string;
-  variant?: "standard" | "outlined" | "filled";
   sx?: SxProps<Theme>;
-  className?: string;
 };
 
-const Input: React.FC<Props> = (props) => {
-  const { id, label, formik, type, variant, sx, className } = props;
-  const { touched, errors } = formik;
+const Checkbox: React.FC<Props> = (props) => {
+  const { id, label, formik, sx } = props;
 
   const errorMessage =
-    touched[id] && errors[id] ? formik.errors[id].toString() : null;
+    formik.touched[id] && formik.errors[id]
+      ? formik.errors[id].toString()
+      : null;
 
   return (
     <FormControl
-      className={className}
-      variant={variant || "outlined"}
       sx={{
         width: "80%",
         mt: !errorMessage ? "0.5rem" : 0,
@@ -37,18 +34,14 @@ const Input: React.FC<Props> = (props) => {
         ...sx,
       }}
     >
-      <InputLabel htmlFor={id}>{label}</InputLabel>
-      <OutlinedInput
-        id={id}
+      <FormControlLabel
+        control={<MUICheckbox id={props.id} {...formik.getFieldProps(id)} />}
         label={label}
-        type={type || "text"}
-        error={!!errorMessage}
-        {...formik.getFieldProps(id)}
       />
       {errorMessage && (
         <ErrorMessage
           message={errorMessage}
-          sx={{ mt: "0.4rem" }}
+          sx={{ mt: 0 }}
           alertStyle={{ flex: 1 }}
         />
       )}
@@ -56,4 +49,4 @@ const Input: React.FC<Props> = (props) => {
   );
 };
 
-export default Input;
+export default Checkbox;
