@@ -1,5 +1,7 @@
-package com.skr.virtuallibrary.emails;
+package com.skr.virtuallibrary.controllers;
 
+import com.skr.virtuallibrary.services.EmailService;
+import com.skr.virtuallibrary.entities.enums.Language;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
@@ -19,21 +21,13 @@ public class EmailController {
 
     private final EmailService emailService;
 
-    @PostMapping("/send/en")
+    @PostMapping("/send")
     @Operation(summary = "Send verification email in English.")
     public String sendEmailEn(
+            @RequestParam Language language,
             @RequestParam String to,
             @RequestParam String token) throws MessagingException, IOException {
-        emailService.sendAuthenticationEmailEn(to, token);
-        return "Email sent successfully!";
-    }
-
-    @PostMapping("/send/pl")
-    @Operation(summary = "Send verification email in Polish.")
-    public String sendEmailPl(
-            @RequestParam String to,
-            @RequestParam String token) throws MessagingException, IOException {
-        emailService.sendAuthenticationEmailPl(to, token);
+        emailService.sendAuthenticationEmail(language, to, token);
         return "Email sent successfully!";
     }
 }
