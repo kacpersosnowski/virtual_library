@@ -8,15 +8,14 @@ import {
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import React, { useState } from "react";
-import { FormikProps } from "formik";
+import { FormikProps, FormikValues } from "formik";
 
 import ErrorMessage from "../../UI/ErrorMessage";
 
 type Props = {
   id: string;
   label: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  formik: FormikProps<any>;
+  formik: FormikProps<FormikValues>;
 };
 
 const PasswordInput: React.FC<Props> = (props) => {
@@ -39,7 +38,7 @@ const PasswordInput: React.FC<Props> = (props) => {
       }}
       variant="outlined"
     >
-      <InputLabel htmlFor="outlined-adornment-password">{label}</InputLabel>
+      <InputLabel htmlFor={id}>{label}</InputLabel>
       <OutlinedInput
         type={showPassword ? "text" : "password"}
         endAdornment={

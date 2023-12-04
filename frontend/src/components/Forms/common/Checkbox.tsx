@@ -6,14 +6,13 @@ import {
   SxProps,
   Theme,
 } from "@mui/material";
-import { FormikProps } from "formik";
+import { FormikProps, FormikValues } from "formik";
 import ErrorMessage from "../../UI/ErrorMessage";
 
 type Props = {
   id: string;
   label: ReactNode;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  formik: FormikProps<any>;
+  formik: FormikProps<FormikValues>;
   sx?: SxProps<Theme>;
 };
 

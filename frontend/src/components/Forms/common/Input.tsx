@@ -5,14 +5,13 @@ import {
   SxProps,
   Theme,
 } from "@mui/material";
-import { FormikProps } from "formik";
+import { FormikProps, FormikValues } from "formik";
 import ErrorMessage from "../../UI/ErrorMessage";
 
 type Props = {
   id: string;
   label: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  formik: FormikProps<any>;
+  formik: FormikProps<FormikValues>;
   type?: string;
   variant?: "standard" | "outlined" | "filled";
   sx?: SxProps<Theme>;
