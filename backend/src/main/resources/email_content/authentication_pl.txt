@@ -1,0 +1,11 @@
+Cześć %s,
+
+Dziękujemy za rejestrację w Liber Mundi! Aby potwierdzić swoje konto, prosimy kliknąć poniższy link:
+
+http://localhost:3000/token=%s
+
+Jeśli nie rejestrowałeś się na naszej stronie, prosimy zignorować tę wiadomość.
+Dziękujemy za zaufanie!
+
+Z poważaniem,
+Zespół Liber Mundi
