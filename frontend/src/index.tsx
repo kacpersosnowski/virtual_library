@@ -11,6 +11,7 @@ import "@fontsource/roboto/700.css";
 import { ThemeProvider } from "@emotion/react";
 import theme from "./palette/theme";
 import router from "./router/router";
+import { AuthContextProvider } from "./store/AuthContext/AuthContext";
 
 import "./i18n";
 import "./config/axios";
@@ -27,9 +28,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <RouterProvider router={router} />
-      </ThemeProvider>
+      <AuthContextProvider>
+        <ThemeProvider theme={theme}>
+          <RouterProvider router={router} />
+        </ThemeProvider>
+      </AuthContextProvider>
     </QueryClientProvider>
   </React.StrictMode>,
 );
