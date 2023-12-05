@@ -48,7 +48,7 @@ const RegisterForm = () => {
       const credentials = {
         email: values.newEmail,
         password: values.password1,
-        language: i18n.language,
+        language: i18n.language.toUpperCase(),
       };
       register(credentials);
     },
