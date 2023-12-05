@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 
-import classes from "./AuthForms.module.css";
 import ActionButton from "../../UI/ActionButton";
 import PasswordInput from "./PasswordInput";
 import Input from "../common/Input";
@@ -15,6 +14,7 @@ import useFormikLanguage from "../../../hooks/useFormikLanguage";
 import { AuthContext } from "../../../store/AuthContext/AuthContext";
 import LoadingSpinner from "../../UI/LoadingSpinner";
 import ErrorMessage from "../../UI/ErrorMessage";
+import Card from "../../UI/Card/Card";
 
 const LoginForm = () => {
   const { t } = useTranslation();
@@ -44,10 +44,7 @@ const LoginForm = () => {
   }, [isAuthenticated]);
 
   return (
-    <Box
-      className={classes["auth-form-wrapper"]}
-      sx={{ width: { xs: "100%", sm: "50%", lg: "25%" } }}
-    >
+    <Card>
       <Box component="form" onSubmit={formik.handleSubmit}>
         <Typography sx={{ mb: "2rem" }} variant="h3">
           {t(authMessages.loginHeader.key)}
@@ -86,7 +83,7 @@ const LoginForm = () => {
           </Link>
         </Typography>
       </Box>
-    </Box>
+    </Card>
   );
 };
 

@@ -3,7 +3,10 @@ import { useMutation } from "react-query";
 
 import { AuthContextType } from "./AuthContext.types";
 import { authApi } from "../../config/api/auth/auth";
-import { Credentials } from "../../config/api/auth/auth.types";
+import {
+  Credentials,
+  RegisterCredentials,
+} from "../../config/api/auth/auth.types";
 import AccessTokenService from "./AccessTokenService";
 
 export const AuthContext = createContext<AuthContextType>(null);
@@ -16,6 +19,7 @@ export const AuthContextProvider: React.FC<PropsWithChildren> = ({
     mutate: loginMutate,
     data: loginResponse,
     isLoading: loginIsLoading,
+    isSuccess: loginIsSuccess,
     error: loginError,
   } = useMutation({
     mutationFn: authApi.login,
@@ -23,6 +27,14 @@ export const AuthContextProvider: React.FC<PropsWithChildren> = ({
       AccessTokenService.storeToken(data.token);
       setIsAuthenticated(true);
     },
+  });
+  const {
+    mutate: registerMutate,
+    isLoading: registerIsLoading,
+    isSuccess: registerIsSuccess,
+    error: registerError,
+  } = useMutation({
+    mutationFn: authApi.register,
   });
 
   useEffect(() => {
@@ -37,6 +49,10 @@ export const AuthContextProvider: React.FC<PropsWithChildren> = ({
     loginMutate(credentials);
   };
 
+  const register = (credentials: RegisterCredentials) => {
+    registerMutate(credentials);
+  };
+
   const logout = () => {
     AccessTokenService.deleteToken();
     setIsAuthenticated(false);
@@ -48,10 +64,12 @@ export const AuthContextProvider: React.FC<PropsWithChildren> = ({
         isAuthenticated,
         setIsAuthenticated,
         login,
+        register,
         logout,
         loginResponse,
-        isLoading: loginIsLoading,
-        error: loginError,
+        isLoading: loginIsLoading || registerIsLoading,
+        isSuccess: loginIsSuccess || registerIsSuccess,
+        error: loginError || registerError,
       }}
     >
       {children}

@@ -5,8 +5,3 @@ export const LANGUAGES = [
   { label: "Polski", code: "pl", flagIcon: polishFlag },
   { label: "English", code: "en", flagIcon: englishFlag },
 ];
-
-export enum LANGUAGE_CODE {
-  POLISH = "pl",
-  ENGLISH = "en",
-}

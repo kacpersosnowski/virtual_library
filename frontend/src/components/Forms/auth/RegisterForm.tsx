@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 
@@ -12,11 +13,14 @@ import useFormikLanguage from "../../../hooks/useFormikLanguage";
 import emailValidator from "../../../config/validators/emailValidator";
 import validationMessages from "../../../messages/validationMessages";
 
-import classes from "./AuthForms.module.css";
 import passwordTranslatableSchema from "../../../config/validators/passwordTranslatableSchema";
+import Card from "../../UI/Card/Card";
+import { AuthContext } from "../../../store/AuthContext/AuthContext";
 
 const RegisterForm = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { register, isSuccess } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const formik = useFormikLanguage({
     initialValues: {
@@ -41,14 +45,24 @@ const RegisterForm = () => {
     }),
     onSubmit: (values) => {
       console.log("Register", JSON.stringify(values));
+      const credentials = {
+        email: values.newEmail,
+        password: values.password1,
+        language: i18n.language,
+      };
+      register(credentials);
     },
   });
 
+  useEffect(() => {
+    if (isSuccess) {
+      localStorage.setItem("email", formik.values.newEmail);
+      navigate("/verification-email-sent");
+    }
+  }, [isSuccess]);
+
   return (
-    <Box
-      className={classes["auth-form-wrapper"]}
-      sx={{ width: { xs: "100%", sm: "50%", lg: "25%" } }}
-    >
+    <Card>
       <Box component="form" onSubmit={formik.handleSubmit}>
         <Typography sx={{ mb: "2rem" }} variant="h3">
           {t(authMessages.registerHeader.key)}
@@ -93,7 +107,7 @@ const RegisterForm = () => {
           </Link>
         </Typography>
       </Box>
-    </Box>
+    </Card>
   );
 };
 
