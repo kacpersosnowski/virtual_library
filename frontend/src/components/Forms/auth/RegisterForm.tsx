@@ -16,10 +16,12 @@ import validationMessages from "../../../messages/validationMessages";
 import passwordTranslatableSchema from "../../../config/validators/passwordTranslatableSchema";
 import Card from "../../UI/Card/Card";
 import { AuthContext } from "../../../store/AuthContext/AuthContext";
+import ErrorMessage from "../../UI/ErrorMessage";
+import errorMessages from "../../../messages/errorMessages";
 
 const RegisterForm = () => {
   const { t, i18n } = useTranslation();
-  const { register, isSuccess } = useContext(AuthContext);
+  const { register, isSuccess, error } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const formik = useFormikLanguage({
@@ -61,6 +63,11 @@ const RegisterForm = () => {
     }
   }, [isSuccess]);
 
+  const errorMessage =
+    error?.response?.status === 409
+      ? t(validationMessages.emailAlreadyExists.key)
+      : t(errorMessages.somethingWentWrongError.key);
+
   return (
     <Card>
       <Box component="form" onSubmit={formik.handleSubmit}>
@@ -100,6 +107,13 @@ const RegisterForm = () => {
         >
           {t(authMessages.registerButton.key)}
         </ActionButton>
+        {error && (
+          <ErrorMessage
+            message={errorMessage}
+            sx={{ mt: 0 }}
+            alertStyle={{ width: "80%" }}
+          />
+        )}
         <Typography paragraph>
           {t(authMessages.loginPrompt.key)}{" "}
           <Link to="/login" className="primary-link">

@@ -56,6 +56,11 @@ const validationMessages: Message = {
     pl: "Email lub hasło niepoprawne",
     en: "Invalid e-mail or password",
   },
+  emailAlreadyExists: {
+    key: "validation >> email_exists",
+    pl: "Użytkownik z tym adresem e-mail już istnieje",
+    en: "User with this e-mail already exists",
+  },
 };
 
 export default validationMessages;

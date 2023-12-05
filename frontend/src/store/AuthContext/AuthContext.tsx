@@ -1,5 +1,6 @@
 import { PropsWithChildren, createContext, useEffect, useState } from "react";
 import { useMutation } from "react-query";
+import { AxiosError } from "axios";
 
 import { AuthContextType } from "./AuthContext.types";
 import { authApi } from "../../config/api/auth/auth";
@@ -69,7 +70,7 @@ export const AuthContextProvider: React.FC<PropsWithChildren> = ({
         loginResponse,
         isLoading: loginIsLoading || registerIsLoading,
         isSuccess: loginIsSuccess || registerIsSuccess,
-        error: loginError || registerError,
+        error: (loginError as AxiosError) || (registerError as AxiosError),
       }}
     >
       {children}

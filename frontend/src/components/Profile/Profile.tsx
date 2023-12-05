@@ -1,8 +1,10 @@
 import { Box, Button } from "@mui/material";
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import { AuthContext } from "../../store/AuthContext/AuthContext";
+import authMessages from "../../messages/authMessages";
 
 type Props = {
   variant: "drawer" | "navbar";
@@ -10,6 +12,7 @@ type Props = {
 
 const Profile: React.FC<Props> = (props) => {
   const { logout } = useContext(AuthContext);
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const logoutHandler = () => {
@@ -41,7 +44,7 @@ const Profile: React.FC<Props> = (props) => {
         sx={{ color: buttonTextColor, bgcolor: buttonBgColor, ml: "15px" }}
         onClick={logoutHandler}
       >
-        Wyloguj się
+        {t(authMessages.logoutButton.key)}
       </Button>
     </Box>
   );
