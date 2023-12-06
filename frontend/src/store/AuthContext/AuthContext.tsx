@@ -18,7 +18,6 @@ export const AuthContextProvider: React.FC<PropsWithChildren> = ({
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const {
     mutate: loginMutate,
-    data: loginResponse,
     isLoading: loginIsLoading,
     isSuccess: loginIsSuccess,
     error: loginError,
@@ -67,10 +66,16 @@ export const AuthContextProvider: React.FC<PropsWithChildren> = ({
         login,
         register,
         logout,
-        loginResponse,
-        isLoading: loginIsLoading || registerIsLoading,
-        isSuccess: loginIsSuccess || registerIsSuccess,
-        error: (loginError as AxiosError) || (registerError as AxiosError),
+        loginQueryData: {
+          isLoading: loginIsLoading,
+          isSuccess: loginIsSuccess,
+          error: loginError as AxiosError,
+        },
+        registerQueryData: {
+          isLoading: registerIsLoading,
+          isSuccess: registerIsSuccess,
+          error: registerError as AxiosError,
+        },
       }}
     >
       {children}

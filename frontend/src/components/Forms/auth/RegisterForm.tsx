@@ -21,7 +21,7 @@ import errorMessages from "../../../messages/errorMessages";
 
 const RegisterForm = () => {
   const { t, i18n } = useTranslation();
-  const { register, isSuccess, error } = useContext(AuthContext);
+  const { register, registerQueryData } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const formik = useFormikLanguage({
@@ -46,15 +46,16 @@ const RegisterForm = () => {
       acceptTerms: Yup.boolean().isTrue(t(validationMessages.acceptTerms.key)),
     }),
     onSubmit: (values) => {
-      console.log("Register", JSON.stringify(values));
       const credentials = {
         email: values.newEmail,
         password: values.password1,
-        language: i18n.language.toUpperCase(),
+        language: i18n.language !== "en" ? i18n.language.toUpperCase() : "ENG",
       };
       register(credentials);
     },
   });
+
+  const { isSuccess, error } = registerQueryData;
 
   useEffect(() => {
     if (isSuccess) {

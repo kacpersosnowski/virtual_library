@@ -19,7 +19,7 @@ import Card from "../../UI/Card/Card";
 const LoginForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { login, isAuthenticated, isLoading, error } = useContext(AuthContext);
+  const { login, isAuthenticated, loginQueryData } = useContext(AuthContext);
 
   const formik = useFormikLanguage({
     initialValues: { email: "", password: "" },
@@ -31,7 +31,6 @@ const LoginForm = () => {
       password: Yup.string().required(t(validationMessages.fieldRequired.key)),
     }),
     onSubmit: (values) => {
-      console.log("Login", JSON.stringify(values));
       login(values);
       localStorage.setItem("email", values.email); // TEMPORARY!!! There is no endpoint for user details
     },
@@ -42,6 +41,8 @@ const LoginForm = () => {
       navigate("/");
     }
   }, [isAuthenticated]);
+
+  const { isLoading, error } = loginQueryData;
 
   return (
     <Card>

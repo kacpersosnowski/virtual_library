@@ -3,7 +3,6 @@ import { AxiosError } from "axios";
 
 import {
   Credentials,
-  LoginResponse,
   RegisterCredentials,
 } from "../../config/api/auth/auth.types";
 
@@ -13,8 +12,12 @@ export type AuthContextType = {
   login: (credentials: Credentials) => void;
   logout: () => void;
   register: (credentials: RegisterCredentials) => void;
-  loginResponse: LoginResponse;
-  isSuccess: boolean;
+  loginQueryData: AuthMutationData;
+  registerQueryData: AuthMutationData;
+};
+
+export type AuthMutationData = {
   isLoading: boolean;
+  isSuccess: boolean;
   error: AxiosError;
 };
