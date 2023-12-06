@@ -15,6 +15,7 @@ import { AuthContext } from "../../../store/AuthContext/AuthContext";
 import LoadingSpinner from "../../UI/LoadingSpinner";
 import ErrorMessage from "../../UI/ErrorMessage";
 import Card from "../../UI/Card/Card";
+import errorMessages from "../../../messages/errorMessages";
 
 const LoginForm = () => {
   const { t } = useTranslation();
@@ -44,6 +45,11 @@ const LoginForm = () => {
 
   const { isLoading, error } = loginQueryData;
 
+  const errorMessage =
+    error?.response?.status === 403
+      ? t(validationMessages.invalidCredentials.key)
+      : t(errorMessages.somethingWentWrongError.key);
+
   return (
     <Card>
       <Box component="form" onSubmit={formik.handleSubmit}>
@@ -71,7 +77,7 @@ const LoginForm = () => {
         )}
         {error && (
           <ErrorMessage
-            message={t(validationMessages.invalidCredentials.key)}
+            message={errorMessage}
             sx={{ mt: 0 }}
             alertStyle={{ width: "80%" }}
           />
