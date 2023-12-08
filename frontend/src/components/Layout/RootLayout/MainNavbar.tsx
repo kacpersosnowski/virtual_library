@@ -7,12 +7,6 @@ import Typography from "@mui/material/Typography";
 import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -22,8 +16,7 @@ import ChangeLanguageForm from "../../Forms/common/ChangeLanguageForm/ChangeLang
 import mainPageMessages from "../../../messages/mainPageMessages";
 import { AuthContext } from "../../../store/AuthContext/AuthContext";
 import Profile from "../../Profile/Profile";
-
-const drawerWidth = 240; // in pixels
+import SidebarDrawer from "./SidebarDrawer";
 
 const MainNavbar = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -39,38 +32,6 @@ const MainNavbar = () => {
     { text: t(mainPageMessages.buttonsRegister.key), link: "/register" },
   ];
 
-  const drawer = (
-    <Box sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        Liber Mundi
-      </Typography>
-      <Divider />
-      {!isAuthenticated && (
-        <List>
-          {navItems.map((item) => (
-            <ListItem key={item.text} disablePadding>
-              <ListItemButton
-                sx={{ textAlign: "center" }}
-                onClick={handleDrawerToggle}
-              >
-                <ListItemText
-                  primary={
-                    <Link to={item.link} className="clear-link">
-                      {item.text}
-                    </Link>
-                  }
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      )}
-      {isAuthenticated && <Profile variant="drawer" />}
-      <ChangeLanguageForm onClickLanguage={() => setMobileOpen(false)} />
-      <Box sx={{ display: "block", flexGrow: 1 }} />
-    </Box>
-  );
-
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -81,7 +42,7 @@ const MainNavbar = () => {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { md: "none" } }}
+            sx={{ mr: 2 }}
           >
             <MenuIcon />
           </IconButton>
@@ -137,25 +98,11 @@ const MainNavbar = () => {
           />
         </Toolbar>
       </AppBar>
-      <nav>
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: "block", md: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-        >
-          {drawer}
-        </Drawer>
-      </nav>
+      <SidebarDrawer
+        isOpen={mobileOpen}
+        toggleHandler={handleDrawerToggle}
+        navItems={navItems}
+      />
     </Box>
   );
 };
