@@ -1,14 +1,20 @@
 import { PropsWithChildren } from "react";
-import { Box } from "@mui/material";
+import { Box, SxProps, Theme } from "@mui/material";
 
 import classes from "./Card.module.css";
 
-const Card: React.FC<PropsWithChildren> = (props) => {
+type Props = {
+  sx?: SxProps<Theme>;
+};
+
+const Card: React.FC<PropsWithChildren<Props>> = (props) => {
+  const sx = {
+    width: { xs: "100%", sm: "50%", lg: "25%" },
+    ...props.sx,
+  };
+
   return (
-    <Box
-      className={classes.card}
-      sx={{ width: { xs: "100%", sm: "50%", lg: "25%" } }}
-    >
+    <Box className={classes.card} sx={sx}>
       {props.children}
     </Box>
   );

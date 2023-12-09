@@ -13,7 +13,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { AuthContext } from "../../../store/AuthContext/AuthContext";
@@ -35,6 +35,12 @@ const drawerWidth = 240; // in pixels
 const SidebarDrawer: React.FC<Props> = (props) => {
   const { isAuthenticated } = useContext(AuthContext);
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const clickNavItemHandler = (link: string) => {
+    props.toggleHandler();
+    navigate(link);
+  };
 
   const drawer = (
     <Box sx={{ textAlign: "center" }}>
@@ -49,33 +55,27 @@ const SidebarDrawer: React.FC<Props> = (props) => {
               sx={{ display: { xs: "block", md: "none" } }}
               disablePadding
             >
-              <ListItemButton onClick={props.toggleHandler}>
+              <ListItemButton
+                onClick={clickNavItemHandler.bind(this, "/login")}
+              >
                 <ListItemIcon>
                   <LoginIcon />
                 </ListItemIcon>
-                <ListItemText
-                  primary={
-                    <Link to="/login" className="clear-link">
-                      {t(mainPageMessages.buttonsLogin.key)}
-                    </Link>
-                  }
-                />
+                <ListItemText primary={t(mainPageMessages.buttonsLogin.key)} />
               </ListItemButton>
             </ListItem>
             <ListItem
               sx={{ display: { xs: "block", md: "none" } }}
               disablePadding
             >
-              <ListItemButton onClick={props.toggleHandler}>
+              <ListItemButton
+                onClick={clickNavItemHandler.bind(this, "/register")}
+              >
                 <ListItemIcon>
                   <AppRegistrationIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary={
-                    <Link to="/register" className="clear-link">
-                      {t(mainPageMessages.buttonsRegister.key)}
-                    </Link>
-                  }
+                  primary={t(mainPageMessages.buttonsRegister.key)}
                 />
               </ListItemButton>
             </ListItem>
@@ -83,7 +83,7 @@ const SidebarDrawer: React.FC<Props> = (props) => {
         )}
         {isAuthenticated && <Profile variant="drawer" />}
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={clickNavItemHandler.bind(this, "/admin")}>
             <ListItemIcon>
               <AdminPanelSettingsIcon />
             </ListItemIcon>
