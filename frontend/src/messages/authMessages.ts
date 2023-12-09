@@ -26,6 +26,11 @@ const authMessages: Message = {
     pl: "Zaloguj się",
     en: "Login",
   },
+  logoutButton: {
+    key: "auth >> logout >> button",
+    pl: "Wyloguj się",
+    en: "Logout",
+  },
   resetPassword: {
     key: "auth >> login >> reset_password",
     pl: "Nie pamiętasz hasła? Zresetuj je tutaj.",
@@ -70,6 +75,31 @@ const authMessages: Message = {
     key: "auth >> login >> login_prompt_link",
     pl: "Zaloguj się tutaj.",
     en: "Login here.",
+  },
+  verificationEmailSent: {
+    key: "verification_email_sent >> header",
+    pl: "E-mail weryfikacyjny został do Ciebie wysłany.",
+    en: "Verification e-mail has been sent to you.",
+  },
+  checkEmailHeader: {
+    key: "verification_email_sent >> check_email >> header",
+    pl: "Sprawdź swojego maila:",
+    en: "Check your e-mail:",
+  },
+  clickActivationLink: {
+    key: "verification_email_sent >> activation_link >> prompt",
+    pl: "Kliknij w link aktywacyjny i",
+    en: "Click the activation link and",
+  },
+  login: {
+    key: "verification_email_sent >> login >> prompt",
+    pl: "zaloguj się",
+    en: "login",
+  },
+  ourSitePrompt: {
+    key: "verification_email_sent >> our_site >> prompt",
+    pl: "do naszej strony.",
+    en: "to our site.",
   },
 };
 

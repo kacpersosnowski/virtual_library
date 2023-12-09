@@ -51,6 +51,16 @@ const validationMessages: Message = {
     pl: "Nasz regulamin musi zostać zaakceptowany",
     en: "You have to accept our terms",
   },
+  invalidCredentials: {
+    key: "validation >> credentials >> invalid",
+    pl: "Email lub hasło niepoprawne",
+    en: "Invalid e-mail or password",
+  },
+  emailAlreadyExists: {
+    key: "validation >> email_exists",
+    pl: "Użytkownik z tym adresem e-mail już istnieje",
+    en: "User with this e-mail already exists",
+  },
 };
 
 export default validationMessages;

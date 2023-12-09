@@ -13,19 +13,22 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import SearchForm from "../../Forms/common/SearchForm";
-import ChangeLanguageForm from "../../Forms/common/ChangeLanguageForm/ChangeLanguageForm";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import mainPageMessages from "../../../messages/mainPageMessages";
 
 import logo from "../../../assets/logo.png";
-import { Link } from "react-router-dom";
+import SearchForm from "../../Forms/common/SearchForm";
+import ChangeLanguageForm from "../../Forms/common/ChangeLanguageForm/ChangeLanguageForm";
+import mainPageMessages from "../../../messages/mainPageMessages";
+import { AuthContext } from "../../../store/AuthContext/AuthContext";
+import Profile from "../../Profile/Profile";
 
 const drawerWidth = 240; // in pixels
 
 const MainNavbar = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const { t } = useTranslation();
+  const { isAuthenticated } = React.useContext(AuthContext);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -42,24 +45,27 @@ const MainNavbar = () => {
         Liber Mundi
       </Typography>
       <Divider />
-      <List>
-        {navItems.map((item) => (
-          <ListItem key={item.text} disablePadding>
-            <ListItemButton
-              sx={{ textAlign: "center" }}
-              onClick={handleDrawerToggle}
-            >
-              <ListItemText
-                primary={
-                  <Link to={item.link} className="clear-link">
-                    {item.text}
-                  </Link>
-                }
-              />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+      {!isAuthenticated && (
+        <List>
+          {navItems.map((item) => (
+            <ListItem key={item.text} disablePadding>
+              <ListItemButton
+                sx={{ textAlign: "center" }}
+                onClick={handleDrawerToggle}
+              >
+                <ListItemText
+                  primary={
+                    <Link to={item.link} className="clear-link">
+                      {item.text}
+                    </Link>
+                  }
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      )}
+      {isAuthenticated && <Profile variant="drawer" />}
       <ChangeLanguageForm onClickLanguage={() => setMobileOpen(false)} />
       <Box sx={{ display: "block", flexGrow: 1 }} />
     </Box>
@@ -107,22 +113,25 @@ const MainNavbar = () => {
           </Typography>
           <Box sx={{ display: "block", flexGrow: 1 }} />
           <SearchForm />
-          <Box
-            sx={{
-              display: { xs: "none", md: "flex" },
-            }}
-          >
-            <Link to={navItems[0].link} className="clear-link">
-              <Button sx={{ color: "#fff", mr: ".5rem" }}>
-                {navItems[0].text}
-              </Button>
-            </Link>
-            <Link to={navItems[1].link} className="clear-link">
-              <Button sx={{ color: "#fff", bgcolor: "primary.dark" }}>
-                {navItems[1].text}
-              </Button>
-            </Link>
-          </Box>
+          {!isAuthenticated && (
+            <Box
+              sx={{
+                display: { xs: "none", md: "flex" },
+              }}
+            >
+              <Link to={navItems[0].link} className="clear-link">
+                <Button sx={{ color: "#fff", mr: ".5rem" }}>
+                  {navItems[0].text}
+                </Button>
+              </Link>
+              <Link to={navItems[1].link} className="clear-link">
+                <Button sx={{ color: "#fff", bgcolor: "primary.dark" }}>
+                  {navItems[1].text}
+                </Button>
+              </Link>
+            </Box>
+          )}
+          {isAuthenticated && <Profile variant="navbar" />}
           <ChangeLanguageForm
             sx={{ ml: "1rem", display: { xs: "none", md: "block" } }}
           />
