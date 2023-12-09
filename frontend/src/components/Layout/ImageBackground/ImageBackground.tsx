@@ -31,7 +31,6 @@ const ImageBackground: React.FC<PropsWithChildren<Props>> = (props) => {
         } else {
           backgroundRef.current.style.height = `${window.innerHeight - 144}px`;
         }
-        console.log(backgroundRef.current.style.height);
       }
     },
     false,

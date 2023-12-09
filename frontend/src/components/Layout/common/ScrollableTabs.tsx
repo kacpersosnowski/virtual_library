@@ -1,7 +1,15 @@
 import { Box, Tab, Tabs } from "@mui/material";
-import { JSXElementConstructor, ReactElement, useState } from "react";
+import {
+  Dispatch,
+  JSXElementConstructor,
+  ReactElement,
+  SetStateAction,
+} from "react";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
+  activeTabValue: string;
+  setActiveTabValue: Dispatch<SetStateAction<string>>;
   tabs: {
     label: string;
     value?: string;
@@ -12,17 +20,18 @@ type Props = {
 };
 
 const ScrollableTabs: React.FC<Props> = (props) => {
-  const [value, setValue] = useState(0);
+  const navigate = useNavigate();
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     event.preventDefault();
-    setValue(newValue);
+    props.setActiveTabValue(newValue);
+    navigate(newValue);
   };
 
   return (
     <Box sx={{ maxWidth: "100%", bgcolor: "background.paper" }}>
       <Tabs
-        value={value}
+        value={props.activeTabValue}
         onChange={handleChange}
         variant="scrollable"
         scrollButtons="auto"
