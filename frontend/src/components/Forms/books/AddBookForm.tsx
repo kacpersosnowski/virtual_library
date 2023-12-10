@@ -60,8 +60,6 @@ const AddBookForm = () => {
       cover: Yup.mixed().required(t(validationMessages.fieldRequired.key)),
     }),
     onSubmit: (values) => {
-      console.log("Add a new book");
-      console.log(values);
       createBook(values);
     },
   });
