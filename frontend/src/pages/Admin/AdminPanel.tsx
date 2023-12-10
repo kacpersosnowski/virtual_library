@@ -3,8 +3,8 @@ import ImageBackground from "../../components/Layout/ImageBackground/ImageBackgr
 import ScrollableTabs from "../../components/Layout/common/ScrollableTabs";
 import Card from "../../components/UI/Card/Card";
 import { Box, Divider } from "@mui/material";
-import { Outlet } from "react-router-dom";
-import { useState } from "react";
+import { Outlet, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import HomeIcon from "@mui/icons-material/Home";
 import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
@@ -26,6 +26,17 @@ const adminTabs = [
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState(adminTabs[0].value);
+  const location = useLocation();
+
+  useEffect(() => {
+    const path = location.pathname.replace("/admin/", "");
+    for (const tab of adminTabs) {
+      if (path === tab.value) {
+        setActiveTab(tab.value);
+        return;
+      }
+    }
+  }, []);
 
   return (
     <ImageBackground image={booksBg} containerSx={{ alignItems: "flex-start" }}>

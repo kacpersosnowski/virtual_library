@@ -11,7 +11,7 @@ type Props = {
 const ImageBackground: React.FC<PropsWithChildren<Props>> = (props) => {
   const backgroundRef = useRef<HTMLDivElement | null>(null);
 
-  const resizeFn = () => {
+  const initialResize = () => {
     if (backgroundRef.current) {
       const childHeight = backgroundRef.current.lastElementChild?.clientHeight;
       if (childHeight && childHeight >= window.innerHeight - 144) {
@@ -20,9 +20,11 @@ const ImageBackground: React.FC<PropsWithChildren<Props>> = (props) => {
     }
   };
 
-  window.addEventListener(
-    "resize",
-    () => {
+  useEffect(() => {
+    initialResize();
+
+    // Resize child accordingly when window size is changed
+    const resizeListener = () => {
       if (backgroundRef.current) {
         const childHeight =
           backgroundRef.current.lastElementChild?.clientHeight;
@@ -32,12 +34,26 @@ const ImageBackground: React.FC<PropsWithChildren<Props>> = (props) => {
           backgroundRef.current.style.height = `${window.innerHeight - 144}px`;
         }
       }
-    },
-    false,
-  );
+    };
+    window.addEventListener("resize", resizeListener, false);
 
-  useEffect(() => {
-    resizeFn();
+    // Resize child accordingly when its size is changed
+    let observer: ResizeObserver;
+    const childElement = backgroundRef.current?.lastElementChild;
+    if (childElement) {
+      observer = new ResizeObserver(() => {
+        resizeListener();
+      });
+
+      observer.observe(childElement);
+    }
+
+    return () => {
+      window.removeEventListener("resize", resizeListener);
+      if (observer) {
+        observer.disconnect();
+      }
+    };
   }, []);
 
   return (

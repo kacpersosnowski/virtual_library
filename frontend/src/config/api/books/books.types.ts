@@ -19,6 +19,15 @@ export type BookItemData = {
   cover: string;
 };
 
+export type CreateBookDTO = {
+  title: string;
+  shortDescription: string;
+  longDescription: string;
+  authors: Author[];
+  cover: File;
+};
+
 export type BooksApi = {
   getAllBooks: () => Promise<BookItemData[]>;
+  createBook: (book: CreateBookDTO) => Promise<Book>;
 };
