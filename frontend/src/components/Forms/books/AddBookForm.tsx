@@ -109,7 +109,12 @@ const AddBookForm = () => {
           return option.firstName + " " + option.lastName;
         }}
       />
-      <FilePicker id="cover" title="Book cover:" formik={formik} />
+      <FilePicker
+        id="cover"
+        title="Book cover:"
+        formik={formik}
+        previewEnabled
+      />
       {isCreatingLoading && <LoadingSpinner />}
       {!isCreatingLoading && (
         <ActionButton

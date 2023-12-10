@@ -1,4 +1,4 @@
-import booksBg from "../../assets/books-bg.jpg";
+import booksBg from "../../assets/books-bg2.jpg";
 import ImageBackground from "../../components/Layout/ImageBackground/ImageBackground";
 import ScrollableTabs from "../../components/Layout/common/ScrollableTabs";
 import Card from "../../components/UI/Card/Card";
