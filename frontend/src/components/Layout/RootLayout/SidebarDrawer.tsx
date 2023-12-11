@@ -20,6 +20,7 @@ import { AuthContext } from "../../../store/AuthContext/AuthContext";
 import Profile from "../../Profile/Profile";
 import ChangeLanguageForm from "../../Forms/common/ChangeLanguageForm/ChangeLanguageForm";
 import mainPageMessages from "../../../messages/mainPageMessages";
+import adminMessages from "../../../messages/adminMessages";
 
 type Props = {
   isOpen: boolean;
@@ -87,7 +88,7 @@ const SidebarDrawer: React.FC<Props> = (props) => {
             <ListItemIcon>
               <AdminPanelSettingsIcon />
             </ListItemIcon>
-            <ListItemText primary="Admin panel" />
+            <ListItemText primary={t(adminMessages.sidebarAdminPanel.key)} />
           </ListItemButton>
         </ListItem>
       </List>

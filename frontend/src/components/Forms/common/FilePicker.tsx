@@ -3,9 +3,11 @@ import Button from "@mui/material/Button";
 import Input from "@mui/material/Input";
 import { Box } from "@mui/material";
 import { FormikProps, FormikValues } from "formik";
+import { useTranslation } from "react-i18next";
 
 import ErrorMessage from "../../UI/ErrorMessage";
 import { BOOK_HEIGHT, BOOK_WITDH } from "../../../constants/common";
+import adminMessages from "../../../messages/adminMessages";
 
 type Props = {
   id: string;
@@ -16,6 +18,7 @@ type Props = {
 };
 
 const FilePicker = React.forwardRef((props: Props, ref) => {
+  const { t } = useTranslation();
   const { id, title, formik, onFileSelected, previewEnabled } = props;
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
@@ -69,7 +72,7 @@ const FilePicker = React.forwardRef((props: Props, ref) => {
     >
       {!previewImage && (
         <Box component="span" sx={{ color: "#ccc" }}>
-          Preview
+          {t(adminMessages.addBookFormCoverPreview.key)}
         </Box>
       )}
       {previewImage && (
@@ -109,7 +112,7 @@ const FilePicker = React.forwardRef((props: Props, ref) => {
         />
         <Box component="label" htmlFor={id}>
           <Button variant="outlined" component="span">
-            Choose File
+            {t(adminMessages.addBookFormCoverChooseFile.key)}
           </Button>
         </Box>
         {previewEnabled && preview}
