@@ -1,6 +1,5 @@
 package com.skr.virtuallibrary.entities;
 
-import com.skr.virtuallibrary.entities.enums.Genre;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.types.Binary;
