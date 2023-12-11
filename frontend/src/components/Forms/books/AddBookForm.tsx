@@ -39,7 +39,9 @@ const AddBookForm = () => {
   } = useMutation({
     mutationFn: booksApi.createBook,
     onSuccess: () => {
-      dispatch(snackbarActions.show("A new book was created successfully"));
+      dispatch(
+        snackbarActions.show(t(adminMessages.addBookFormSuccessMessage.key)),
+      );
       formik.handleReset(null);
       filePickerRef.current.resetPreview();
     },

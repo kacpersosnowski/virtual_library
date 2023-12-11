@@ -43,7 +43,7 @@ const AdminPanel = () => {
 
   return (
     <ImageBackground image={booksBg} containerSx={{ alignItems: "flex-start" }}>
-      <Card sx={{ width: { xs: "100%", sm: "70%" }, marginTop: "2rem" }}>
+      <Card sx={{ width: { xs: "100%", sm: "70%" } }}>
         <ScrollableTabs
           activeTabValue={activeTab}
           setActiveTabValue={setActiveTab}

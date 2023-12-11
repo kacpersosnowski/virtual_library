@@ -56,6 +56,11 @@ const adminMessages: Message = {
     pl: "Dodaj książkę",
     en: "Add book",
   },
+  addBookFormSuccessMessage: {
+    key: "admin_panel >> add_book_form >> success_message",
+    pl: "Książka została dodana pomyślnie",
+    en: "A new book was created successfully",
+  },
 };
 
 export default adminMessages;
