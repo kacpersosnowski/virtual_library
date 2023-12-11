@@ -17,6 +17,9 @@ import "./i18n";
 import "./config/axios";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RouterProvider } from "react-router-dom";
+import { Provider } from "react-redux";
+
+import store from "./store/redux";
 
 document.body.classList.add("body");
 
@@ -28,11 +31,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <AuthContextProvider>
-        <ThemeProvider theme={theme}>
-          <RouterProvider router={router} />
-        </ThemeProvider>
-      </AuthContextProvider>
+      <Provider store={store}>
+        <AuthContextProvider>
+          <ThemeProvider theme={theme}>
+            <RouterProvider router={router} />
+          </ThemeProvider>
+        </AuthContextProvider>
+      </Provider>
     </QueryClientProvider>
   </React.StrictMode>,
 );

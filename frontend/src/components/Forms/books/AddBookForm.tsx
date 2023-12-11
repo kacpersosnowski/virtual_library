@@ -1,7 +1,9 @@
+import { useRef } from "react";
 import { Box } from "@mui/material";
 import * as Yup from "yup";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery } from "react-query";
+import { useDispatch } from "react-redux";
 
 import useFormikLanguage from "../../../hooks/useFormikLanguage";
 import Input from "../common/Input";
@@ -14,9 +16,12 @@ import ErrorMessage from "../../UI/ErrorMessage";
 import FilePicker from "../common/FilePicker";
 import { CreateBookDTO } from "../../../config/api/books/books.types";
 import { booksApi } from "../../../config/api/books/books";
+import { snackbarActions } from "../../../store/redux/slices/snackbar-slice";
 
 const AddBookForm = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const filePickerRef = useRef(null);
 
   const {
     data: authors,
@@ -32,6 +37,11 @@ const AddBookForm = () => {
     mutate: createBook,
   } = useMutation({
     mutationFn: booksApi.createBook,
+    onSuccess: () => {
+      dispatch(snackbarActions.show("A new book was created successfully"));
+      formik.handleReset(null);
+      filePickerRef.current.resetPreview();
+    },
   });
 
   const formik = useFormikLanguage({
@@ -114,6 +124,7 @@ const AddBookForm = () => {
         title="Book cover:"
         formik={formik}
         previewEnabled
+        ref={filePickerRef}
       />
       {isCreatingLoading && <LoadingSpinner />}
       {!isCreatingLoading && (

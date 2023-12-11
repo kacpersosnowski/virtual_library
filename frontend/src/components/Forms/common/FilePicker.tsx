@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useImperativeHandle, useState } from "react";
 import Button from "@mui/material/Button";
 import Input from "@mui/material/Input";
 import { Box } from "@mui/material";
@@ -15,9 +15,21 @@ type Props = {
   previewEnabled?: boolean;
 };
 
-const FilePicker: React.FC<Props> = (props) => {
+const FilePicker = React.forwardRef((props: Props, ref) => {
   const { id, title, formik, onFileSelected, previewEnabled } = props;
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        resetPreview() {
+          setPreviewImage(null);
+        },
+      };
+    },
+    [],
+  );
 
   const { touched, errors } = formik;
 
@@ -93,6 +105,7 @@ const FilePicker: React.FC<Props> = (props) => {
           style={{ display: "none" }}
           id={id}
           onChange={handleFileChange}
+          value=""
         />
         <Box component="label" htmlFor={id}>
           <Button variant="outlined" component="span">
@@ -110,6 +123,8 @@ const FilePicker: React.FC<Props> = (props) => {
       )}
     </>
   );
-};
+});
+
+FilePicker.displayName = "FilePicker";
 
 export default FilePicker;
