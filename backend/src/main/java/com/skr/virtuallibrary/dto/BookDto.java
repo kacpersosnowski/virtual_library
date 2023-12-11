@@ -1,6 +1,6 @@
 package com.skr.virtuallibrary.dto;
 
-import com.skr.virtuallibrary.entities.enums.Genre;
+import com.skr.virtuallibrary.entities.Genre;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;

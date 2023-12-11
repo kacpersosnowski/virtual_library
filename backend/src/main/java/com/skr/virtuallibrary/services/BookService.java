@@ -63,12 +63,11 @@ public class BookService {
     }
 
     public BookDto updateBook(String id, BookDto bookDto, MultipartFile cover) {
-        if (bookRepository.findById(id).isPresent()) {
-            bookDto.setId(id);
-            return saveBook(bookDto, cover);
-        } else {
+        if (bookRepository.findById(id).isEmpty()) {
             throw new BookNotFoundException(ERROR_NOT_FOUND_MSG + id);
         }
+        bookDto.setId(id);
+        return saveBook(bookDto, cover);
     }
 
     public List<BookDto> findBooksByTitleOrAuthor(String searchPhrase) {
