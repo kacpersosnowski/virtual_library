@@ -1,4 +1,5 @@
 import { Author } from "../authors/authors.types";
+import { Genre } from "../genres/genres.types";
 
 export type Book = {
   id: string;
@@ -24,6 +25,7 @@ export type CreateBookDTO = {
   shortDescription: string;
   longDescription: string;
   authors: Author[];
+  genres: Genre[];
   tags: string[];
   cover: File;
 };

@@ -11,6 +11,7 @@ import ActionButton from "../../UI/ActionButton";
 import validationMessages from "../../../messages/validationMessages";
 import AutocompleteInput from "../common/AutocompleteInput";
 import authorsApi from "../../../config/api/authors/authors";
+import genresApi from "../../../config/api/genres/genres";
 import LoadingSpinner from "../../UI/LoadingSpinner";
 import ErrorMessage from "../../UI/ErrorMessage";
 import FilePicker from "../common/FilePicker";
@@ -18,6 +19,7 @@ import { CreateBookDTO } from "../../../config/api/books/books.types";
 import { booksApi } from "../../../config/api/books/books";
 import { snackbarActions } from "../../../store/redux/slices/snackbar-slice";
 import adminMessages from "../../../messages/adminMessages";
+import arrayNotEmptyValidator from "../../../config/validators/arrayNotEmptyValidator";
 
 const AddBookForm = () => {
   const { t } = useTranslation();
@@ -31,6 +33,14 @@ const AddBookForm = () => {
   } = useQuery({
     queryFn: authorsApi.getAllAuthors,
     queryKey: ["authors"],
+  });
+  const {
+    data: genres,
+    isLoading: isFetchingGenresLoading,
+    isError: isFetchingGenresError,
+  } = useQuery({
+    queryFn: genresApi.getAllGenres,
+    queryKey: ["genres"],
   });
   const {
     isLoading: isCreatingLoading,
@@ -53,6 +63,7 @@ const AddBookForm = () => {
       shortDescription: "",
       longDescription: "",
       authors: [],
+      genres: [],
       tags: [],
       cover: null,
     } as CreateBookDTO,
@@ -64,20 +75,15 @@ const AddBookForm = () => {
       longDescription: Yup.string().required(
         t(validationMessages.fieldRequired.key),
       ),
-      authors: Yup.array().test(
-        "at-least-one",
-        t(validationMessages.fieldRequired.key),
-        function (value) {
-          return value && value.length > 0;
-        },
-      ),
-      tags: Yup.array().test(
-        "at-least-one",
-        t(validationMessages.fieldRequired.key),
-        function (value) {
-          return value && value.length > 0;
-        },
-      ),
+      authors: arrayNotEmptyValidator({
+        required: t(validationMessages.fieldRequired.key),
+      }),
+      genres: arrayNotEmptyValidator({
+        required: t(validationMessages.fieldRequired.key),
+      }),
+      tags: arrayNotEmptyValidator({
+        required: t(validationMessages.fieldRequired.key),
+      }),
       cover: Yup.mixed().required(t(validationMessages.fieldRequired.key)),
     }),
     onSubmit: (values) => {
@@ -85,11 +91,11 @@ const AddBookForm = () => {
     },
   });
 
-  if (isFetchingAuthorsError) {
+  if (isFetchingAuthorsError || isFetchingGenresError) {
     return <ErrorMessage message="Something went wrong. Try again later" />;
   }
 
-  if (isFetchingAuthorsLoading) {
+  if (isFetchingAuthorsLoading || isFetchingGenresLoading) {
     return <LoadingSpinner />;
   }
 
@@ -135,6 +141,17 @@ const AddBookForm = () => {
           return option.firstName + " " + option.lastName;
         }}
         sx={{ mt: "0.5rem" }}
+      />
+      <AutocompleteInput
+        id="genres"
+        label={t(adminMessages.addBookFormGenres.key)}
+        multiple
+        formik={formik}
+        options={genres}
+        getOptionLabel={(option) => {
+          return option.name;
+        }}
+        sx={{ mt: "1rem" }}
       />
       <AutocompleteInput
         id="tags"

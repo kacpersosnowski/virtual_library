@@ -12,3 +12,7 @@ export type PasswordErrorMessages = {
   special: string;
   required: string;
 };
+
+export type ArrayNotEmptyErrorMessages = {
+  required: string;
+};
