@@ -53,6 +53,7 @@ const AddBookForm = () => {
       shortDescription: "",
       longDescription: "",
       authors: [],
+      tags: [],
       cover: null,
     } as CreateBookDTO,
     validationSchema: Yup.object({
@@ -64,6 +65,13 @@ const AddBookForm = () => {
         t(validationMessages.fieldRequired.key),
       ),
       authors: Yup.array().test(
+        "at-least-one",
+        t(validationMessages.fieldRequired.key),
+        function (value) {
+          return value && value.length > 0;
+        },
+      ),
+      tags: Yup.array().test(
         "at-least-one",
         t(validationMessages.fieldRequired.key),
         function (value) {
@@ -120,11 +128,23 @@ const AddBookForm = () => {
       <AutocompleteInput
         id="authors"
         label={t(adminMessages.addBookFormAuthors.key)}
+        multiple
         formik={formik}
         options={authors}
         getOptionLabel={(option) => {
           return option.firstName + " " + option.lastName;
         }}
+        sx={{ mt: "0.5rem" }}
+      />
+      <AutocompleteInput
+        id="tags"
+        label={t(adminMessages.addBookFormTags.key)}
+        freeSolo
+        multiple
+        formik={formik}
+        options={[]}
+        isOptionEqualToValue={(option, value) => option === value}
+        sx={{ mt: "1rem" }}
       />
       <FilePicker
         id="cover"

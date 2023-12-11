@@ -23,7 +23,7 @@ export const parseBookFormDataForCreate = (data: CreateBookDTO) => {
     longDescription: data.longDescription,
     authorList: data.authors,
     genreList: ["ACTION"],
-    tagList: ["s"],
+    tagList: data.tags,
   };
   formData.append(
     "book",

@@ -24,6 +24,7 @@ export type CreateBookDTO = {
   shortDescription: string;
   longDescription: string;
   authors: Author[];
+  tags: string[];
   cover: File;
 };
 

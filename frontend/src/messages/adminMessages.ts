@@ -36,6 +36,11 @@ const adminMessages: Message = {
     pl: "Autorzy",
     en: "Authors",
   },
+  addBookFormTags: {
+    key: "admin_panel >> add_book_form >> tags",
+    pl: "Tagi",
+    en: "Tags",
+  },
   addBookFormCover: {
     key: "admin_panel >> add_book_form >> cover",
     pl: "Okładka:",
