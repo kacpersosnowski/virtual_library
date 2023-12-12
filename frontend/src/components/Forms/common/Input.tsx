@@ -16,10 +16,26 @@ type Props = {
   variant?: "standard" | "outlined" | "filled";
   sx?: SxProps<Theme>;
   className?: string;
+  multiline?: boolean;
+  minRows?: number;
+  maxRows?: number;
+  maxLength?: number;
 };
 
 const Input: React.FC<Props> = (props) => {
-  const { id, label, formik, type, variant, sx, className } = props;
+  const {
+    id,
+    label,
+    formik,
+    type,
+    variant,
+    sx,
+    className,
+    multiline,
+    minRows,
+    maxRows,
+    maxLength,
+  } = props;
   const { touched, errors } = formik;
 
   const errorMessage =
@@ -38,10 +54,14 @@ const Input: React.FC<Props> = (props) => {
     >
       <InputLabel htmlFor={id}>{label}</InputLabel>
       <OutlinedInput
+        inputProps={{ maxLength }}
         id={id}
         label={label}
         type={type || "text"}
         error={!!errorMessage}
+        multiline={multiline}
+        minRows={minRows}
+        maxRows={maxRows}
         {...formik.getFieldProps(id)}
       />
       {errorMessage && (

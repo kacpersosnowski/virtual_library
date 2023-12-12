@@ -1,3 +1,4 @@
+import adminMessages from "./adminMessages";
 import authMessages from "./authMessages";
 import booksMessages from "./booksMessages";
 import errorMessages from "./errorMessages";
@@ -10,6 +11,7 @@ const messages = [
   booksMessages,
   authMessages,
   validationMessages,
+  adminMessages,
 ];
 
 export default messages;

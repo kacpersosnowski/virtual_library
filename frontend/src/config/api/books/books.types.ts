@@ -1,4 +1,5 @@
 import { Author } from "../authors/authors.types";
+import { Genre } from "../genres/genres.types";
 
 export type Book = {
   id: string;
@@ -19,6 +20,17 @@ export type BookItemData = {
   cover: string;
 };
 
+export type CreateBookDTO = {
+  title: string;
+  shortDescription: string;
+  longDescription: string;
+  authors: Author[];
+  genres: Genre[];
+  tags: string[];
+  cover: File;
+};
+
 export type BooksApi = {
   getAllBooks: () => Promise<BookItemData[]>;
+  createBook: (book: CreateBookDTO) => Promise<Book>;
 };
