@@ -2,6 +2,7 @@ package com.skr.virtuallibrary.auth;
 
 import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.entities.enums.Authority;
+import com.skr.virtuallibrary.exceptions.UserAlreadyExistsException;
 import com.skr.virtuallibrary.exceptions.UserNotFoundException;
 import com.skr.virtuallibrary.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,9 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest registerRequest) {
+        if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
+            throw new UserAlreadyExistsException("User already exists with email: " + registerRequest.getEmail());
+        }
         final User user = User.builder()
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))

@@ -8,10 +8,10 @@ import lombok.*;
 @Builder
 public class AuthenticationRequest {
 
-    @Email
+    @Email(message = "Email should be valid")
     private String email;
 
-    @NotEmpty
+    @NotEmpty(message = "Password should not be empty")
     private String password;
 
 }

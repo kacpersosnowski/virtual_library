@@ -1,41 +1,87 @@
+import { useContext, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import * as Yup from "yup";
 
-import classes from "./AuthForms.module.css";
 import ActionButton from "../../UI/ActionButton";
 import PasswordInput from "./PasswordInput";
 import Input from "../common/Input";
 import authMessages from "../../../messages/authMessages";
+import emailValidator from "../../../config/validators/emailValidator";
+import validationMessages from "../../../messages/validationMessages";
+import useFormikLanguage from "../../../hooks/useFormikLanguage";
+import { AuthContext } from "../../../store/AuthContext/AuthContext";
+import LoadingSpinner from "../../UI/LoadingSpinner";
+import ErrorMessage from "../../UI/ErrorMessage";
+import Card from "../../UI/Card/Card";
+import errorMessages from "../../../messages/errorMessages";
 
 const LoginForm = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { login, isAuthenticated, loginQueryData } = useContext(AuthContext);
+
+  const formik = useFormikLanguage({
+    initialValues: { email: "", password: "" },
+    validationSchema: Yup.object({
+      email: emailValidator({
+        invalid: t(validationMessages.emailInvalid.key),
+        required: t(validationMessages.fieldRequired.key),
+      }),
+      password: Yup.string().required(t(validationMessages.fieldRequired.key)),
+    }),
+    onSubmit: (values) => {
+      login(values);
+      localStorage.setItem("email", values.email); // TEMPORARY!!! There is no endpoint for user details
+    },
+  });
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated]);
+
+  const { isLoading, error } = loginQueryData;
+
+  const errorMessage =
+    error?.response?.status === 403
+      ? t(validationMessages.invalidCredentials.key)
+      : t(errorMessages.somethingWentWrongError.key);
 
   return (
-    <Box
-      className={classes["auth-form-wrapper"]}
-      sx={{ width: { xs: "100%", sm: "50%", lg: "25%" } }}
-    >
-      <Box
-        component="form"
-        onSubmit={(event) => {
-          event.preventDefault();
-        }}
-      >
+    <Card>
+      <Box component="form" onSubmit={formik.handleSubmit}>
         <Typography sx={{ mb: "2rem" }} variant="h3">
           {t(authMessages.loginHeader.key)}
         </Typography>
         <Input
-          id="outlined-email-login"
+          id="email"
           label={t(authMessages.emailLabel.key)}
+          formik={formik}
         />
-        <PasswordInput label={t(authMessages.passwordLabel.key)} />
-        <ActionButton
-          sx={{ mt: "0.5rem", width: "80%", mb: "1rem" }}
-          type="submit"
-        >
-          {t(authMessages.loginButton.key)}
-        </ActionButton>
+        <PasswordInput
+          id="password"
+          label={t(authMessages.passwordLabel.key)}
+          formik={formik}
+        />
+        {isLoading && <LoadingSpinner />}
+        {!isLoading && (
+          <ActionButton
+            sx={{ mt: "0.5rem", width: "80%", mb: "1rem" }}
+            type="submit"
+          >
+            {t(authMessages.loginButton.key)}
+          </ActionButton>
+        )}
+        {error && (
+          <ErrorMessage
+            message={errorMessage}
+            sx={{ mt: 0 }}
+            alertStyle={{ width: "80%" }}
+          />
+        )}
         <Typography paragraph>{t(authMessages.resetPassword.key)}</Typography>
         <Typography paragraph>
           {t(authMessages.registerPrompt.key)}{" "}
@@ -44,7 +90,7 @@ const LoginForm = () => {
           </Link>
         </Typography>
       </Box>
-    </Box>
+    </Card>
   );
 };
 

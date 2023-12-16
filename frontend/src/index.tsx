@@ -11,11 +11,15 @@ import "@fontsource/roboto/700.css";
 import { ThemeProvider } from "@emotion/react";
 import theme from "./palette/theme";
 import router from "./router/router";
+import { AuthContextProvider } from "./store/AuthContext/AuthContext";
 
 import "./i18n";
 import "./config/axios";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RouterProvider } from "react-router-dom";
+import { Provider } from "react-redux";
+
+import store from "./store/redux";
 
 document.body.classList.add("body");
 
@@ -27,9 +31,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <RouterProvider router={router} />
-      </ThemeProvider>
+      <Provider store={store}>
+        <AuthContextProvider>
+          <ThemeProvider theme={theme}>
+            <RouterProvider router={router} />
+          </ThemeProvider>
+        </AuthContextProvider>
+      </Provider>
     </QueryClientProvider>
   </React.StrictMode>,
 );
