@@ -2,7 +2,7 @@ Hello %s,
 
 Thank you for registering on Liber Mundi! To confirm your account, please click the link below:
 
-http://localhost:3000/token=%s
+http://localhost:3000/token/%s
 
 If you did not sign up on our website, please disregard this message.
 
