@@ -4,11 +4,9 @@ import com.skr.virtuallibrary.entities.enums.Authority;
 import com.skr.virtuallibrary.entities.enums.Language;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
 public class UserDto {
 
     private String id;
