@@ -33,7 +33,6 @@ const LoginForm = () => {
     }),
     onSubmit: (values) => {
       login(values);
-      localStorage.setItem("email", values.email); // TEMPORARY!!! There is no endpoint for user details
     },
   });
 

@@ -7,8 +7,13 @@ import {
   SxProps,
 } from "@mui/material";
 
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useMutation } from "react-query";
+
 import { LANGUAGES } from "../../../../constants/languages";
+import { usersApi } from "../../../../config/api/users/users";
+import useFetchUserData from "../../../../hooks/useFetchUserData";
 
 import classes from "./ChangeLanguageForm.module.css";
 
@@ -19,10 +24,30 @@ type Props = {
 
 const ChangeLanguageForm: React.FC<Props> = (props) => {
   const { i18n } = useTranslation();
+  const { mutate: changeLanguage } = useMutation({
+    mutationFn: usersApi.changeUserLanguage,
+  });
+  const { data: user } = useFetchUserData();
+
+  useEffect(() => {
+    if (user) {
+      for (const language of LANGUAGES) {
+        if (language.backendCode === user.language) {
+          i18n.changeLanguage(language.code);
+        }
+      }
+    }
+  }, [user]);
 
   const onChangeLanguage = (e: SelectChangeEvent<string>) => {
     const langCode = e.target.value;
     i18n.changeLanguage(langCode);
+
+    for (const language of LANGUAGES) {
+      if (language.code === langCode) {
+        changeLanguage(language.backendCode);
+      }
+    }
   };
 
   return (

@@ -59,7 +59,6 @@ const RegisterForm = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      localStorage.setItem("email", formik.values.newEmail);
       navigate("/verification-email-sent");
     }
   }, [isSuccess]);
