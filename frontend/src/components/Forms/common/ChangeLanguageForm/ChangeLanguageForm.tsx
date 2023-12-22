@@ -7,13 +7,13 @@ import {
   SxProps,
 } from "@mui/material";
 
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation } from "react-query";
 
 import { LANGUAGES } from "../../../../constants/languages";
 import { usersApi } from "../../../../config/api/users/users";
-import useFetchUserData from "../../../../hooks/useFetchUserData";
+import { AuthContext } from "../../../../store/AuthContext/AuthContext";
 
 import classes from "./ChangeLanguageForm.module.css";
 
@@ -27,21 +27,18 @@ const ChangeLanguageForm: React.FC<Props> = (props) => {
   const { mutate: changeLanguage } = useMutation({
     mutationFn: usersApi.changeUserLanguage,
   });
-  const { data: user } = useFetchUserData();
+  const { isAuthenticated } = useContext(AuthContext);
 
   useEffect(() => {
-    if (user) {
-      for (const language of LANGUAGES) {
-        if (language.backendCode === user.language) {
-          i18n.changeLanguage(language.code);
-        }
-      }
+    if (!isAuthenticated && localStorage.getItem("language")) {
+      i18n.changeLanguage(localStorage.getItem("language"));
     }
-  }, [user]);
+  }, [isAuthenticated]);
 
   const onChangeLanguage = (e: SelectChangeEvent<string>) => {
     const langCode = e.target.value;
     i18n.changeLanguage(langCode);
+    localStorage.setItem("language", langCode);
 
     for (const language of LANGUAGES) {
       if (language.code === langCode) {

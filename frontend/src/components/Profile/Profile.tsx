@@ -1,5 +1,5 @@
 import { Box, Button } from "@mui/material";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -8,6 +8,7 @@ import authMessages from "../../messages/authMessages";
 import useFetchUserData from "../../hooks/useFetchUserData";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import ErrorMessage from "../UI/ErrorMessage";
+import { LANGUAGES } from "../../constants/languages";
 
 type Props = {
   variant: "drawer" | "navbar";
@@ -15,9 +16,19 @@ type Props = {
 
 const Profile: React.FC<Props> = (props) => {
   const { logout } = useContext(AuthContext);
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
   const navigate = useNavigate();
   const { data: user, isLoading, isError } = useFetchUserData();
+
+  useEffect(() => {
+    if (user) {
+      for (const language of LANGUAGES) {
+        if (language.backendCode === user.language) {
+          i18n.changeLanguage(language.code);
+        }
+      }
+    }
+  }, [user]);
 
   if (isError) {
     return <ErrorMessage message="Failed to load user data. Try again later" />;
