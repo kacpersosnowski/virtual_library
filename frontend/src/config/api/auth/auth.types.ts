@@ -14,4 +14,5 @@ export type LoginResponse = {
 export type AuthApi = {
   login: (credentials: Credentials) => Promise<LoginResponse>;
   register: (credentials: RegisterCredentials) => Promise<LoginResponse>;
+  finalizeRegistration: (token: string) => Promise<LoginResponse>;
 };

@@ -101,6 +101,11 @@ const authMessages: Message = {
     pl: "do naszej strony.",
     en: "to our site.",
   },
+  accountActivated: {
+    key: "verification_email >> account_activated",
+    pl: "Pomyślnie aktywowano konto. Teraz możesz się już zalogować.",
+    en: "Account activated successfully! Now you can log in.",
+  },
 };
 
 export default authMessages;

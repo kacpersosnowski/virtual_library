@@ -40,9 +40,11 @@ const ChangeLanguageForm: React.FC<Props> = (props) => {
     i18n.changeLanguage(langCode);
     localStorage.setItem("language", langCode);
 
-    for (const language of LANGUAGES) {
-      if (language.code === langCode) {
-        changeLanguage(language.backendCode);
+    if (isAuthenticated) {
+      for (const language of LANGUAGES) {
+        if (language.code === langCode) {
+          changeLanguage(language.backendCode);
+        }
       }
     }
   };

@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 
@@ -16,11 +17,14 @@ import LoadingSpinner from "../../UI/LoadingSpinner";
 import ErrorMessage from "../../UI/ErrorMessage";
 import Card from "../../UI/Card/Card";
 import errorMessages from "../../../messages/errorMessages";
+import { snackbarActions } from "../../../store/redux/slices/snackbar-slice";
 
 const LoginForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { login, isAuthenticated, loginQueryData } = useContext(AuthContext);
+  const location = useLocation();
+  const dispatch = useDispatch();
 
   const formik = useFormikLanguage({
     initialValues: { email: "", password: "" },
@@ -35,6 +39,13 @@ const LoginForm = () => {
       login(values);
     },
   });
+
+  useEffect(() => {
+    if (location?.state?.accountActivated) {
+      dispatch(snackbarActions.show(t(authMessages.accountActivated.key)));
+      window.history.replaceState({}, document.title);
+    }
+  }, []);
 
   useEffect(() => {
     if (isAuthenticated) {
