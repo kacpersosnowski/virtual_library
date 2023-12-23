@@ -28,7 +28,7 @@ public class JwtService {
     }
 
     public AuthenticationResponse generateTokens(UserDetails userDetails) {
-        final String accessToken = generateToken(userDetails, new Date(System.currentTimeMillis() + 1000 * 60 * 2));
+        final String accessToken = generateToken(userDetails, new Date(System.currentTimeMillis() + 1000 * 60 * 15));
         final String refreshToken = generateToken(userDetails, new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 30));
         return AuthenticationResponse.builder()
                 .accessToken(accessToken)
