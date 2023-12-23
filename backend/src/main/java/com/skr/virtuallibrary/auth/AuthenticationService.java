@@ -45,7 +45,7 @@ public class AuthenticationService {
                 .language(registerRequest.getLanguage())
                 .build();
         userRepository.save(user);
-        return generateToken(user);
+        return jwtService.generateTokens(user);
     }
 
     public void createTempUserAndSendEmail(RegisterRequest registerRequest) {
@@ -87,7 +87,7 @@ public class AuthenticationService {
                 .build();
         userRepository.save(user);
         unregisteredUserRepository.delete(tempUser);
-        return generateToken(user);
+        return jwtService.generateTokens(user);
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
@@ -99,14 +99,14 @@ public class AuthenticationService {
         );
         User user = userRepository.findByEmail(authenticationRequest.getEmail())
                 .orElseThrow(() -> new UserNotFoundException("User not found with email: " + authenticationRequest.getEmail()));
-        return generateToken(user);
+        return jwtService.generateTokens(user);
     }
 
-    private AuthenticationResponse generateToken(User user) {
-        final String jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+    public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+        String email = jwtService.extractEmail(refreshTokenRequest.getRefreshToken());
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
+        return jwtService.generateTokens(user);
     }
 
     private String generateRegistrationToken() {
