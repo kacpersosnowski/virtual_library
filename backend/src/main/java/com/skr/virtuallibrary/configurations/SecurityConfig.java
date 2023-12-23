@@ -36,7 +36,7 @@ public class SecurityConfig {
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/auth/quick-register").hasAuthority(ADMIN_AUTHORITY)
                                 .requestMatchers("/auth/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/books/**").hasAuthority(ADMIN_AUTHORITY)
+                                .requestMatchers(HttpMethod.GET, "/books/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/books/**").hasAuthority(ADMIN_AUTHORITY)
                                 .requestMatchers(HttpMethod.POST, "/authors/**").hasAuthority(ADMIN_AUTHORITY)
                                 .requestMatchers("/error").anonymous()
