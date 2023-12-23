@@ -1,4 +1,4 @@
-import { PropsWithChildren, createContext, useEffect, useState } from "react";
+import { PropsWithChildren, createContext, useState } from "react";
 import { useMutation } from "react-query";
 import { AxiosError } from "axios";
 
@@ -15,7 +15,9 @@ export const AuthContext = createContext<AuthContextType>(null);
 export const AuthContextProvider: React.FC<PropsWithChildren> = ({
   children,
 }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    AccessTokenService.getToken() !== null,
+  );
   const {
     mutate: loginMutate,
     isLoading: loginIsLoading,
@@ -36,13 +38,6 @@ export const AuthContextProvider: React.FC<PropsWithChildren> = ({
   } = useMutation({
     mutationFn: authApi.register,
   });
-
-  useEffect(() => {
-    const token = AccessTokenService.getToken();
-    if (token) {
-      setIsAuthenticated(true);
-    }
-  }, []);
 
   // Wrapper for better ts typing
   const login = (credentials: Credentials) => {

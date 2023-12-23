@@ -11,6 +11,16 @@ const errorMessages: Message = {
     pl: "Coś poszło nie tak. Spróbuj ponownie później",
     en: "Something went wrong. Try again later",
   },
+  pageNotFoundError: {
+    key: "page_not_found >> error",
+    pl: "Tutaj nic nie mamy. Jeżeli się zgubiłeś, wróć na",
+    en: "We do not have anything here. If you got lost go back to",
+  },
+  pageNotFoundErrorMainPage: {
+    key: "page_not_found >> error >> main_page",
+    pl: "stronę główną.",
+    en: "the main page.",
+  },
 };
 
 export default errorMessages;

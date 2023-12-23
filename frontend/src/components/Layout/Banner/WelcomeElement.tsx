@@ -1,10 +1,13 @@
 import { Box, Typography } from "@mui/material";
-import ActionButton from "../../UI/ActionButton";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+
+import ActionButton from "../../UI/ActionButton";
 import mainPageMessages from "../../../messages/mainPageMessages";
 
 const WelcomeElement = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
     <Box
@@ -33,6 +36,9 @@ const WelcomeElement = () => {
       </Typography>
       <ActionButton
         sx={{ mt: "1.2rem", width: "15rem", p: "10px 0", fontSize: "1.3rem" }}
+        onClick={() => {
+          navigate("/register");
+        }}
       >
         {t(mainPageMessages.buttonsJoinUs.key)}
       </ActionButton>

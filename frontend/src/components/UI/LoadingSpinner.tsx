@@ -1,9 +1,30 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, SxProps, Theme } from "@mui/material";
 
-const LoadingSpinner = () => {
+type CircularProgressColor =
+  | "inherit"
+  | "primary"
+  | "secondary"
+  | "error"
+  | "info"
+  | "success"
+  | "warning";
+
+type Props = {
+  boxSx?: SxProps<Theme>;
+  color?: CircularProgressColor;
+};
+
+const LoadingSpinner: React.FC<Props> = (props) => {
   return (
-    <Box sx={{ display: "flex", justifyContent: "center", marginY: "3rem" }}>
-      <CircularProgress />
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        marginY: "3rem",
+        ...props.boxSx,
+      }}
+    >
+      <CircularProgress color={props.color || "primary"} />
     </Box>
   );
 };

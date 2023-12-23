@@ -21,6 +21,7 @@ import Profile from "../../Profile/Profile";
 import ChangeLanguageForm from "../../Forms/common/ChangeLanguageForm/ChangeLanguageForm";
 import mainPageMessages from "../../../messages/mainPageMessages";
 import adminMessages from "../../../messages/adminMessages";
+import useIsAdmin from "../../../hooks/useIsAdmin";
 
 type Props = {
   isOpen: boolean;
@@ -37,6 +38,7 @@ const SidebarDrawer: React.FC<Props> = (props) => {
   const { isAuthenticated } = useContext(AuthContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const isAdmin = useIsAdmin();
 
   const clickNavItemHandler = (link: string) => {
     props.toggleHandler();
@@ -83,14 +85,16 @@ const SidebarDrawer: React.FC<Props> = (props) => {
           </>
         )}
         {isAuthenticated && <Profile variant="drawer" />}
-        <ListItem disablePadding>
-          <ListItemButton onClick={clickNavItemHandler.bind(this, "/admin")}>
-            <ListItemIcon>
-              <AdminPanelSettingsIcon />
-            </ListItemIcon>
-            <ListItemText primary={t(adminMessages.sidebarAdminPanel.key)} />
-          </ListItemButton>
-        </ListItem>
+        {isAdmin && (
+          <ListItem disablePadding>
+            <ListItemButton onClick={clickNavItemHandler.bind(this, "/admin")}>
+              <ListItemIcon>
+                <AdminPanelSettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary={t(adminMessages.sidebarAdminPanel.key)} />
+            </ListItemButton>
+          </ListItem>
+        )}
       </List>
       <ChangeLanguageForm
         sx={{ display: { xs: "block", md: "none" } }}

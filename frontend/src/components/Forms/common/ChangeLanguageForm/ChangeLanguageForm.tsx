@@ -7,8 +7,13 @@ import {
   SxProps,
 } from "@mui/material";
 
+import { useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useMutation } from "react-query";
+
 import { LANGUAGES } from "../../../../constants/languages";
+import { usersApi } from "../../../../config/api/users/users";
+import { AuthContext } from "../../../../store/AuthContext/AuthContext";
 
 import classes from "./ChangeLanguageForm.module.css";
 
@@ -19,10 +24,29 @@ type Props = {
 
 const ChangeLanguageForm: React.FC<Props> = (props) => {
   const { i18n } = useTranslation();
+  const { mutate: changeLanguage } = useMutation({
+    mutationFn: usersApi.changeUserLanguage,
+  });
+  const { isAuthenticated } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (!isAuthenticated && localStorage.getItem("language")) {
+      i18n.changeLanguage(localStorage.getItem("language"));
+    }
+  }, [isAuthenticated]);
 
   const onChangeLanguage = (e: SelectChangeEvent<string>) => {
     const langCode = e.target.value;
     i18n.changeLanguage(langCode);
+    localStorage.setItem("language", langCode);
+
+    if (isAuthenticated) {
+      for (const language of LANGUAGES) {
+        if (language.code === langCode) {
+          changeLanguage(language.backendCode);
+        }
+      }
+    }
   };
 
   return (

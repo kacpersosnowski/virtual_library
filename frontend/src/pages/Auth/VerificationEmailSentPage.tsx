@@ -1,5 +1,6 @@
+import { useEffect } from "react";
 import { Box, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import booksBg from "../../assets/books-bg.jpg";
@@ -9,6 +10,14 @@ import authMessages from "../../messages/authMessages";
 
 const VerificationEmailSentPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!location?.state?.email) {
+      navigate("/");
+    }
+  }, [location?.state]);
 
   return (
     <ImageBackground image={booksBg}>
@@ -18,7 +27,7 @@ const VerificationEmailSentPage = () => {
         </Typography>
         <Typography variant="h6">
           {t(authMessages.checkEmailHeader.key)}{" "}
-          <Box className="primary-link">{localStorage.getItem("email")}</Box>
+          <Box className="primary-link">{location?.state?.email}</Box>
         </Typography>
         <Typography paragraph sx={{ mt: "2rem" }}>
           {t(authMessages.clickActivationLink.key)}{" "}
