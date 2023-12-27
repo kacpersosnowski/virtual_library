@@ -4,14 +4,19 @@ import AccessTokenService from "../store/AuthContext/AccessTokenService";
 
 axios.defaults.baseURL = "http://localhost:8080";
 
-axios.interceptors.request.use((config) => {
-  const token = AccessTokenService.getToken();
-  if (token) {
-    config.headers.Authorization = AccessTokenService.bearerHeader();
-  }
+axios.interceptors.request.use(
+  (config) => {
+    const token = AccessTokenService.getToken();
+    if (token) {
+      config.headers.Authorization = AccessTokenService.bearerHeader();
+    }
 
-  return config;
-});
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
 
 axios.interceptors.response.use(
   (response) => response,
@@ -22,3 +27,8 @@ axios.interceptors.response.use(
     throw error;
   },
 );
+
+export const customFetch = axios.create({
+  baseURL: "http://localhost:8080",
+  headers: { "Content-Type": "application/json" },
+});
