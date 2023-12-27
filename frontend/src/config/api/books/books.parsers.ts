@@ -1,5 +1,9 @@
-import { parseAuthorsString } from "../authors/authors.parsers";
-import { Book, BookItemData, CreateBookDTO } from "./books.types";
+import {
+  parseAuthorsList,
+  parseAuthorsString,
+} from "../authors/authors.parsers";
+import { parseGenresList } from "../genres/genres.parsers";
+import { Book, BookItemData, CreateBookDTO, ReadBookDTO } from "./books.types";
 
 export const parseBookItems = (data: Book[]): BookItemData[] => {
   return data.map((dataItem: Book) => {
@@ -12,6 +16,19 @@ export const parseBookItems = (data: Book[]): BookItemData[] => {
       cover: `data:image/jpeg;base64,${dataItem.cover}`,
     };
   });
+};
+
+export const parseBookItemForDetails = (dataItem: Book): ReadBookDTO => {
+  return {
+    id: dataItem.id,
+    title:
+      dataItem.title.slice(0, 60) + (dataItem.title.length > 60 ? "..." : ""),
+    authors: parseAuthorsList(dataItem.authorList),
+    longDescription: dataItem.longDescription,
+    genres: parseGenresList(dataItem.genreList),
+    tags: dataItem.tagList,
+    cover: `data:image/jpeg;base64,${dataItem.cover}`,
+  };
 };
 
 export const parseBookFormDataForCreate = (data: CreateBookDTO) => {

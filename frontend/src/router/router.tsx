@@ -6,6 +6,7 @@ import ErrorPage from "../pages/ErrorPage";
 
 import authRoutes from "../pages/Auth/routes";
 import adminRoutes from "../pages/Admin/routes";
+import booksRoutes from "../pages/Books/routes";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
       { index: true, element: <MainPage /> },
       ...authRoutes,
       ...adminRoutes,
+      ...booksRoutes,
     ],
   },
 ]);

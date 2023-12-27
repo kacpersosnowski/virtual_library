@@ -1,14 +1,15 @@
 import { Box, Typography } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
-import ActionButton from "../../UI/ActionButton";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 
 import classes from "./BookDetails.module.css";
-import { useTranslation } from "react-i18next";
+import ActionButton from "../../UI/ActionButton";
 import booksMessages from "../../../messages/booksMessages";
 
 type Props = {
-  id: number;
+  id: string;
   title: string;
   author: string;
   zIndex: number;
@@ -16,6 +17,7 @@ type Props = {
 
 const BookDetails: React.FC<Props> = (props) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
     <Box
@@ -60,7 +62,9 @@ const BookDetails: React.FC<Props> = (props) => {
         <StarIcon />
       </Box>
       <Box sx={{ textAlign: "center" }}>
-        <ActionButton>{t(booksMessages.bookItemDetails.key)}</ActionButton>
+        <ActionButton onClick={() => navigate(`/book/${props.id}`)}>
+          {t(booksMessages.bookItemDetails.key)}
+        </ActionButton>
       </Box>
     </Box>
   );
