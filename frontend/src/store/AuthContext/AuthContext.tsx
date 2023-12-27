@@ -1,4 +1,4 @@
-import { PropsWithChildren, createContext, useState } from "react";
+import { PropsWithChildren, createContext, useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { AxiosError } from "axios";
 
@@ -9,6 +9,7 @@ import {
   RegisterCredentials,
 } from "../../config/api/auth/auth.types";
 import AccessTokenService from "./AccessTokenService";
+import RefreshTokenService from "./RefreshTokenService";
 
 export const AuthContext = createContext<AuthContextType>(null);
 
@@ -26,7 +27,8 @@ export const AuthContextProvider: React.FC<PropsWithChildren> = ({
   } = useMutation({
     mutationFn: authApi.login,
     onSuccess: (data) => {
-      AccessTokenService.storeToken(data.token);
+      AccessTokenService.storeToken(data.accessToken);
+      RefreshTokenService.storeToken(data.refreshToken);
       setIsAuthenticated(true);
     },
   });
@@ -39,6 +41,34 @@ export const AuthContextProvider: React.FC<PropsWithChildren> = ({
     mutationFn: authApi.register,
   });
 
+  useEffect(() => {
+    const refresh = async () => {
+      try {
+        await RefreshTokenService.refreshToken();
+      } catch (error) {
+        logout();
+      }
+    };
+
+    let refreshInterval: NodeJS.Timeout;
+    if (isAuthenticated) {
+      refresh();
+
+      refreshInterval = setInterval(
+        () => {
+          refresh();
+        },
+        (AccessTokenService.ACCESS_TOKEN_LIFETIME_IN_MINUTES - 1) * 60 * 1000,
+      );
+    }
+
+    return () => {
+      if (refreshInterval) {
+        clearInterval(refreshInterval);
+      }
+    };
+  }, [isAuthenticated]);
+
   // Wrapper for better ts typing
   const login = (credentials: Credentials) => {
     loginMutate(credentials);
@@ -50,6 +80,7 @@ export const AuthContextProvider: React.FC<PropsWithChildren> = ({
 
   const logout = () => {
     AccessTokenService.deleteToken();
+    RefreshTokenService.deleteToken();
     setIsAuthenticated(false);
   };
 

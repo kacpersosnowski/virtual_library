@@ -1,5 +1,6 @@
 class AccessTokenService {
   static ACCESS_TOKEN_ITEM_NAME = "access_token";
+  static ACCESS_TOKEN_LIFETIME_IN_MINUTES = 15;
 
   static storeToken(token: string) {
     localStorage.setItem(this.ACCESS_TOKEN_ITEM_NAME, token);

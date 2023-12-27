@@ -5,10 +5,13 @@ import {
   LoginResponse,
   RegisterCredentials,
 } from "./auth.types";
+import { customFetch } from "../../axios";
+import RefreshTokenService from "../../../store/AuthContext/RefreshTokenService";
 
 const loginUrl = "/auth/login";
 const registerUrl = "/auth/register";
 const finalizeRegistrationUrl = "/auth/finalize-registration";
+const refreshTokenUrl = "/auth/refresh-token";
 
 export const authApi: AuthApi = {
   login: async (credentials: Credentials) => {
@@ -25,6 +28,12 @@ export const authApi: AuthApi = {
       String(token),
       { headers: { "Content-Type": "text/plain" } },
     );
+    return response.data;
+  },
+  refreshToken: async () => {
+    const response = await customFetch.post<LoginResponse>(refreshTokenUrl, {
+      refreshToken: RefreshTokenService.getToken(),
+    });
     return response.data;
   },
 };
