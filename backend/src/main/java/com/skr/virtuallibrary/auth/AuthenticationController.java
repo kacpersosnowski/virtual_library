@@ -43,4 +43,10 @@ public class AuthenticationController {
         return authenticationService.authenticate(authenticationRequest);
     }
 
+    @PostMapping("/refresh-token")
+    @Operation(summary = "Refresh authentication token.")
+    public AuthenticationResponse refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return authenticationService.refreshToken(refreshTokenRequest);
+    }
+
 }
