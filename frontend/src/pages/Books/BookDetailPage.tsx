@@ -15,6 +15,7 @@ import BookTitle from "../../components/Books/BookInfos/BookTitle";
 import BookInfosTiles from "../../components/Books/BookInfos/BookInfosTiles";
 import BookDescription from "../../components/Books/BookInfos/BookDescription";
 import booksMessages from "../../messages/booksMessages";
+import errorMessages from "../../messages/errorMessages";
 
 const BookDetailPage = () => {
   const { id } = useParams();
@@ -73,7 +74,7 @@ const BookDetailPage = () => {
 
   if (isError) {
     content = (
-      <ErrorMessage message="Nie udało się pobrać informacji o tej książce. Spróbuj ponownie później" />
+      <ErrorMessage message={t(errorMessages.fetchBookDetailsError.key)} />
     );
   }
 
