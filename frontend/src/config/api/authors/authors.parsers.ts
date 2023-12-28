@@ -14,3 +14,11 @@ export const parseAuthorsString = (data: Author[]): string => {
   }
   return result;
 };
+
+export const parseAuthorsList = (data: Author[]): string[] => {
+  const result = [];
+  for (const author of data) {
+    result.push(author.firstName + " " + author.lastName);
+  }
+  return result;
+};

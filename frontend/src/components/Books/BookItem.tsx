@@ -63,10 +63,14 @@ const BookItem: React.FC<Props> = (props) => {
       onMouseEnter={mouseEnterHandler}
       onMouseLeave={mouseOverHandler}
     >
-      <BookCover coverImage={props.details.cover} zIndex={coverZIndex} />
+      <BookCover
+        id={props.details.id}
+        coverImage={props.details.cover}
+        zIndex={coverZIndex}
+      />
       <BookDetails
         zIndex={detailsZIndex}
-        id={1}
+        id={props.details.id}
         title={props.details.title}
         author={props.details.authorList}
       />
