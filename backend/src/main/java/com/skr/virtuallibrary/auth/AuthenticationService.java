@@ -38,6 +38,7 @@ public class AuthenticationService {
         if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
             throw new UserAlreadyExistsException("User already exists with email: " + registerRequest.getEmail());
         }
+
         final User user = User.builder()
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
