@@ -1,6 +1,7 @@
 package com.skr.virtuallibrary.auth;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 
 @Data
 @Builder
