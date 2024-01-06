@@ -33,4 +33,6 @@ public class BookDto {
 
     private String cover;
 
+    private String pdfFileId;
+
 }

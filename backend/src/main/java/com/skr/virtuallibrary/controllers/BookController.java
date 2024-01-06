@@ -3,6 +3,7 @@ package com.skr.virtuallibrary.controllers;
 import com.skr.virtuallibrary.dto.BookDto;
 import com.skr.virtuallibrary.exceptions.BookNotFoundException;
 import com.skr.virtuallibrary.services.BookService;
+import com.skr.virtuallibrary.services.PdfFileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,6 +27,8 @@ import java.util.List;
 public class BookController {
 
     private final BookService bookService;
+
+    private final PdfFileService pdfFileService;
 
     @Operation(
             summary = "Find Book by id",
@@ -65,8 +68,11 @@ public class BookController {
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public BookDto addBook(
             @Valid @RequestPart("book") BookDto bookDto,
-            @RequestPart("cover") MultipartFile cover
+            @RequestPart("cover") MultipartFile cover,
+            @RequestPart("pdfFile") MultipartFile pdfFile
     ) {
+        String pdfFileId = pdfFileService.addPdfFile(pdfFile);
+        bookDto.setPdfFileId(pdfFileId);
         return bookService.addBook(bookDto, cover);
     }
 
@@ -90,8 +96,11 @@ public class BookController {
     public BookDto updateBook(
             @PathVariable String id,
             @Valid @RequestPart("book") BookDto bookDto,
-            @RequestPart("cover") MultipartFile cover
+            @RequestPart("cover") MultipartFile cover,
+            @RequestPart("pdfFile") MultipartFile pdfFile
     ) {
+        String pdfFileId = pdfFileService.addPdfFile(pdfFile);
+        bookDto.setPdfFileId(pdfFileId);
         return bookService.updateBook(id, bookDto, cover);
     }
 
