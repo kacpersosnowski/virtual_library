@@ -30,4 +30,6 @@ public class Book {
 
     private Binary cover;
 
+    private String pdfFileId;
+
 }
