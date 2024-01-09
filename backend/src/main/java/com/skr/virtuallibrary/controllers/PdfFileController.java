@@ -2,6 +2,8 @@ package com.skr.virtuallibrary.controllers;
 
 import com.skr.virtuallibrary.dto.PdfFile;
 import com.skr.virtuallibrary.services.PdfFileService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -14,11 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/pdf-files")
+@Tag(name = "Pdf Files", description = "Pdf Files management APIs")
 @RequiredArgsConstructor
 public class PdfFileController {
 
     private final PdfFileService pdfFileService;
 
+    @Operation(summary = "Get Pdf File by id")
     @GetMapping("/{id}")
     public ResponseEntity<ByteArrayResource> getPdfFile(@PathVariable String id) {
         PdfFile pdfFile = pdfFileService.getPdfFile(id);
