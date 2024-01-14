@@ -5,6 +5,8 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @Document
@@ -21,5 +23,7 @@ public class Review {
 
     private User author;
 
-    private Book reviewTarget;
+    private Book book;
+
+    private LocalDate date;
 }

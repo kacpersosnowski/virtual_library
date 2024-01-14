@@ -1,13 +1,7 @@
 package com.skr.virtuallibrary.mapping;
 
-import com.skr.virtuallibrary.dto.AuthorDto;
-import com.skr.virtuallibrary.dto.BookDto;
-import com.skr.virtuallibrary.dto.GenreDto;
-import com.skr.virtuallibrary.dto.UserDto;
-import com.skr.virtuallibrary.entities.Author;
-import com.skr.virtuallibrary.entities.Book;
-import com.skr.virtuallibrary.entities.Genre;
-import com.skr.virtuallibrary.entities.User;
+import com.skr.virtuallibrary.dto.*;
+import com.skr.virtuallibrary.entities.*;
 import org.bson.types.Binary;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -38,7 +32,15 @@ public interface ModelMapper {
 
     @Named("bookCoverBinaryToString")
     static String bookCoverBinaryToString(Binary cover) {
-        return Base64.getEncoder().encodeToString(cover.getData());
+        if (cover != null) {
+            return Base64.getEncoder().encodeToString(cover.getData());
+        }
+        return null;
     }
+
+    @Mapping(source = "author", target = "author")
+    ReviewDto toReviewDto(Review review);
+
+    Review toReviewEntity(ReviewDto reviewDto);
 
 }
