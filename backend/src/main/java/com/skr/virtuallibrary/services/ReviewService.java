@@ -39,6 +39,11 @@ public class ReviewService {
 
     private static final String ERROR_NOT_FOUND_MSG = "Not found review with id: ";
 
+    private static final int MIN_REVIEW_RATE = 1;
+
+    private static final int MAX_REVIEW_RATE = 5;
+
+
     public ReviewDto findReviewById(String id) {
         return reviewRepository.findById(id).map(modelMapper::toReviewDto)
                 .orElseThrow(() -> new ReviewNotFoundException(ERROR_NOT_FOUND_MSG + id));
@@ -53,8 +58,13 @@ public class ReviewService {
 
     public ReviewDto addReview(ReviewDto reviewDto) {
         Review review = modelMapper.toReviewEntity(reviewDto);
-        Book book = bookRepository.findById(reviewDto.getBook().getId())
-                        .orElseThrow(() -> new BookNotFoundException("Not found book with id: " + reviewDto.getBook().getId()));
+        Book book = bookRepository.findById(reviewDto.getBookId())
+                .orElseThrow(() -> new BookNotFoundException("Not found book with id: " + reviewDto.getBookId()));
+
+        if (review.getRating() < MIN_REVIEW_RATE || review.getRating() > MAX_REVIEW_RATE) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Review rate out of bound (1-5)");
+        }
+
         review.setBook(book);
         review.setAuthor(getUser());
         review.setDate(LocalDate.now());
@@ -62,10 +72,10 @@ public class ReviewService {
         return modelMapper.toReviewDto(reviewRepository.save(review));
     }
 
-    public void deleteAuthor(String id) {
+    public void deleteReview(String id) {
         Optional<Review> review = reviewRepository.findById(id);
         if (review.isEmpty()) {
-            return;
+            throw new ReviewNotFoundException(ERROR_NOT_FOUND_MSG + id);
         }
 
         User user = getUser();
@@ -80,9 +90,17 @@ public class ReviewService {
     public ReviewDto updateReview(String id, ReviewDto reviewDto) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(ERROR_NOT_FOUND_MSG + id));
-        Book book = bookRepository.findById(reviewDto.getBook().getId())
-                .orElseThrow(() -> new BookNotFoundException("Not found book with id: " + reviewDto.getBook().getId()));
+        Book book = bookRepository.findById(reviewDto.getBookId())
+                .orElseThrow(() -> new BookNotFoundException("Not found book with id: " + reviewDto.getBookId()));
         review.setBook(book);
+
+        if (!reviewDto.getAuthor().getId().equals(review.getAuthor().getId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You cannot change review's author");
+        }
+
+        if (review.getRating() < MIN_REVIEW_RATE || review.getRating() > MAX_REVIEW_RATE) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Review rate out of bound (1-5)");
+        }
 
         if (!review.getAuthor().equals(getUser())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot edit this review.");

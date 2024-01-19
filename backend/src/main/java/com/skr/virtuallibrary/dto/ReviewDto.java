@@ -23,8 +23,8 @@ public class ReviewDto {
 
     private UserDto author;
 
-    @NotNull(message = "Book is mandatory.")
-    private BookDto book;
+    @NotEmpty(message = "BookId is mandatory.")
+    private String bookId;
 
     private LocalDate date;
 }

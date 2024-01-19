@@ -43,7 +43,7 @@ public class ReviewController {
     @Operation(summary = "Delete Review by id")
     @DeleteMapping("/{id}")
     public void deleteReview(@PathVariable String id) {
-        reviewService.deleteAuthor(id);
+        reviewService.deleteReview(id);
     }
 
     @Operation(summary = "Update Review by id")

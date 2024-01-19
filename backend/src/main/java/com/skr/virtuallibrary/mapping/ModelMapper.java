@@ -38,7 +38,6 @@ public interface ModelMapper {
         return null;
     }
 
-    @Mapping(source = "author", target = "author")
     ReviewDto toReviewDto(Review review);
 
     Review toReviewEntity(ReviewDto reviewDto);
