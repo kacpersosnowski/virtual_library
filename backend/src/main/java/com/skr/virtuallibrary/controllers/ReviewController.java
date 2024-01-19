@@ -23,32 +23,32 @@ public class ReviewController {
 
     @Operation(summary = "Find Review by id.")
     @GetMapping("/{id}")
-    public ReviewDto findAuthorById(@PathVariable String id) {
+    public ReviewDto findReviewById(@PathVariable String id) {
         return reviewService.findReviewById(id);
     }
 
     @Operation(summary = "Find all Reviews.")
     @GetMapping
-    public List<ReviewDto> findAllAuthors() {
+    public List<ReviewDto> findAllReviews() {
         return reviewService.findAllReviews();
     }
 
     @Operation(summary = "Post Review.")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ReviewDto addAuthor(@Valid @RequestBody ReviewDto reviewDto) {
+    public ReviewDto addReview(@Valid @RequestBody ReviewDto reviewDto) {
         return reviewService.addReview(reviewDto);
     }
 
     @Operation(summary = "Delete Review by id")
     @DeleteMapping("/{id}")
-    public void deleteAuthor(@PathVariable String id) {
+    public void deleteReview(@PathVariable String id) {
         reviewService.deleteAuthor(id);
     }
 
     @Operation(summary = "Update Review by id")
     @PutMapping("/{id}")
-    public ReviewDto updateAuthor(@PathVariable String id, @Valid @RequestBody ReviewDto reviewDto) {
+    public ReviewDto updateReview(@PathVariable String id, @Valid @RequestBody ReviewDto reviewDto) {
         return reviewService.updateReview(id, reviewDto);
     }
 }
