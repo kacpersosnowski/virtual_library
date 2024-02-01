@@ -6,10 +6,12 @@ import { DocumentCallback } from "react-pdf/dist/cjs/shared/types";
 
 import Page from "./Page";
 import samplePdf from "../../../assets/harry.pdf";
+import LoadingSpinner from "../../UI/LoadingSpinner";
 
 const PDFReader = () => {
   const [page, setPage] = useState(0);
   const [totalPage, setTotalPage] = useState(0);
+  const [doc, setDoc] = useState<DocumentCallback>(null);
   const [bookDimensions, setBookDimensions] = useState({
     width: null as number,
     height: null as number,
@@ -34,30 +36,30 @@ const PDFReader = () => {
     initialPageHeight: number,
   ) => {
     const containerWidth = containerRef.current.offsetWidth;
-
-    if (initialPageWidth && initialPageHeight) {
-      if (2 * initialPageWidth <= containerWidth + 20) {
-        setBookDimensions({
-          width: initialPageWidth,
-          height: initialPageHeight,
-        });
-      } else {
-        const ratio = initialPageWidth / initialPageHeight;
-        const newWidth = containerWidth / 2 - 20;
-        const newHeight = newWidth / ratio;
-        setBookDimensions({ width: newWidth, height: newHeight });
-      }
+    const ratio = initialPageWidth / initialPageHeight;
+    const newWidth = containerWidth / 2 - 20;
+    const newHeight = newWidth / ratio;
+    if (
+      bookDimensions.width != newWidth ||
+      bookDimensions.height != newHeight
+    ) {
+      setBookDimensions({ width: newWidth, height: newHeight });
     }
   };
 
   useEffect(() => {
     const handleResize = (entries) => {
       entries.forEach(() => {
-        const containerWidth = containerRef?.current.offsetWidth;
+        const containerWidth = containerRef.current.offsetWidth;
         const ratio = bookDimensions.width / bookDimensions.height;
         const newWidth = containerWidth / 2 - 20;
         const newHeight = newWidth / ratio;
-        if (bookDimensions.width != newWidth) {
+        if (
+          bookDimensions.width &&
+          bookDimensions.height &&
+          (bookDimensions.width != newWidth ||
+            bookDimensions.height != newHeight)
+        ) {
           setBookDimensions({ width: newWidth, height: newHeight });
         }
       });
@@ -72,6 +74,21 @@ const PDFReader = () => {
       resizeObserver.disconnect();
     };
   }, [bookDimensions]);
+
+  useEffect(() => {
+    const getFirstPage = doc?.getPage(page + 1);
+    const getNextPage = doc?.getPage(page + 2);
+
+    Promise.all([getFirstPage, getNextPage])
+      .then((pages) => {
+        const [page1, page2] = pages;
+        if (page1 && page2) {
+          const smallerPage = page1.view[2] <= page2.view[2] ? page1 : page2;
+          handleInitialResize(smallerPage.view[2], smallerPage.view[3]);
+        }
+      })
+      .catch(() => {});
+  }, [page]);
 
   return (
     <Box
@@ -91,8 +108,10 @@ const PDFReader = () => {
     >
       <Document
         file={samplePdf}
+        loading={<LoadingSpinner />}
         onLoadSuccess={(doc: DocumentCallback) => {
           setTotalPage(doc.numPages);
+          setDoc(doc);
           doc.getPage(1).then((s) => {
             handleInitialResize(s.view[2], s.view[3]);
           });
