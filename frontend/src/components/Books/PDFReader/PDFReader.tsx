@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import HTMLFlipBook from "react-pageflip";
 import { Document } from "react-pdf";
 import { DocumentCallback } from "react-pdf/dist/cjs/shared/types";
@@ -7,6 +7,7 @@ import { DocumentCallback } from "react-pdf/dist/cjs/shared/types";
 import Page from "./Page";
 import samplePdf from "../../../assets/harry.pdf";
 import LoadingSpinner from "../../UI/LoadingSpinner";
+import { LeftArrow, RightArrow } from "../../Layout/common/arrows";
 
 const PDFReader = () => {
   const [page, setPage] = useState(0);
@@ -31,13 +32,15 @@ const PDFReader = () => {
     setPage(e.data);
   };
 
+  const bookMargin = 100;
+
   const handleInitialResize = (
     initialPageWidth: number,
     initialPageHeight: number,
   ) => {
     const containerWidth = containerRef.current.offsetWidth;
     const ratio = initialPageWidth / initialPageHeight;
-    const newWidth = containerWidth / 2 - 20;
+    const newWidth = containerWidth / 2 - bookMargin;
     const newHeight = newWidth / ratio;
     if (
       bookDimensions.width != newWidth ||
@@ -52,7 +55,7 @@ const PDFReader = () => {
       entries.forEach(() => {
         const containerWidth = containerRef.current.offsetWidth;
         const ratio = bookDimensions.width / bookDimensions.height;
-        const newWidth = containerWidth / 2 - 20;
+        const newWidth = containerWidth / 2 - bookMargin;
         const newHeight = newWidth / ratio;
         if (
           bookDimensions.width &&
@@ -76,15 +79,21 @@ const PDFReader = () => {
   }, [bookDimensions]);
 
   useEffect(() => {
-    const getFirstPage = doc?.getPage(page + 1);
-    const getNextPage = doc?.getPage(page + 2);
+    const getFirstPage = doc?.getPage(page);
+    const getNextPage = doc?.getPage(page + 1);
 
     Promise.all([getFirstPage, getNextPage])
       .then((pages) => {
         const [page1, page2] = pages;
         if (page1 && page2) {
-          const smallerPage = page1.view[2] <= page2.view[2] ? page1 : page2;
-          handleInitialResize(smallerPage.view[2], smallerPage.view[3]);
+          console.log(page1.view, page2.view);
+          if (
+            Math.abs(page1.view[2] - page2.view[2]) >= 15 ||
+            Math.abs(page1.view[3] - page2.view[3]) >= 15
+          ) {
+            const smallerPage = page1.view[2] <= page2.view[2] ? page1 : page2;
+            handleInitialResize(smallerPage.view[2], smallerPage.view[3]);
+          }
         }
       })
       .catch(() => {});
@@ -99,67 +108,76 @@ const PDFReader = () => {
         alignItems: "center",
         flexDirection: "column",
         width: "70%",
-        height: bookDimensions.height + 100 + "px" || "1000px",
+        height: bookDimensions.height + 50 + "px" || "1000px",
         backgroundColor: "#333333",
         marginBottom: "30px",
         overflow: "hidden",
         zIndex: 1,
       }}
     >
-      <Document
-        file={samplePdf}
-        loading={<LoadingSpinner />}
-        onLoadSuccess={(doc: DocumentCallback) => {
-          setTotalPage(doc.numPages);
-          setDoc(doc);
-          doc.getPage(1).then((s) => {
-            handleInitialResize(s.view[2], s.view[3]);
-          });
-        }}
+      <Box
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
-        <HTMLFlipBook
-          key={`${bookDimensions.width}-${bookDimensions.height}`}
-          style={{}}
-          startPage={page}
-          drawShadow={false}
-          flippingTime={1000}
-          usePortrait={false}
-          startZIndex={1}
-          autoSize={true}
-          clickEventForward={true}
-          useMouseEvents={true}
-          swipeDistance={30}
-          showPageCorners={true}
-          disableFlipByClick={false}
-          width={bookDimensions.width || 595.25}
-          height={bookDimensions.height || 842}
-          size="fixed"
-          minWidth={115}
-          maxWidth={2000}
-          minHeight={100}
-          maxHeight={2533}
-          maxShadowOpacity={0.5}
-          showCover={true}
-          mobileScrollSupport={true}
-          onFlip={onPage}
-          className="demo-book"
-          ref={flipBook}
+        <LeftArrow disabled={page === 0} onClick={prevButtonClick} />
+        <Document
+          file={samplePdf}
+          loading={<LoadingSpinner />}
+          onLoadSuccess={(doc: DocumentCallback) => {
+            setTotalPage(doc.numPages);
+            setDoc(doc);
+            doc.getPage(1).then((s) => {
+              handleInitialResize(s.view[2], s.view[3]);
+            });
+          }}
         >
-          {Array.from({ length: totalPage }, (_, index) => index + 1).map(
-            (pageNumber) => {
-              return (
-                <Page
-                  key={pageNumber}
-                  number={pageNumber}
-                  width={bookDimensions.width || 595.25}
-                />
-              );
-            },
-          )}
-        </HTMLFlipBook>
-      </Document>
+          <HTMLFlipBook
+            key={`${bookDimensions.width}-${bookDimensions.height}`}
+            style={{}}
+            startPage={page}
+            drawShadow={false}
+            flippingTime={1000}
+            usePortrait={false}
+            startZIndex={1}
+            autoSize={true}
+            clickEventForward={true}
+            useMouseEvents={true}
+            swipeDistance={30}
+            showPageCorners={true}
+            disableFlipByClick={false}
+            width={bookDimensions.width || 595.25}
+            height={bookDimensions.height || 842}
+            size="fixed"
+            minWidth={115}
+            maxWidth={2000}
+            minHeight={100}
+            maxHeight={2533}
+            maxShadowOpacity={0.5}
+            showCover={true}
+            mobileScrollSupport={true}
+            onFlip={onPage}
+            className="demo-book"
+            ref={flipBook}
+          >
+            {Array.from({ length: totalPage }, (_, index) => index + 1).map(
+              (pageNumber) => {
+                return (
+                  <Page
+                    key={pageNumber}
+                    number={pageNumber}
+                    width={bookDimensions.width || 595.25}
+                  />
+                );
+              },
+            )}
+          </HTMLFlipBook>
+        </Document>
+        <RightArrow
+          disabled={page === totalPage - 1}
+          onClick={nextButtonClick}
+        />
+      </Box>
 
-      <Box sx={{ color: "white", padding: "10px" }}>
+      {/* <Box sx={{ color: "white", padding: "10px", mt: "20px" }}>
         <Box>
           <Button type="button" onClick={prevButtonClick}>
             Previous page
@@ -170,7 +188,7 @@ const PDFReader = () => {
             Next page
           </Button>
         </Box>
-      </Box>
+      </Box> */}
     </Box>
   );
 };
