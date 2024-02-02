@@ -5,7 +5,7 @@ import { Document } from "react-pdf";
 import { DocumentCallback } from "react-pdf/dist/cjs/shared/types";
 
 import Page from "./Page";
-import samplePdf from "../../../assets/ochrona.pdf";
+import samplePdf from "../../../assets/harry.pdf";
 import LoadingSpinner from "../../UI/LoadingSpinner";
 import { LeftArrow, RightArrow } from "../../Layout/common/arrows";
 import ReadToolbar from "./ReadToolbar/ReadToolbar";
@@ -13,6 +13,7 @@ import ReadToolbar from "./ReadToolbar/ReadToolbar";
 const PDFReader = () => {
   const [page, setPage] = useState(0);
   const [totalPage, setTotalPage] = useState(0);
+  const [isFullScreen, setIsFullScreen] = useState(false);
   const [doc, setDoc] = useState<DocumentCallback>(null);
   const [bookDimensions, setBookDimensions] = useState({
     width: null as number,
@@ -57,8 +58,48 @@ const PDFReader = () => {
   };
 
   useEffect(() => {
+    const fullscreenChangeHandler = () => {
+      setIsFullScreen(!!document.fullscreenElement);
+    };
+    const handleFKeyPress = (e) => {
+      if (e.key === "f" || e.key === "F") {
+        handleFullscreen();
+      }
+    };
+
+    document.addEventListener("fullscreenchange", fullscreenChangeHandler);
+    document.onkeydown = handleFKeyPress;
+
+    return () => {
+      document.removeEventListener("fullscreenchange", fullscreenChangeHandler);
+      document.onkeydown = null;
+    };
+  }, []);
+
+  useEffect(() => {
     const handleResize = (entries) => {
       entries.forEach(() => {
+        if (isFullScreen) {
+          const availableHeight = window.screen.availHeight - 100;
+          const availableWidth = (window.screen.availWidth - 50) / 2;
+          const ratio = bookDimensions.width / bookDimensions.height;
+          let width: number, height: number;
+
+          if (availableWidth / ratio <= availableHeight) {
+            width = availableWidth;
+            height = width / ratio;
+          } else {
+            height = availableHeight;
+            width = height * ratio;
+          }
+          if (
+            width !== bookDimensions.width ||
+            height !== bookDimensions.height
+          ) {
+            setBookDimensions({ width, height });
+          }
+          return;
+        }
         const containerWidth = containerRef.current.offsetWidth;
         const ratio = bookDimensions.width / bookDimensions.height;
         const newWidth = containerWidth / 2 - bookMargin;
@@ -82,7 +123,7 @@ const PDFReader = () => {
     return () => {
       resizeObserver.disconnect();
     };
-  }, [bookDimensions]);
+  }, [bookDimensions, isFullScreen]);
 
   useEffect(() => {
     const getFirstPage = doc?.getPage(page);
@@ -103,6 +144,33 @@ const PDFReader = () => {
       })
       .catch(() => {});
   }, [page]);
+
+  const enterFullscreen = () => {
+    const elem = containerRef.current;
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) {
+      // Firefox
+      elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) {
+      // Chrome, Safari, and Opera
+      elem.webkitRequestFullscreen();
+    }
+  };
+
+  const exitFullscreen = () => {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  };
+
+  const handleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      enterFullscreen();
+    } else {
+      exitFullscreen();
+    }
+  };
 
   return (
     <Box
@@ -194,6 +262,7 @@ const PDFReader = () => {
         currentPage={page}
         totalPages={totalPage}
         onTurnPage={turnToPage}
+        onHandleFullScreen={handleFullscreen}
       />
     </Box>
   );

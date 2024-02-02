@@ -1,15 +1,22 @@
-import { Box } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
+import FullscreenIcon from "@mui/icons-material/Fullscreen";
+import FullscreenExitIcon from "@mui/icons-material/FullscreenExit";
+import { useTranslation } from "react-i18next";
 
 import PageSlider from "./PageSlider";
+import booksMessages from "../../../../messages/booksMessages";
 
 type Props = {
   currentPage: number;
   totalPages: number;
   onTurnPage: (newPage: number) => void;
+  onHandleFullScreen: () => void;
 };
 
 const ReadToolbar: React.FC<Props> = (props) => {
-  const { currentPage, totalPages, onTurnPage } = props;
+  const { t } = useTranslation();
+
+  const { currentPage, totalPages, onTurnPage, onHandleFullScreen } = props;
 
   let visiblePages: string = "";
 
@@ -49,6 +56,29 @@ const ReadToolbar: React.FC<Props> = (props) => {
         <Box>
           {visiblePages} / {totalPages}
         </Box>
+        {!document.fullscreenElement ? (
+          <Tooltip
+            title={t(booksMessages.enterFullscreen.key)}
+            arrow
+            placement="top"
+          >
+            <FullscreenIcon
+              sx={{ cursor: "pointer" }}
+              onClick={onHandleFullScreen}
+            />
+          </Tooltip>
+        ) : (
+          <Tooltip
+            title={t(booksMessages.exitFullscreen.key)}
+            arrow
+            placement="top"
+          >
+            <FullscreenExitIcon
+              sx={{ cursor: "pointer" }}
+              onClick={onHandleFullScreen}
+            />
+          </Tooltip>
+        )}
       </Box>
     </Box>
   );
