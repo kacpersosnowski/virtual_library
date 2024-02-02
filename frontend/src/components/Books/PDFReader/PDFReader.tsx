@@ -5,9 +5,10 @@ import { Document } from "react-pdf";
 import { DocumentCallback } from "react-pdf/dist/cjs/shared/types";
 
 import Page from "./Page";
-import samplePdf from "../../../assets/harry.pdf";
+import samplePdf from "../../../assets/ochrona.pdf";
 import LoadingSpinner from "../../UI/LoadingSpinner";
 import { LeftArrow, RightArrow } from "../../Layout/common/arrows";
+import ReadToolbar from "./ReadToolbar/ReadToolbar";
 
 const PDFReader = () => {
   const [page, setPage] = useState(0);
@@ -26,6 +27,11 @@ const PDFReader = () => {
 
   const prevButtonClick = () => {
     flipBook.current?.pageFlip().flipPrev();
+  };
+
+  const turnToPage = (page: number) => {
+    flipBook.current?.pageFlip().turnToPage(page);
+    setPage(page);
   };
 
   const onPage = (e) => {
@@ -86,7 +92,6 @@ const PDFReader = () => {
       .then((pages) => {
         const [page1, page2] = pages;
         if (page1 && page2) {
-          console.log(page1.view, page2.view);
           if (
             Math.abs(page1.view[2] - page2.view[2]) >= 15 ||
             Math.abs(page1.view[3] - page2.view[3]) >= 15
@@ -102,21 +107,26 @@ const PDFReader = () => {
   return (
     <Box
       ref={containerRef}
-      style={{
+      sx={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
-        width: "70%",
-        height: bookDimensions.height + 50 + "px" || "1000px",
+        width: { xs: "100%", md: "70%" },
+        height: bookDimensions.height + 140 + "px" || "1000px",
         backgroundColor: "#333333",
         marginBottom: "30px",
         overflow: "hidden",
         zIndex: 1,
+        padding: "1rem",
       }}
     >
       <Box
-        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
       >
         <LeftArrow disabled={page === 0} onClick={prevButtonClick} />
         <Document
@@ -135,7 +145,7 @@ const PDFReader = () => {
             style={{}}
             startPage={page}
             drawShadow={false}
-            flippingTime={1000}
+            flippingTime={700}
             usePortrait={false}
             startZIndex={1}
             autoSize={true}
@@ -172,23 +182,19 @@ const PDFReader = () => {
           </HTMLFlipBook>
         </Document>
         <RightArrow
-          disabled={page === totalPage - 1}
+          disabled={
+            totalPage % 2 === 0
+              ? page === totalPage - 1
+              : page === totalPage - 2
+          }
           onClick={nextButtonClick}
         />
       </Box>
-
-      {/* <Box sx={{ color: "white", padding: "10px", mt: "20px" }}>
-        <Box>
-          <Button type="button" onClick={prevButtonClick}>
-            Previous page
-          </Button>
-          [<Box component="span">{page}</Box> of{" "}
-          <Box component="span">{totalPage}</Box>]
-          <Button type="button" onClick={nextButtonClick}>
-            Next page
-          </Button>
-        </Box>
-      </Box> */}
+      <ReadToolbar
+        currentPage={page}
+        totalPages={totalPage}
+        onTurnPage={turnToPage}
+      />
     </Box>
   );
 };

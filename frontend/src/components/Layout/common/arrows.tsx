@@ -39,7 +39,7 @@ const Arrow: React.FC<PropsWithChildren<ArrowProps>> = ({
 
 export const LeftArrow: React.FC<ArrowProps> = ({ disabled, onClick }) => {
   return (
-    <Arrow sx={{ right: "1%" }} disabled={disabled} onClick={onClick}>
+    <Arrow sx={{ right: "1rem" }} disabled={disabled} onClick={onClick}>
       <ArrowBackIosIcon />
     </Arrow>
   );
@@ -47,7 +47,7 @@ export const LeftArrow: React.FC<ArrowProps> = ({ disabled, onClick }) => {
 
 export const RightArrow: React.FC<ArrowProps> = ({ disabled, onClick }) => {
   return (
-    <Arrow sx={{ left: "1%" }} disabled={disabled} onClick={onClick}>
+    <Arrow sx={{ left: "1rem" }} disabled={disabled} onClick={onClick}>
       <ArrowForwardIosIcon />
     </Arrow>
   );
