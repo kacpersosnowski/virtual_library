@@ -2,7 +2,6 @@ package com.skr.virtuallibrary.entities;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -28,8 +27,8 @@ public class Book {
 
     private List<String> tagList;
 
-    private Binary cover;
+    private String bookCoverId;
 
-    private String pdfFileId;
+    private String bookContentId;
 
 }

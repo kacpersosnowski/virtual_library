@@ -1,9 +1,9 @@
-package com.skr.virtuallibrary.dto;
+package com.skr.virtuallibrary.entities;
 
 import lombok.Data;
 
 @Data
-public class PdfFile {
+public class File {
 
     private String filename;
 

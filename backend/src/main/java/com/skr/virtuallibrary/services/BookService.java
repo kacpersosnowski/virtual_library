@@ -5,21 +5,16 @@ import com.skr.virtuallibrary.dto.BookDto;
 import com.skr.virtuallibrary.entities.Author;
 import com.skr.virtuallibrary.entities.Book;
 import com.skr.virtuallibrary.exceptions.BookNotFoundException;
-import com.skr.virtuallibrary.exceptions.InternalException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.AuthorRepository;
 import com.skr.virtuallibrary.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.BsonBinarySubType;
-import org.bson.types.Binary;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,8 +34,6 @@ public class BookService {
 
     private static final String ERROR_NOT_FOUND_MSG = "Not found book with id: ";
 
-    private static final String ERROR_SAVE_MSG = "Error while trying to save book in database.";
-
     public BookDto findBookById(String id) {
         return bookRepository.findById(id).map(modelMapper::toBookDto)
                 .orElseThrow(() -> new BookNotFoundException(ERROR_NOT_FOUND_MSG + id));
@@ -50,8 +43,8 @@ public class BookService {
         return bookRepository.findAll().stream().map(modelMapper::toBookDto).toList();
     }
 
-    public BookDto addBook(BookDto bookDto, MultipartFile cover) {
-        return saveBook(bookDto, cover);
+    public BookDto addBook(BookDto bookDto) {
+        return saveBook(bookDto);
     }
 
     public void deleteBook(String id) {
@@ -62,12 +55,12 @@ public class BookService {
         }
     }
 
-    public BookDto updateBook(String id, BookDto bookDto, MultipartFile cover) {
+    public BookDto updateBook(String id, BookDto bookDto) {
         if (bookRepository.findById(id).isEmpty()) {
             throw new BookNotFoundException(ERROR_NOT_FOUND_MSG + id);
         }
         bookDto.setId(id);
-        return saveBook(bookDto, cover);
+        return saveBook(bookDto);
     }
 
     public List<BookDto> findBooksByTitleOrAuthor(String searchPhrase) {
@@ -88,16 +81,11 @@ public class BookService {
                 .toList();
     }
 
-    private BookDto saveBook(BookDto bookDto, MultipartFile cover) {
-        try {
-            List<Author> authorList = bookDto.getAuthorList().stream().map(this::findOrCreateAuthor).toList();
-            Book book = modelMapper.toBookEntity(bookDto);
-            book.setAuthorList(authorList);
-            book.setCover(new Binary(BsonBinarySubType.BINARY, cover.getBytes()));
-            return modelMapper.toBookDto(bookRepository.save(book));
-        } catch (IOException ex) {
-            throw new InternalException(ERROR_SAVE_MSG, ex);
-        }
+    private BookDto saveBook(BookDto bookDto) {
+        List<Author> authorList = bookDto.getAuthorList().stream().map(this::findOrCreateAuthor).toList();
+        Book book = modelMapper.toBookEntity(bookDto);
+        book.setAuthorList(authorList);
+        return modelMapper.toBookDto(bookRepository.save(book));
     }
 
     private Author findOrCreateAuthor(AuthorDto authorDto) {

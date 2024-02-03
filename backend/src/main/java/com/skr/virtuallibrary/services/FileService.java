@@ -3,7 +3,7 @@ package com.skr.virtuallibrary.services;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.gridfs.model.GridFSFile;
-import com.skr.virtuallibrary.dto.PdfFile;
+import com.skr.virtuallibrary.entities.File;
 import com.skr.virtuallibrary.exceptions.IncorrectContentTypeException;
 import com.skr.virtuallibrary.exceptions.InternalException;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +20,14 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class PdfFileService {
+public class FileService {
 
     private final GridFsTemplate gridFsTemplate;
 
     private final GridFsOperations gridFsOperations;
 
-    public String addPdfFile(MultipartFile upload) {
-        if (!Objects.equals(upload.getContentType(), "application/pdf")) {
+    public String addFile(MultipartFile upload, String expectedContentType) {
+        if (!Objects.equals(upload.getContentType(), expectedContentType)) {
             throw new IncorrectContentTypeException("Incorrect content type: " + upload.getContentType());
         }
         try {
@@ -36,23 +36,33 @@ public class PdfFileService {
             Object fileID = gridFsTemplate.store(upload.getInputStream(), upload.getOriginalFilename(), upload.getContentType(), metadata);
             return fileID.toString();
         } catch (IOException ex) {
-            throw new InternalException("Error occurred while saving pdf file", ex);
+            throw new InternalException("Error occurred while saving file", ex);
         }
     }
 
-    public PdfFile getPdfFile(String id) {
-        try {
-            GridFSFile gridFSFile = gridFsTemplate.findOne( new Query(Criteria.where("_id").is(id)) );
-            PdfFile pdfFile = new PdfFile();
-            if (gridFSFile != null && gridFSFile.getMetadata() != null) {
-                pdfFile.setFilename( gridFSFile.getFilename() );
-                pdfFile.setFileType( gridFSFile.getMetadata().get("_contentType").toString() );
-                pdfFile.setFileSize( gridFSFile.getMetadata().get("fileSize").toString() );
-                pdfFile.setFile( IOUtils.toByteArray(gridFsOperations.getResource(gridFSFile).getInputStream()) );
+    public File getFile(String id, String expectedContentType) {
+        GridFSFile gridFSFile = gridFsTemplate.findOne( new Query(Criteria.where("_id").is(id)) );
+        File pdfFile = new File();
+
+        if (gridFSFile != null && gridFSFile.getMetadata() != null) {
+            pdfFile.setFilename( gridFSFile.getFilename() );
+
+            String contentType = gridFSFile.getMetadata().get("_contentType").toString();
+            if (!Objects.equals(contentType, expectedContentType)) {
+                throw new IncorrectContentTypeException("Incorrect content type: " + contentType);
             }
+            pdfFile.setFileType( contentType );
+
+            pdfFile.setFileSize( gridFSFile.getMetadata().get("fileSize").toString() );
+        } else {
+            throw new InternalException("Cannot read metadata from file with id: " + id);
+        }
+
+        try {
+            pdfFile.setFile(IOUtils.toByteArray(gridFsOperations.getResource(gridFSFile).getInputStream()));
             return pdfFile;
         } catch (IOException ex) {
-            throw new InternalException("Error occurred while getting pdf file", ex);
+            throw new InternalException("Error occurred while getting file", ex);
         }
     }
 
