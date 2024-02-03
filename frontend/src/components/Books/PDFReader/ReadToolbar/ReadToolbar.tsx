@@ -4,6 +4,7 @@ import FullscreenExitIcon from "@mui/icons-material/FullscreenExit";
 import { useTranslation } from "react-i18next";
 
 import PageSlider from "./PageSlider";
+import ZoomSlider from "./ZoomSlider";
 import booksMessages from "../../../../messages/booksMessages";
 
 type Props = {
@@ -56,6 +57,7 @@ const ReadToolbar: React.FC<Props> = (props) => {
         <Box>
           {visiblePages} / {totalPages}
         </Box>
+        <ZoomSlider />
         {!document.fullscreenElement ? (
           <Tooltip
             title={t(booksMessages.enterFullscreen.key)}

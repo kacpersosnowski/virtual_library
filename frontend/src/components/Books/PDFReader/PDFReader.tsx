@@ -1,24 +1,29 @@
 import { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Box } from "@mui/material";
 import HTMLFlipBook from "react-pageflip";
 import { Document } from "react-pdf";
 import { DocumentCallback } from "react-pdf/dist/cjs/shared/types";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 import Page from "./Page";
-import samplePdf from "../../../assets/harry.pdf";
+import samplePdf from "../../../assets/pan-tadeusz.pdf";
 import LoadingSpinner from "../../UI/LoadingSpinner";
 import { LeftArrow, RightArrow } from "../../Layout/common/arrows";
 import ReadToolbar from "./ReadToolbar/ReadToolbar";
+import { zoomActions } from "../../../store/redux/slices/zoom-slice";
 
 const PDFReader = () => {
   const [page, setPage] = useState(0);
   const [totalPage, setTotalPage] = useState(0);
+  const [isZoomed, setIsZoomed] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [doc, setDoc] = useState<DocumentCallback>(null);
   const [bookDimensions, setBookDimensions] = useState({
     width: null as number,
     height: null as number,
   });
+  const dispatch = useDispatch();
   const containerRef = useRef(null);
   const flipBook = useRef(null);
 
@@ -73,6 +78,7 @@ const PDFReader = () => {
     return () => {
       document.removeEventListener("fullscreenchange", fullscreenChangeHandler);
       document.onkeydown = null;
+      dispatch(zoomActions.setScale(1));
     };
   }, []);
 
@@ -84,7 +90,6 @@ const PDFReader = () => {
           const availableWidth = (window.screen.availWidth - 50) / 2;
           const ratio = bookDimensions.width / bookDimensions.height;
           let width: number, height: number;
-
           if (availableWidth / ratio <= availableHeight) {
             width = availableWidth;
             height = width / ratio;
@@ -189,81 +194,113 @@ const PDFReader = () => {
         padding: "1rem",
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+      <TransformWrapper
+        doubleClick={{ disabled: true }}
+        minScale={1}
+        maxScale={2}
+        panning={{
+          disabled: !isZoomed,
+        }}
+        wheel={{
+          disabled: false,
+          activationKeys: !isFullScreen ? ["Control", "Shift"] : [],
+          smoothStep: (0.001 * 0.2) / 0.12, // one scroll = 0.2 of scale
+        }}
+        onTransformed={(ref) => {
+          if (ref.state.scale !== 1) {
+            if (!isZoomed) {
+              setIsZoomed(true);
+            }
+            flipBook.current.pageFlip().setting.useMouseEvents = false;
+          } else {
+            if (isZoomed) {
+              setIsZoomed(false);
+            }
+            flipBook.current.pageFlip().setting.useMouseEvents = true;
+          }
+        }}
+        onWheel={(ref) => {
+          dispatch(zoomActions.setScale(ref.state.scale));
         }}
       >
-        <LeftArrow disabled={page === 0} onClick={prevButtonClick} />
-        <Document
-          file={samplePdf}
-          loading={<LoadingSpinner />}
-          onLoadSuccess={(doc: DocumentCallback) => {
-            setTotalPage(doc.numPages);
-            setDoc(doc);
-            doc.getPage(1).then((s) => {
-              handleInitialResize(s.view[2], s.view[3]);
-            });
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <HTMLFlipBook
-            key={`${bookDimensions.width}-${bookDimensions.height}`}
-            style={{}}
-            startPage={page}
-            drawShadow={false}
-            flippingTime={700}
-            usePortrait={false}
-            startZIndex={1}
-            autoSize={true}
-            clickEventForward={true}
-            useMouseEvents={true}
-            swipeDistance={30}
-            showPageCorners={true}
-            disableFlipByClick={false}
-            width={bookDimensions.width || 595.25}
-            height={bookDimensions.height || 842}
-            size="fixed"
-            minWidth={115}
-            maxWidth={2000}
-            minHeight={100}
-            maxHeight={2533}
-            maxShadowOpacity={0.5}
-            showCover={true}
-            mobileScrollSupport={true}
-            onFlip={onPage}
-            className="demo-book"
-            ref={flipBook}
-          >
-            {Array.from({ length: totalPage }, (_, index) => index + 1).map(
-              (pageNumber) => {
-                return (
-                  <Page
-                    key={pageNumber}
-                    number={pageNumber}
-                    width={bookDimensions.width || 595.25}
-                  />
-                );
-              },
-            )}
-          </HTMLFlipBook>
-        </Document>
-        <RightArrow
-          disabled={
-            totalPage % 2 === 0
-              ? page === totalPage - 1
-              : page === totalPage - 2
-          }
-          onClick={nextButtonClick}
+          <LeftArrow disabled={page === 0} onClick={prevButtonClick} />
+          <TransformComponent>
+            <Document
+              file={samplePdf}
+              loading={<LoadingSpinner />}
+              onLoadSuccess={(doc: DocumentCallback) => {
+                setTotalPage(doc.numPages);
+                setDoc(doc);
+                doc.getPage(1).then((s) => {
+                  handleInitialResize(s.view[2], s.view[3]);
+                });
+              }}
+            >
+              <HTMLFlipBook
+                key={`${bookDimensions.width}-${bookDimensions.height}`}
+                style={{}}
+                startPage={page}
+                drawShadow={false}
+                flippingTime={700}
+                usePortrait={false}
+                startZIndex={1}
+                autoSize={true}
+                clickEventForward={true}
+                useMouseEvents={true}
+                swipeDistance={30}
+                showPageCorners={true}
+                disableFlipByClick={true}
+                width={bookDimensions.width || 595.25}
+                height={bookDimensions.height || 842}
+                size="fixed"
+                minWidth={115}
+                maxWidth={2000}
+                minHeight={100}
+                maxHeight={2533}
+                maxShadowOpacity={0.5}
+                showCover={true}
+                mobileScrollSupport={true}
+                onFlip={onPage}
+                className="demo-book"
+                ref={flipBook}
+              >
+                {Array.from({ length: totalPage }, (_, index) => index + 1).map(
+                  (pageNumber) => {
+                    return (
+                      <Page
+                        key={pageNumber}
+                        number={pageNumber}
+                        width={bookDimensions.width || 595.25}
+                      />
+                    );
+                  },
+                )}
+              </HTMLFlipBook>
+            </Document>
+          </TransformComponent>
+          <RightArrow
+            disabled={
+              totalPage % 2 === 0
+                ? page === totalPage - 1
+                : page === totalPage - 2
+            }
+            onClick={nextButtonClick}
+          />
+        </Box>
+        <ReadToolbar
+          currentPage={page}
+          totalPages={totalPage}
+          onTurnPage={turnToPage}
+          onHandleFullScreen={handleFullscreen}
         />
-      </Box>
-      <ReadToolbar
-        currentPage={page}
-        totalPages={totalPage}
-        onTurnPage={turnToPage}
-        onHandleFullScreen={handleFullscreen}
-      />
+      </TransformWrapper>
     </Box>
   );
 };
