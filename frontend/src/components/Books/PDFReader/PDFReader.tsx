@@ -4,7 +4,11 @@ import { Box } from "@mui/material";
 import HTMLFlipBook from "react-pageflip";
 import { Document } from "react-pdf";
 import { DocumentCallback } from "react-pdf/dist/cjs/shared/types";
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import {
+  TransformWrapper,
+  TransformComponent,
+  ReactZoomPanPinchRef,
+} from "react-zoom-pan-pinch";
 
 import Page from "./Page";
 import samplePdf from "../../../assets/pan-tadeusz.pdf";
@@ -26,41 +30,6 @@ const PDFReader = () => {
   const dispatch = useDispatch();
   const containerRef = useRef(null);
   const flipBook = useRef(null);
-
-  const nextButtonClick = () => {
-    flipBook.current?.pageFlip().flipNext();
-  };
-
-  const prevButtonClick = () => {
-    flipBook.current?.pageFlip().flipPrev();
-  };
-
-  const turnToPage = (page: number) => {
-    flipBook.current?.pageFlip().turnToPage(page);
-    setPage(page);
-  };
-
-  const onPage = (e) => {
-    setPage(e.data);
-  };
-
-  const bookMargin = 100;
-
-  const handleInitialResize = (
-    initialPageWidth: number,
-    initialPageHeight: number,
-  ) => {
-    const containerWidth = containerRef.current.offsetWidth;
-    const ratio = initialPageWidth / initialPageHeight;
-    const newWidth = containerWidth / 2 - bookMargin;
-    const newHeight = newWidth / ratio;
-    if (
-      bookDimensions.width != newWidth ||
-      bookDimensions.height != newHeight
-    ) {
-      setBookDimensions({ width: newWidth, height: newHeight });
-    }
-  };
 
   useEffect(() => {
     const fullscreenChangeHandler = () => {
@@ -150,6 +119,41 @@ const PDFReader = () => {
       .catch(() => {});
   }, [page]);
 
+  const nextButtonClick = () => {
+    flipBook.current?.pageFlip().flipNext();
+  };
+
+  const prevButtonClick = () => {
+    flipBook.current?.pageFlip().flipPrev();
+  };
+
+  const turnToPage = (page: number) => {
+    flipBook.current?.pageFlip().turnToPage(page);
+    setPage(page);
+  };
+
+  const onPage = (e) => {
+    setPage(e.data);
+  };
+
+  const bookMargin = 100;
+
+  const handleInitialResize = (
+    initialPageWidth: number,
+    initialPageHeight: number,
+  ) => {
+    const containerWidth = containerRef.current.offsetWidth;
+    const ratio = initialPageWidth / initialPageHeight;
+    const newWidth = containerWidth / 2 - bookMargin;
+    const newHeight = newWidth / ratio;
+    if (
+      bookDimensions.width != newWidth ||
+      bookDimensions.height != newHeight
+    ) {
+      setBookDimensions({ width: newWidth, height: newHeight });
+    }
+  };
+
   const enterFullscreen = () => {
     const elem = containerRef.current;
     if (elem.requestFullscreen) {
@@ -177,6 +181,20 @@ const PDFReader = () => {
     }
   };
 
+  const handleContainerTransform = (ref: ReactZoomPanPinchRef) => {
+    if (ref.state.scale !== 1) {
+      if (!isZoomed) {
+        setIsZoomed(true);
+      }
+      flipBook.current.pageFlip().setting.useMouseEvents = false;
+    } else {
+      if (isZoomed) {
+        setIsZoomed(false);
+      }
+      flipBook.current.pageFlip().setting.useMouseEvents = true;
+    }
+  };
+
   return (
     <Box
       ref={containerRef}
@@ -186,7 +204,7 @@ const PDFReader = () => {
         alignItems: "center",
         flexDirection: "column",
         width: { xs: "100%", md: "70%" },
-        height: bookDimensions.height + 140 + "px" || "1000px",
+        height: bookDimensions.height + 140 + "px",
         backgroundColor: "#333333",
         marginBottom: "30px",
         overflow: "hidden",
@@ -206,19 +224,7 @@ const PDFReader = () => {
           activationKeys: !isFullScreen ? ["Control", "Shift"] : [],
           smoothStep: (0.001 * 0.2) / 0.12, // one scroll = 0.2 of scale
         }}
-        onTransformed={(ref) => {
-          if (ref.state.scale !== 1) {
-            if (!isZoomed) {
-              setIsZoomed(true);
-            }
-            flipBook.current.pageFlip().setting.useMouseEvents = false;
-          } else {
-            if (isZoomed) {
-              setIsZoomed(false);
-            }
-            flipBook.current.pageFlip().setting.useMouseEvents = true;
-          }
-        }}
+        onTransformed={handleContainerTransform}
         onWheel={(ref) => {
           dispatch(zoomActions.setScale(ref.state.scale));
         }}
