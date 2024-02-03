@@ -28,12 +28,14 @@ export const parseBookItemForDetails = (dataItem: Book): ReadBookDTO => {
     genres: parseGenresList(dataItem.genreList),
     tags: dataItem.tagList,
     cover: `data:image/jpeg;base64,${dataItem.cover}`,
+    pdfFileId: dataItem.pdfFileId,
   };
 };
 
 export const parseBookFormDataForCreate = (data: CreateBookDTO) => {
   const formData = new FormData();
   formData.append("cover", data.cover, data.cover.name);
+  formData.append("pdfFile", data.content, data.content.name);
   const book = {
     title: data.title,
     shortDescription: data.shortDescription,

@@ -9,7 +9,7 @@ const routes: RouteObject[] = [
     element: <BookDetailPage />,
   },
   {
-    path: "/book/read",
+    path: "/book/read/:id",
     element: <ReadBookPage />,
   },
 ];
