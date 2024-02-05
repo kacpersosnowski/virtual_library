@@ -3,7 +3,7 @@ package com.skr.virtuallibrary.controllers;
 import com.skr.virtuallibrary.dto.BookDto;
 import com.skr.virtuallibrary.exceptions.BookNotFoundException;
 import com.skr.virtuallibrary.services.BookService;
-import com.skr.virtuallibrary.services.PdfFileService;
+import com.skr.virtuallibrary.services.FileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,7 +28,7 @@ public class BookController {
 
     private final BookService bookService;
 
-    private final PdfFileService pdfFileService;
+    private final FileService fileService;
 
     @Operation(
             summary = "Find Book by id",
@@ -68,12 +68,14 @@ public class BookController {
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public BookDto addBook(
             @Valid @RequestPart("book") BookDto bookDto,
-            @RequestPart("cover") MultipartFile cover,
-            @RequestPart("pdfFile") MultipartFile pdfFile
+            @RequestPart("cover") MultipartFile bookCover,
+            @RequestPart("content") MultipartFile bookContent
     ) {
-        String pdfFileId = pdfFileService.addPdfFile(pdfFile);
-        bookDto.setPdfFileId(pdfFileId);
-        return bookService.addBook(bookDto, cover);
+        String bookCoverId = fileService.addFile(bookCover, "image/png");
+        String bookContentId = fileService.addFile(bookContent, "application/pdf");
+        bookDto.setBookCoverId(bookCoverId);
+        bookDto.setBookContentId(bookContentId);
+        return bookService.addBook(bookDto);
     }
 
     @Operation(
@@ -96,12 +98,14 @@ public class BookController {
     public BookDto updateBook(
             @PathVariable String id,
             @Valid @RequestPart("book") BookDto bookDto,
-            @RequestPart("cover") MultipartFile cover,
-            @RequestPart("pdfFile") MultipartFile pdfFile
+            @RequestPart("cover")  MultipartFile bookCover,
+            @RequestPart("content") MultipartFile bookContent
     ) {
-        String pdfFileId = pdfFileService.addPdfFile(pdfFile);
-        bookDto.setPdfFileId(pdfFileId);
-        return bookService.updateBook(id, bookDto, cover);
+        String bookCoverId = fileService.addFile(bookCover, "image/png");
+        String bookContentId = fileService.addFile(bookContent, "application/pdf");
+        bookDto.setBookCoverId(bookCoverId);
+        bookDto.setBookContentId(bookContentId);
+        return bookService.updateBook(id, bookDto);
     }
 
     @Operation(
