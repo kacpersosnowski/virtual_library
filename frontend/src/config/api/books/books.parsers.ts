@@ -1,3 +1,4 @@
+import { BACKEND_BASE_URL } from "../../../constants/api";
 import {
   parseAuthorsList,
   parseAuthorsString,
@@ -13,7 +14,7 @@ export const parseBookItems = (data: Book[]): BookItemData[] => {
         dataItem.title.slice(0, 60) + (dataItem.title.length > 60 ? "..." : ""),
       authorList: parseAuthorsString(dataItem.authorList),
       shortDescription: dataItem.shortDescription,
-      cover: `data:image/jpeg;base64,${dataItem.cover}`,
+      cover: `${BACKEND_BASE_URL}/files/cover/${dataItem.bookCoverId}`,
     };
   });
 };
@@ -27,15 +28,15 @@ export const parseBookItemForDetails = (dataItem: Book): ReadBookDTO => {
     longDescription: dataItem.longDescription,
     genres: parseGenresList(dataItem.genreList),
     tags: dataItem.tagList,
-    cover: `data:image/jpeg;base64,${dataItem.cover}`,
-    pdfFileId: dataItem.pdfFileId,
+    cover: `${BACKEND_BASE_URL}/files/cover/${dataItem.bookCoverId}`,
+    bookContentId: dataItem.bookContentId,
   };
 };
 
 export const parseBookFormDataForCreate = (data: CreateBookDTO) => {
   const formData = new FormData();
   formData.append("cover", data.cover, data.cover.name);
-  formData.append("pdfFile", data.content, data.content.name);
+  formData.append("content", data.content, data.content.name);
   const book = {
     title: data.title,
     shortDescription: data.shortDescription,

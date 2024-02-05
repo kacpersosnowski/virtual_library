@@ -9,8 +9,8 @@ export type Book = {
   longDescription: string;
   genreList: Genre[];
   tagList: string[];
-  cover: string;
-  pdfFileId: string;
+  bookCoverId: string;
+  bookContentId: string;
 };
 
 export type BookItemData = {
@@ -29,7 +29,7 @@ export type ReadBookDTO = {
   genres: string[];
   tags: string[];
   cover: string;
-  pdfFileId: string;
+  bookContentId: string;
 };
 
 export type CreateBookDTO = {

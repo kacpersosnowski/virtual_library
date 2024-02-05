@@ -8,7 +8,7 @@ import {
 } from "./books.parsers";
 
 const url = "/books";
-const pdfUrl = "/pdf-files";
+const pdfUrl = "/files/content";
 
 export const booksApi: BooksApi = {
   getAllBooks: async () => {
@@ -21,9 +21,12 @@ export const booksApi: BooksApi = {
   },
   getBookContent: async (id: string) => {
     const details = await booksApi.getBookDetails(id);
-    const response = await axios.get<object>(`${pdfUrl}/${details.pdfFileId}`, {
-      responseType: "arraybuffer",
-    });
+    const response = await axios.get<object>(
+      `${pdfUrl}/${details.bookContentId}`,
+      {
+        responseType: "arraybuffer",
+      },
+    );
     return response.data;
   },
   createBook: async (book: CreateBookDTO) => {
