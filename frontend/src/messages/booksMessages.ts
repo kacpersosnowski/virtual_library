@@ -36,6 +36,16 @@ const booksMessages: Message = {
     pl: "Opis",
     en: "Description",
   },
+  enterFullscreen: {
+    key: "books >> read_book >> enter_full_screen",
+    pl: "Pełny ekran (f)",
+    en: "Fullscreen (f)",
+  },
+  exitFullscreen: {
+    key: "books >> read_book >> exit_full_screen",
+    pl: "Zamknij pełny ekran (f)",
+    en: "Exit (f)",
+  },
 };
 
 export default booksMessages;

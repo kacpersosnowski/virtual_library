@@ -6,6 +6,7 @@ import { PropsWithChildren } from "react";
 type Props = {
   image: string;
   containerSx?: SxProps<Theme>;
+  gradientSx?: SxProps<Theme>;
 };
 
 const ImageBackground: React.FC<PropsWithChildren<Props>> = (props) => {
@@ -17,7 +18,7 @@ const ImageBackground: React.FC<PropsWithChildren<Props>> = (props) => {
         ...props.containerSx,
       }}
     >
-      <Box className={classes["gradient"]} />
+      <Box className={classes["gradient"]} sx={props.gradientSx} />
       {props.children}
     </Box>
   );

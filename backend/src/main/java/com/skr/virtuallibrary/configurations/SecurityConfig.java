@@ -37,6 +37,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/auth/quick-register").hasAuthority(ADMIN_AUTHORITY)
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/books/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/files/cover/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/books/**").hasAuthority(ADMIN_AUTHORITY)
                                 .requestMatchers(HttpMethod.POST, "/authors/**").hasAuthority(ADMIN_AUTHORITY)
                                 .requestMatchers(HttpMethod.GET, "/reviews/**").permitAll()
