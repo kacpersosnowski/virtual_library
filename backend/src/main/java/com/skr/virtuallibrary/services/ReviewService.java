@@ -14,6 +14,9 @@ import com.skr.virtuallibrary.repositories.ReviewRepository;
 import com.skr.virtuallibrary.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,6 +42,8 @@ public class ReviewService {
 
     private static final String ERROR_NOT_FOUND_MSG = "Not found review with id: ";
 
+    public static final String BOOK_NOT_FOUND_MSG = "Not found book with id: ";
+
     private static final int MIN_REVIEW_RATE = 1;
 
     private static final int MAX_REVIEW_RATE = 5;
@@ -56,10 +61,27 @@ public class ReviewService {
                 .toList();
     }
 
+    public List<ReviewDto> findReviewsByBookId(String id, int pageNr) {
+        if(pageNr < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page number cannot be negative.");
+        }
+
+        if(bookRepository.findById(id).isEmpty()) {
+            throw new BookNotFoundException(BOOK_NOT_FOUND_MSG + id);
+        }
+
+        Pageable pageable = PageRequest.of(pageNr, 5, Sort.by("date").descending());
+
+        return reviewRepository.findAllByBookId(id, pageable)
+                .stream()
+                .map(modelMapper::toReviewDto)
+                .toList();
+    }
+
     public ReviewDto addReview(ReviewDto reviewDto) {
         Review review = modelMapper.toReviewEntity(reviewDto);
         Book book = bookRepository.findById(reviewDto.getBookId())
-                .orElseThrow(() -> new BookNotFoundException("Not found book with id: " + reviewDto.getBookId()));
+                .orElseThrow(() -> new BookNotFoundException(BOOK_NOT_FOUND_MSG + reviewDto.getBookId()));
 
         if (review.getRating() < MIN_REVIEW_RATE || review.getRating() > MAX_REVIEW_RATE) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Review rate out of bound (1-5)");
@@ -91,7 +113,7 @@ public class ReviewService {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(ERROR_NOT_FOUND_MSG + id));
         Book book = bookRepository.findById(reviewDto.getBookId())
-                .orElseThrow(() -> new BookNotFoundException("Not found book with id: " + reviewDto.getBookId()));
+                .orElseThrow(() -> new BookNotFoundException(BOOK_NOT_FOUND_MSG + reviewDto.getBookId()));
         review.setBook(book);
 
         if (!reviewDto.getAuthor().getId().equals(review.getAuthor().getId())) {

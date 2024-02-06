@@ -33,6 +33,12 @@ public class ReviewController {
         return reviewService.findAllReviews();
     }
 
+    @Operation(summary = "Find Reviews by book id and page number.")
+    @GetMapping("/book/{id}/{pageNr}")
+    public List<ReviewDto> findReviewsByBookId(@PathVariable String id, @PathVariable int pageNr) {
+        return reviewService.findReviewsByBookId(id, pageNr);
+    }
+
     @Operation(summary = "Post Review.")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
