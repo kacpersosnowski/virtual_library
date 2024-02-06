@@ -2,6 +2,7 @@ import { Autocomplete, SxProps, TextField, Theme } from "@mui/material";
 import { FormikProps, FormikValues } from "formik";
 
 import ErrorMessage from "../../UI/ErrorMessage";
+import { createPortal } from "react-dom";
 
 type Props = {
   id: string;
@@ -16,6 +17,8 @@ type Props = {
   multiple?: boolean;
   freeSolo?: boolean;
   sx?: SxProps<Theme>;
+  errorSx?: SxProps<Theme>;
+  errorPortalId?: string;
 };
 
 const AutocompleteInput: React.FC<Props> = (props) => {
@@ -29,6 +32,8 @@ const AutocompleteInput: React.FC<Props> = (props) => {
     multiple,
     freeSolo,
     sx,
+    errorSx,
+    errorPortalId,
   } = props;
 
   const { touched, errors } = formik;
@@ -60,10 +65,20 @@ const AutocompleteInput: React.FC<Props> = (props) => {
           return <TextField {...params} label={label} />;
         }}
       />
-      {errorMessage && (
+      {errorMessage &&
+        errorPortalId &&
+        createPortal(
+          <ErrorMessage
+            message={errorMessage}
+            sx={{ my: "0.4rem", width: "80%", ...errorSx }}
+            alertStyle={{ flex: 1 }}
+          />,
+          document.getElementById(errorPortalId),
+        )}
+      {errorMessage && !errorPortalId && (
         <ErrorMessage
           message={errorMessage}
-          sx={{ mt: "0.4rem", width: "80%" }}
+          sx={{ my: "0.4rem", width: "80%", ...errorSx }}
           alertStyle={{ flex: 1 }}
         />
       )}

@@ -21,6 +21,10 @@ import { booksApi } from "../../../config/api/books/books";
 import { snackbarActions } from "../../../store/redux/slices/snackbar-slice";
 import adminMessages from "../../../messages/adminMessages";
 import arrayNotEmptyValidator from "../../../config/validators/arrayNotEmptyValidator";
+import AddAuthorPopover from "../authors/AddAuthorPopover";
+import { Author } from "../../../config/api/authors/authors.types";
+import { Genre } from "../../../config/api/genres/genres.types";
+import AddGenrePopover from "../genres/AddGenrePopover";
 
 const AddBookForm = () => {
   const { t } = useTranslation();
@@ -94,6 +98,14 @@ const AddBookForm = () => {
     },
   });
 
+  const addChosenAuthor = (author: Author) => {
+    formik.setFieldValue("authors", [...formik.values.authors, author]);
+  };
+
+  const addChosenGenre = (genre: Genre) => {
+    formik.setFieldValue("genres", [...formik.values.genres, genre]);
+  };
+
   if (isFetchingAuthorsError || isFetchingGenresError) {
     return (
       <ErrorMessage message={t(errorMessages.somethingWentWrongError.key)} />
@@ -136,28 +148,56 @@ const AddBookForm = () => {
         maxRows={10}
         formik={formik}
       />
-      <AutocompleteInput
-        id="authors"
-        label={t(adminMessages.addBookFormAuthors.key)}
-        multiple
-        formik={formik}
-        options={authors}
-        getOptionLabel={(option) => {
-          return option.firstName + " " + option.lastName;
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          mt: "0.5rem",
+          width: "80%",
         }}
-        sx={{ mt: "0.5rem" }}
-      />
-      <AutocompleteInput
-        id="genres"
-        label={t(adminMessages.addBookFormGenres.key)}
-        multiple
-        formik={formik}
-        options={genres}
-        getOptionLabel={(option) => {
-          return option.name;
+      >
+        <AutocompleteInput
+          id="authors"
+          label={t(adminMessages.addBookFormAuthors.key)}
+          multiple
+          formik={formik}
+          options={authors}
+          getOptionLabel={(option) => {
+            return option.firstName + " " + option.lastName;
+          }}
+          sx={{ flex: 1 }}
+          errorSx={{ width: "100%" }}
+          errorPortalId="authors-error"
+        />
+        <AddAuthorPopover addChosenAuthor={addChosenAuthor} />
+      </Box>
+      <Box id="authors-error" sx={{ width: "80%" }}></Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          mt: "1rem",
+          width: "80%",
         }}
-        sx={{ mt: "1rem" }}
-      />
+      >
+        <AutocompleteInput
+          id="genres"
+          label={t(adminMessages.addBookFormGenres.key)}
+          multiple
+          formik={formik}
+          options={genres}
+          getOptionLabel={(option) => {
+            return option.name;
+          }}
+          sx={{ flex: 1 }}
+          errorSx={{ width: "100%" }}
+          errorPortalId="genres-error"
+        />
+        <AddGenrePopover addChosenGenre={addChosenGenre} />
+      </Box>
+      <Box id="genres-error" sx={{ width: "80%" }}></Box>
       <AutocompleteInput
         id="tags"
         label={t(adminMessages.addBookFormTags.key)}

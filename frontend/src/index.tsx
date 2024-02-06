@@ -18,15 +18,14 @@ import "./config/axios";
 import "./config/pdf";
 import "./config/warnings";
 
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClientProvider } from "react-query";
 import { RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import store from "./store/redux";
+import { queryClient } from "./config/api";
 
 document.body.classList.add("body");
-
-const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,

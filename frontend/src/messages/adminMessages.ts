@@ -71,6 +71,41 @@ const adminMessages: Message = {
     pl: "Książka została dodana pomyślnie",
     en: "A new book was created successfully",
   },
+  addAuthorFormFirstName: {
+    key: "admin_panel >> add_author_form >> first_name",
+    pl: "Imię",
+    en: "First name",
+  },
+  addAuthorFormLastName: {
+    key: "admin_panel >> add_author_form >> last_name",
+    pl: "Nazwisko",
+    en: "Last name",
+  },
+  addAuthorFormSubmitButton: {
+    key: "admin_panel >> add_author_form >> submit_button",
+    pl: "Dodaj autora",
+    en: "Add author",
+  },
+  addAuthorFormSuccessMessage: {
+    key: "admin_panel >> add_author_form >> success_message",
+    pl: "Autor został dodany pomyślnie",
+    en: "A new author was created successfully",
+  },
+  addGenreFormName: {
+    key: "admin_panel >> add_genre_form >> name",
+    pl: "Nazwa",
+    en: "Name",
+  },
+  addGenreFormSubmitButton: {
+    key: "admin_panel >> add_genre_form >> submit_button",
+    pl: "Dodaj gatunek",
+    en: "Add genre",
+  },
+  addGenreFormSuccessMessage: {
+    key: "admin_panel >> add_genre_form >> success_message",
+    pl: "Gatunek został dodany pomyślnie",
+    en: "A new genre was created successfully",
+  },
 };
 
 export default adminMessages;
