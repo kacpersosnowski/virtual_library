@@ -57,7 +57,7 @@ const BookDetailPage = () => {
             <ActionButton
               sx={{ mt: "1rem" }}
               scaleOnHover={1.04}
-              onClick={() => navigate("/book/read")}
+              onClick={() => navigate(`/book/read/${book.id}`)}
             >
               <Box
                 sx={{

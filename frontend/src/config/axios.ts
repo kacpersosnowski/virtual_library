@@ -1,8 +1,9 @@
 import axios from "axios";
 
 import AccessTokenService from "../store/AuthContext/AccessTokenService";
+import { BACKEND_BASE_URL } from "../constants/api";
 
-axios.defaults.baseURL = "http://localhost:8080";
+axios.defaults.baseURL = BACKEND_BASE_URL;
 
 axios.interceptors.request.use(
   (config) => {
@@ -29,6 +30,6 @@ axios.interceptors.response.use(
 );
 
 export const customFetch = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: BACKEND_BASE_URL,
   headers: { "Content-Type": "application/json" },
 });

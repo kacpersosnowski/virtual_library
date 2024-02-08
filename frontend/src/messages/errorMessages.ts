@@ -11,6 +11,11 @@ const errorMessages: Message = {
     pl: "Nie udało się pobrać informacji o tej książce. Spróbuj ponownie później.",
     en: "Failed to fetch information about this book. Try again later.",
   },
+  bookContentError: {
+    key: "books >> read_book >> content",
+    pl: "Nie udało się wczytać zawartości książki. Spróbuj ponownie później.",
+    en: "Failed to load the book's content. Try again later.",
+  },
   somethingWentWrongError: {
     key: "something_went_wrong >> error",
     pl: "Coś poszło nie tak. Spróbuj ponownie później",

@@ -1,5 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import { useTranslation } from "react-i18next";
 import { Box } from "@mui/material";
 import HTMLFlipBook from "react-pageflip";
 import { Document } from "react-pdf";
@@ -11,13 +14,16 @@ import {
 } from "react-zoom-pan-pinch";
 
 import Page from "./Page";
-import samplePdf from "../../../assets/pan-tadeusz.pdf";
 import LoadingSpinner from "../../UI/LoadingSpinner";
 import { LeftArrow, RightArrow } from "../../Layout/common/arrows";
 import ReadToolbar from "./ReadToolbar/ReadToolbar";
 import { zoomActions } from "../../../store/redux/slices/zoom-slice";
+import { booksApi } from "../../../config/api/books/books";
+import ErrorMessage from "../../UI/ErrorMessage";
+import errorMessages from "../../../messages/errorMessages";
 
 const PDFReader = () => {
+  const { id } = useParams();
   const [page, setPage] = useState(0);
   const [totalPage, setTotalPage] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
@@ -30,6 +36,16 @@ const PDFReader = () => {
   const dispatch = useDispatch();
   const containerRef = useRef(null);
   const flipBook = useRef(null);
+  const {
+    data: pdf,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["books", "read", id],
+    queryFn: () => booksApi.getBookContent(id),
+    staleTime: Infinity,
+  });
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fullscreenChangeHandler = () => {
@@ -119,6 +135,14 @@ const PDFReader = () => {
       .catch(() => {});
   }, [page]);
 
+  const pdfObject = useMemo(
+    () => ({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      data: pdf as any,
+    }),
+    [pdf],
+  );
+
   const nextButtonClick = () => {
     flipBook.current?.pageFlip().flipNext();
   };
@@ -195,23 +219,13 @@ const PDFReader = () => {
     }
   };
 
-  return (
-    <Box
-      ref={containerRef}
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column",
-        width: { xs: "100%", md: "70%" },
-        height: bookDimensions.height + 140 + "px",
-        backgroundColor: "#333333",
-        marginBottom: "30px",
-        overflow: "hidden",
-        zIndex: 1,
-        padding: "1rem",
-      }}
-    >
+  let content = null;
+  if (isError) {
+    content = <ErrorMessage message={t(errorMessages.bookContentError.key)} />;
+  } else if (isLoading) {
+    content = <LoadingSpinner />;
+  } else {
+    content = (
       <TransformWrapper
         doubleClick={{ disabled: true }}
         minScale={1}
@@ -239,7 +253,7 @@ const PDFReader = () => {
           <LeftArrow disabled={page === 0} onClick={prevButtonClick} />
           <TransformComponent>
             <Document
-              file={samplePdf}
+              file={pdfObject}
               loading={<LoadingSpinner />}
               onLoadSuccess={(doc: DocumentCallback) => {
                 setTotalPage(doc.numPages);
@@ -307,6 +321,27 @@ const PDFReader = () => {
           onHandleFullScreen={handleFullscreen}
         />
       </TransformWrapper>
+    );
+  }
+
+  return (
+    <Box
+      ref={containerRef}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
+        width: { xs: "100%", md: "70%" },
+        height: bookDimensions.height + 140 + "px",
+        backgroundColor: "#333333",
+        marginBottom: "30px",
+        overflow: "hidden",
+        zIndex: 1,
+        padding: "1rem",
+      }}
+    >
+      {content}
     </Box>
   );
 };
