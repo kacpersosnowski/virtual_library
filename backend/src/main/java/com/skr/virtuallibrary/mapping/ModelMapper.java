@@ -4,10 +4,12 @@ import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.dto.BookDto;
 import com.skr.virtuallibrary.dto.GenreDto;
 import com.skr.virtuallibrary.dto.UserDto;
+import com.skr.virtuallibrary.dto.ReviewDto;
 import com.skr.virtuallibrary.entities.Author;
 import com.skr.virtuallibrary.entities.Book;
 import com.skr.virtuallibrary.entities.Genre;
 import com.skr.virtuallibrary.entities.User;
+import com.skr.virtuallibrary.entities.Review;
 import org.mapstruct.Mapper;
 
 @Mapper
@@ -28,5 +30,9 @@ public interface ModelMapper {
     UserDto toUserDto(User user);
 
     User toUserEntity(UserDto userDto);
+
+    ReviewDto toReviewDto(Review review);
+
+    Review toReviewEntity(ReviewDto reviewDto);
 
 }

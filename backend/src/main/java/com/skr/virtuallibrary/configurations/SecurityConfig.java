@@ -40,6 +40,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/files/cover/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/books/**").hasAuthority(ADMIN_AUTHORITY)
                                 .requestMatchers(HttpMethod.POST, "/authors/**").hasAuthority(ADMIN_AUTHORITY)
+                                .requestMatchers(HttpMethod.GET, "/reviews/**").permitAll()
                                 .requestMatchers("/error").anonymous()
                                 .anyRequest().authenticated()
                 )
