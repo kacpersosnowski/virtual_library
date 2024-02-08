@@ -62,11 +62,11 @@ public class ReviewService {
     }
 
     public List<ReviewDto> findReviewsByBookId(String id, int pageNr) {
-        if(pageNr < 0) {
+        if (pageNr < 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page number cannot be negative.");
         }
 
-        if(bookRepository.findById(id).isEmpty()) {
+        if (bookRepository.findById(id).isEmpty()) {
             throw new BookNotFoundException(BOOK_NOT_FOUND_MSG + id);
         }
 
