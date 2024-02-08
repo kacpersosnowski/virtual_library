@@ -21,7 +21,7 @@ export const booksApi: BooksApi = {
   },
   getBookContent: async (id: string) => {
     const details = await booksApi.getBookDetails(id);
-    const response = await axios.get<object>(
+    const response = await axios.get<Uint8Array>(
       `${pdfUrl}/${details.bookContentId}`,
       {
         responseType: "arraybuffer",
