@@ -138,7 +138,7 @@ const PDFReader = () => {
   const pdfObject = useMemo(
     () => ({
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      data: pdf as any,
+      data: pdf?.slice(0) as any,
     }),
     [pdf],
   );

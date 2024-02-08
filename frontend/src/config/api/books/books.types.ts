@@ -46,6 +46,6 @@ export type CreateBookDTO = {
 export type BooksApi = {
   getAllBooks: () => Promise<BookItemData[]>;
   getBookDetails: (id: string) => Promise<ReadBookDTO>;
-  getBookContent: (id: string) => Promise<object>;
+  getBookContent: (id: string) => Promise<Uint8Array>;
   createBook: (book: CreateBookDTO) => Promise<Book>;
 };

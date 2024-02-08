@@ -16,6 +16,11 @@ const errorMessages: Message = {
     pl: "Nie udało się wczytać zawartości książki. Spróbuj ponownie później.",
     en: "Failed to load the book's content. Try again later.",
   },
+  userDataError: {
+    key: "users >> user_data >> error",
+    pl: "Nie udało się wczytać danych użytkownika. Spróbuj ponownie później.",
+    en: "Failed to load user data. Try again later.",
+  },
   somethingWentWrongError: {
     key: "something_went_wrong >> error",
     pl: "Coś poszło nie tak. Spróbuj ponownie później",
