@@ -92,7 +92,12 @@ const MainNavbar = () => {
               </Link>
             </Box>
           )}
-          {isAuthenticated && <Profile variant="navbar" />}
+          {isAuthenticated && (
+            <Profile
+              variant="navbar"
+              toggleDrawerHandler={handleDrawerToggle}
+            />
+          )}
           <ChangeLanguageForm
             sx={{ ml: "1rem", display: { xs: "none", md: "block" } }}
           />

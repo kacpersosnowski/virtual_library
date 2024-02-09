@@ -16,11 +16,15 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
+import LogoutIcon from "@mui/icons-material/Logout";
+
 import { AuthContext } from "../../../store/AuthContext/AuthContext";
 import Profile from "../../Profile/Profile";
 import ChangeLanguageForm from "../../Forms/common/ChangeLanguageForm/ChangeLanguageForm";
+import authMessages from "../../../messages/authMessages";
 import mainPageMessages from "../../../messages/mainPageMessages";
 import adminMessages from "../../../messages/adminMessages";
+import useIsAdmin from "../../../hooks/useIsAdmin";
 
 type Props = {
   isOpen: boolean;
@@ -34,70 +38,109 @@ type Props = {
 const drawerWidth = 240; // in pixels
 
 const SidebarDrawer: React.FC<Props> = (props) => {
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, logout } = useContext(AuthContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const isAdmin = useIsAdmin();
 
   const clickNavItemHandler = (link: string) => {
     props.toggleHandler();
     navigate(link);
   };
 
+  const logoutHandler = () => {
+    logout();
+    props.toggleHandler();
+    navigate("/");
+  };
+
   const drawer = (
-    <Box sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        Liber Mundi
-      </Typography>
-      <Divider />
-      <List>
-        {!isAuthenticated && (
-          <>
-            <ListItem
-              sx={{ display: { xs: "block", md: "none" } }}
-              disablePadding
-            >
+    <>
+      <Box
+        sx={{
+          overflow: "auto",
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+          justifyContent: "space-between",
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="h6" sx={{ my: 2 }}>
+          Liber Mundi
+        </Typography>
+        <Divider />
+        <List>
+          {!isAuthenticated && (
+            <>
+              <ListItem
+                sx={{ display: { xs: "block", md: "none" } }}
+                disablePadding
+              >
+                <ListItemButton
+                  onClick={clickNavItemHandler.bind(this, "/login")}
+                >
+                  <ListItemIcon>
+                    <LoginIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={t(mainPageMessages.buttonsLogin.key)}
+                  />
+                </ListItemButton>
+              </ListItem>
+              <ListItem
+                sx={{ display: { xs: "block", md: "none" } }}
+                disablePadding
+              >
+                <ListItemButton
+                  onClick={clickNavItemHandler.bind(this, "/register")}
+                >
+                  <ListItemIcon>
+                    <AppRegistrationIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={t(mainPageMessages.buttonsRegister.key)}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </>
+          )}
+          {isAuthenticated && <Profile variant="drawer" sx={{ mb: 1 }} />}
+          <Divider sx={{ mb: 2 }} />
+          {isAdmin && (
+            <ListItem disablePadding>
               <ListItemButton
-                onClick={clickNavItemHandler.bind(this, "/login")}
+                onClick={clickNavItemHandler.bind(this, "/admin")}
               >
                 <ListItemIcon>
-                  <LoginIcon />
-                </ListItemIcon>
-                <ListItemText primary={t(mainPageMessages.buttonsLogin.key)} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem
-              sx={{ display: { xs: "block", md: "none" } }}
-              disablePadding
-            >
-              <ListItemButton
-                onClick={clickNavItemHandler.bind(this, "/register")}
-              >
-                <ListItemIcon>
-                  <AppRegistrationIcon />
+                  <AdminPanelSettingsIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary={t(mainPageMessages.buttonsRegister.key)}
+                  primary={t(adminMessages.sidebarAdminPanel.key)}
                 />
               </ListItemButton>
             </ListItem>
-          </>
-        )}
-        {isAuthenticated && <Profile variant="drawer" />}
-        <ListItem disablePadding>
-          <ListItemButton onClick={clickNavItemHandler.bind(this, "/admin")}>
-            <ListItemIcon>
-              <AdminPanelSettingsIcon />
-            </ListItemIcon>
-            <ListItemText primary={t(adminMessages.sidebarAdminPanel.key)} />
-          </ListItemButton>
-        </ListItem>
-      </List>
-      <ChangeLanguageForm
-        sx={{ display: { xs: "block", md: "none" } }}
-        onClickLanguage={props.toggleHandler}
-      />
-      <Box sx={{ display: "block", flexGrow: 1 }} />
-    </Box>
+          )}
+        </List>
+        <ChangeLanguageForm
+          sx={{ display: { xs: "block", md: "none" } }}
+          onClickLanguage={props.toggleHandler}
+        />
+        <Box sx={{ display: "block", flexGrow: 1 }} />
+      </Box>
+      {isAuthenticated && (
+        <List>
+          <ListItem disablePadding>
+            <ListItemButton onClick={logoutHandler}>
+              <ListItemIcon>
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText>{t(authMessages.logoutButton.key)}</ListItemText>
+            </ListItemButton>
+          </ListItem>
+        </List>
+      )}
+    </>
   );
 
   return (

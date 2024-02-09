@@ -15,6 +15,9 @@ import { AuthContextProvider } from "./store/AuthContext/AuthContext";
 
 import "./i18n";
 import "./config/axios";
+import "./config/pdf";
+import "./config/warnings";
+
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";

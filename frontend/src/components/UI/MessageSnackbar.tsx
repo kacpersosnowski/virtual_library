@@ -9,7 +9,7 @@ type Props = {
 
 const MessageSnackbar: React.FC<Props> = (props) => {
   return (
-    <Snackbar open={props.open} autoHideDuration={3000} onClose={props.onClose}>
+    <Snackbar open={props.open} autoHideDuration={5000} onClose={props.onClose}>
       <Alert
         onClose={props.onClose}
         severity={props.severity || "success"}

@@ -9,13 +9,16 @@ import {
   RegisterCredentials,
 } from "../../config/api/auth/auth.types";
 import AccessTokenService from "./AccessTokenService";
+import RefreshTokenService from "./RefreshTokenService";
 
 export const AuthContext = createContext<AuthContextType>(null);
 
 export const AuthContextProvider: React.FC<PropsWithChildren> = ({
   children,
 }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    AccessTokenService.getToken() !== null,
+  );
   const {
     mutate: loginMutate,
     isLoading: loginIsLoading,
@@ -24,7 +27,8 @@ export const AuthContextProvider: React.FC<PropsWithChildren> = ({
   } = useMutation({
     mutationFn: authApi.login,
     onSuccess: (data) => {
-      AccessTokenService.storeToken(data.token);
+      AccessTokenService.storeToken(data.accessToken);
+      RefreshTokenService.storeToken(data.refreshToken);
       setIsAuthenticated(true);
     },
   });
@@ -38,11 +42,32 @@ export const AuthContextProvider: React.FC<PropsWithChildren> = ({
   });
 
   useEffect(() => {
-    const token = AccessTokenService.getToken();
-    if (token) {
-      setIsAuthenticated(true);
+    const refresh = async () => {
+      try {
+        await RefreshTokenService.refreshToken();
+      } catch (error) {
+        logout();
+      }
+    };
+
+    let refreshInterval: NodeJS.Timeout;
+    if (isAuthenticated) {
+      refresh();
+
+      refreshInterval = setInterval(
+        () => {
+          refresh();
+        },
+        (AccessTokenService.ACCESS_TOKEN_LIFETIME_IN_MINUTES - 1) * 60 * 1000,
+      );
     }
-  }, []);
+
+    return () => {
+      if (refreshInterval) {
+        clearInterval(refreshInterval);
+      }
+    };
+  }, [isAuthenticated]);
 
   // Wrapper for better ts typing
   const login = (credentials: Credentials) => {
@@ -55,6 +80,7 @@ export const AuthContextProvider: React.FC<PropsWithChildren> = ({
 
   const logout = () => {
     AccessTokenService.deleteToken();
+    RefreshTokenService.deleteToken();
     setIsAuthenticated(false);
   };
 

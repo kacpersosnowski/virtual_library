@@ -7,9 +7,10 @@ export type Book = {
   authorList: Author[];
   shortDescription: string;
   longDescription: string;
-  genreList: string[];
+  genreList: Genre[];
   tagList: string[];
-  cover: string;
+  bookCoverId: string;
+  bookContentId: string;
 };
 
 export type BookItemData = {
@@ -20,6 +21,17 @@ export type BookItemData = {
   cover: string;
 };
 
+export type ReadBookDTO = {
+  id: string;
+  title: string;
+  authors: string[];
+  longDescription: string;
+  genres: string[];
+  tags: string[];
+  cover: string;
+  bookContentId: string;
+};
+
 export type CreateBookDTO = {
   title: string;
   shortDescription: string;
@@ -28,9 +40,12 @@ export type CreateBookDTO = {
   genres: Genre[];
   tags: string[];
   cover: File;
+  content: File;
 };
 
 export type BooksApi = {
   getAllBooks: () => Promise<BookItemData[]>;
+  getBookDetails: (id: string) => Promise<ReadBookDTO>;
+  getBookContent: (id: string) => Promise<Uint8Array>;
   createBook: (book: CreateBookDTO) => Promise<Book>;
 };

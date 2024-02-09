@@ -3,23 +3,20 @@ package com.skr.virtuallibrary.mapping;
 import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.dto.BookDto;
 import com.skr.virtuallibrary.dto.GenreDto;
+import com.skr.virtuallibrary.dto.UserDto;
+import com.skr.virtuallibrary.dto.ReviewDto;
 import com.skr.virtuallibrary.entities.Author;
 import com.skr.virtuallibrary.entities.Book;
 import com.skr.virtuallibrary.entities.Genre;
-import org.bson.types.Binary;
+import com.skr.virtuallibrary.entities.User;
+import com.skr.virtuallibrary.entities.Review;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-
-import java.util.Base64;
 
 @Mapper
 public interface ModelMapper {
 
-    @Mapping(source = "cover", target = "cover", qualifiedByName = "bookCoverBinaryToString")
     BookDto toBookDto(Book book);
 
-    @Mapping(target = "cover", ignore = true)
     Book toBookEntity(BookDto bookDto);
 
     AuthorDto toAuthorDto(Author author);
@@ -30,9 +27,12 @@ public interface ModelMapper {
 
     Genre toGenreEntity(GenreDto genreDto);
 
-    @Named("bookCoverBinaryToString")
-    static String bookCoverBinaryToString(Binary cover) {
-        return Base64.getEncoder().encodeToString(cover.getData());
-    }
+    UserDto toUserDto(User user);
+
+    User toUserEntity(UserDto userDto);
+
+    ReviewDto toReviewDto(Review review);
+
+    Review toReviewEntity(ReviewDto reviewDto);
 
 }

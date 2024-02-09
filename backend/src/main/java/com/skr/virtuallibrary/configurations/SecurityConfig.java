@@ -22,6 +22,8 @@ public class SecurityConfig {
 
     private final AuthenticationProvider authenticationProvider;
 
+    private static final String ADMIN_AUTHORITY = "ADMIN";
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,
                                            CorsConfigurationSource corsConfigurationSource) throws Exception {
@@ -32,10 +34,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/auth/quick-register").hasAuthority(ADMIN_AUTHORITY)
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/books/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/books/**").hasAuthority("ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/authors/**").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/files/cover/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/books/**").hasAuthority(ADMIN_AUTHORITY)
+                                .requestMatchers(HttpMethod.POST, "/authors/**").hasAuthority(ADMIN_AUTHORITY)
+                                .requestMatchers(HttpMethod.GET, "/reviews/**").permitAll()
                                 .requestMatchers("/error").anonymous()
                                 .anyRequest().authenticated()
                 )

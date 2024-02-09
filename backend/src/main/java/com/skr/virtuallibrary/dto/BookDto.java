@@ -31,6 +31,8 @@ public class BookDto {
     @NotEmpty(message = "Tag list is mandatory.")
     private List<String> tagList;
 
-    private String cover;
+    private String bookCoverId;
+
+    private String bookContentId;
 
 }

@@ -1,6 +1,7 @@
 package com.skr.virtuallibrary.auth;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
-import java.util.Map;
 import java.util.function.Function;
 
 @Service
@@ -27,20 +27,21 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(Map.of(), userDetails);
+    public AuthenticationResponse generateTokens(UserDetails userDetails) {
+        final String accessToken = generateToken(userDetails, new Date(System.currentTimeMillis() + 1000 * 60 * 15));
+        final String refreshToken = generateToken(userDetails, new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 30));
+        return AuthenticationResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 
-    public String generateToken(
-            Map<String, Object> extraClaims,
-            UserDetails userDetails
-    ) {
+    private String generateToken(UserDetails userDetails, Date expiration) {
         return Jwts
                 .builder()
-                .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setExpiration(expiration)
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -59,12 +60,17 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String jwtToken) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build()
-                .parseClaimsJws(jwtToken)
-                .getBody();
+        try {
+            return Jwts
+                    .parserBuilder()
+                    .setSigningKey(getSignInKey())
+                    .build()
+                    .parseClaimsJws(jwtToken)
+                    .getBody();
+        } catch (ExpiredJwtException ex) {
+            return ex.getClaims();
+        }
+
     }
 
     private Key getSignInKey() {

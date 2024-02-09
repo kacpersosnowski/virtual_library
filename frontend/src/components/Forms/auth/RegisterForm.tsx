@@ -18,6 +18,7 @@ import Card from "../../UI/Card/Card";
 import { AuthContext } from "../../../store/AuthContext/AuthContext";
 import ErrorMessage from "../../UI/ErrorMessage";
 import errorMessages from "../../../messages/errorMessages";
+import LoadingSpinner from "../../UI/LoadingSpinner";
 
 const RegisterForm = () => {
   const { t, i18n } = useTranslation();
@@ -55,12 +56,13 @@ const RegisterForm = () => {
     },
   });
 
-  const { isSuccess, error } = registerQueryData;
+  const { isSuccess, error, isLoading } = registerQueryData;
 
   useEffect(() => {
     if (isSuccess) {
-      localStorage.setItem("email", formik.values.newEmail);
-      navigate("/verification-email-sent");
+      navigate("/verification-email-sent", {
+        state: { email: formik.values.newEmail },
+      });
     }
   }, [isSuccess]);
 
@@ -102,12 +104,15 @@ const RegisterForm = () => {
           }
           formik={formik}
         />
-        <ActionButton
-          sx={{ mt: "0.5rem", width: "80%", mb: "1rem" }}
-          type="submit"
-        >
-          {t(authMessages.registerButton.key)}
-        </ActionButton>
+        {isLoading && <LoadingSpinner />}
+        {!isLoading && (
+          <ActionButton
+            sx={{ mt: "0.5rem", width: "80%", mb: "1rem" }}
+            type="submit"
+          >
+            {t(authMessages.registerButton.key)}
+          </ActionButton>
+        )}
         {error && (
           <ErrorMessage
             message={errorMessage}

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import MessageSnackbar from "../../UI/MessageSnackbar";
 import { RootState } from "../../../store/redux";
 import { snackbarActions } from "../../../store/redux/slices/snackbar-slice";
+import ScrollToTop from "../../scrolling/ScrollToTop";
 
 const RootLayout = () => {
   const { isSnackbarVisible, message } = useSelector(
@@ -19,18 +20,21 @@ const RootLayout = () => {
   };
 
   return (
-    <Box sx={{ position: "relative", minHeight: "100vh" }}>
-      <Box sx={{ paddingBottom: "5rem" }}>
-        <MainNavbar />
-        <MessageSnackbar
-          message={message}
-          open={isSnackbarVisible}
-          onClose={hideSnackbar}
-        />
-        <Outlet />
+    <>
+      <ScrollToTop />
+      <Box sx={{ position: "relative", minHeight: "100vh" }}>
+        <Box sx={{ paddingBottom: "5rem" }}>
+          <MainNavbar />
+          <MessageSnackbar
+            message={message}
+            open={isSnackbarVisible}
+            onClose={hideSnackbar}
+          />
+          <Outlet />
+        </Box>
+        <Footer />
       </Box>
-      <Footer />
-    </Box>
+    </>
   );
 };
 

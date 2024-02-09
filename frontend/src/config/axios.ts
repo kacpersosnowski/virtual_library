@@ -1,17 +1,23 @@
 import axios from "axios";
 
 import AccessTokenService from "../store/AuthContext/AccessTokenService";
+import { BACKEND_BASE_URL } from "../constants/api";
 
-axios.defaults.baseURL = "http://localhost:8080";
+axios.defaults.baseURL = BACKEND_BASE_URL;
 
-axios.interceptors.request.use((config) => {
-  const token = AccessTokenService.getToken();
-  if (token) {
-    config.headers.Authorization = AccessTokenService.bearerHeader();
-  }
+axios.interceptors.request.use(
+  (config) => {
+    const token = AccessTokenService.getToken();
+    if (token) {
+      config.headers.Authorization = AccessTokenService.bearerHeader();
+    }
 
-  return config;
-});
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
 
 axios.interceptors.response.use(
   (response) => response,
@@ -22,3 +28,8 @@ axios.interceptors.response.use(
     throw error;
   },
 );
+
+export const customFetch = axios.create({
+  baseURL: BACKEND_BASE_URL,
+  headers: { "Content-Type": "application/json" },
+});
