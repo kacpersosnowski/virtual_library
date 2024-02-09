@@ -34,6 +34,18 @@ public class FileController {
         return getFile(id, "application/pdf");
     }
 
+    @Operation(summary = "Get book cover file name by id")
+    @GetMapping("/cover/{id}/filename")
+    public String getBookCoverFilename(@PathVariable String id) {
+        return fileService.getFilename(id);
+    }
+
+    @Operation(summary = "Get book content file name by id")
+    @GetMapping("/content/{id}/filename")
+    public String getBookContentFilename(@PathVariable String id) {
+        return fileService.getFilename(id);
+    }
+
     private ResponseEntity<ByteArrayResource> getFile(String id, String expectedContentType) {
         File file = fileService.getFile(id, expectedContentType);
         return ResponseEntity.ok()

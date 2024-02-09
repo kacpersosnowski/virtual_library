@@ -66,4 +66,13 @@ public class FileService {
         }
     }
 
+    public String getFilename(String id) {
+        GridFSFile gridFSFile = gridFsTemplate.findOne( new Query(Criteria.where("_id").is(id)) );
+        if (gridFSFile != null) {
+            return gridFSFile.getFilename();
+        } else {
+            throw new InternalException("Cannot read filename from file with id: " + id);
+        }
+    }
+
 }
