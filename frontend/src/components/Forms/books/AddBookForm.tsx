@@ -1,9 +1,12 @@
 import { useRef } from "react";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import * as Yup from "yup";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import useFormikLanguage from "../../../hooks/useFormikLanguage";
 import Input from "../common/Input";
@@ -26,9 +29,14 @@ import { Author } from "../../../config/api/authors/authors.types";
 import { Genre } from "../../../config/api/genres/genres.types";
 import AddGenrePopover from "../genres/AddGenrePopover";
 
-const AddBookForm = () => {
+type Props = {
+  initialValues?: CreateBookDTO;
+};
+
+const AddBookForm: React.FC<Props> = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const filePickerRef = useRef(null);
 
   const {
@@ -62,8 +70,9 @@ const AddBookForm = () => {
     },
   });
 
-  const formik = useFormikLanguage({
-    initialValues: {
+  const initialValues =
+    props.initialValues ||
+    ({
       title: "",
       shortDescription: "",
       longDescription: "",
@@ -72,7 +81,10 @@ const AddBookForm = () => {
       tags: [],
       cover: null,
       content: null,
-    } as CreateBookDTO,
+    } as CreateBookDTO);
+
+  const formik = useFormikLanguage({
+    initialValues,
     validationSchema: Yup.object({
       title: Yup.string().required(t(validationMessages.fieldRequired.key)),
       shortDescription: Yup.string().required(
@@ -128,6 +140,15 @@ const AddBookForm = () => {
       }}
       onSubmit={formik.handleSubmit}
     >
+      <Box sx={{ width: "100%", textAlign: "left", mb: "0.5rem" }}>
+        <ActionButton onClick={() => navigate("/admin/books")}>
+          <ArrowBackIcon />
+          Wróć do listy książek
+        </ActionButton>
+      </Box>
+      <Typography variant="h4" sx={{ mb: "1rem" }}>
+        {props.initialValues ? "Edytuj książkę" : "Dodaj książkę"}
+      </Typography>
       <Input
         id="title"
         label={t(adminMessages.addBookFormTitle.key)}

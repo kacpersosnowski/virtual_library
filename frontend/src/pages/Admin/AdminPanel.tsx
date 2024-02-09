@@ -21,12 +21,6 @@ const AdminPanel = () => {
       iconPosition: "start" as const,
     },
     {
-      label: t(adminMessages.addBookTab.key),
-      value: "add-book",
-      icon: <BookmarkAddIcon />,
-      iconPosition: "start" as const,
-    },
-    {
       label: "Książki",
       value: "books",
       icon: <BookmarkAddIcon />,
@@ -37,15 +31,21 @@ const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState(adminTabs[0].value);
   const location = useLocation();
 
+  const path = location.pathname.replace("/admin/", "");
+
   useEffect(() => {
-    const path = location.pathname.replace("/admin/", "");
+    if (path === "") {
+      setActiveTab(adminTabs[0].value);
+      return;
+    }
     for (const tab of adminTabs) {
-      if (path === tab.value) {
+      const regex = new RegExp(`^${tab.value}(/|$)`);
+      if (path !== "" && regex.test(path)) {
         setActiveTab(tab.value);
         return;
       }
     }
-  }, []);
+  }, [path]);
 
   return (
     <ImageBackground image={booksBg} containerSx={{ alignItems: "flex-start" }}>

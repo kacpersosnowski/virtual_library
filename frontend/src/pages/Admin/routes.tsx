@@ -1,9 +1,9 @@
 import { RouteObject } from "react-router-dom";
 
 import AdminPanel from "./AdminPanel";
-import AddBookForm from "../../components/Forms/books/AddBookForm";
 import AdminProtectedRoute from "../../router/AdminProtectedRoute";
 import AdminBooksList from "../../components/Admin/AdminBooksList";
+import BookForm from "../../components/Forms/books/BookForm";
 
 const routes: RouteObject[] = [
   {
@@ -14,8 +14,12 @@ const routes: RouteObject[] = [
       </AdminProtectedRoute>
     ),
     children: [
-      { path: "add-book", element: <AddBookForm /> },
-      { path: "books", element: <AdminBooksList /> },
+      {
+        path: "books",
+        element: <AdminBooksList />,
+      },
+      { path: "books/add", element: <BookForm /> },
+      { path: "books/edit/:id", element: <BookForm /> },
     ],
   },
 ];

@@ -22,6 +22,8 @@ import { queryClient } from "../../config/api";
 import { snackbarActions } from "../../store/redux/slices/snackbar-slice";
 import adminMessages from "../../messages/adminMessages";
 import errorMessages from "../../messages/errorMessages";
+import ActionButton from "../UI/ActionButton";
+import SearchForm from "../Forms/common/SearchForm";
 
 const AdminBooksList = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -113,7 +115,7 @@ const AdminBooksList = () => {
                   title={t(adminMessages.listBookTableActionsEdit.key)}
                   arrow
                 >
-                  <IconButton>
+                  <IconButton onClick={() => navigate(`edit/${book.id}`)}>
                     <EditIcon />
                   </IconButton>
                 </Tooltip>
@@ -164,6 +166,21 @@ const AdminBooksList = () => {
           </Button>
         }
       />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: { xs: "center", md: "space-between" },
+          alignItems: "center",
+          mb: "1rem",
+          flexWrap: "wrap",
+          columnGap: 2,
+        }}
+      >
+        <ActionButton onClick={() => navigate("add")}>
+          Dodaj książkę
+        </ActionButton>
+        <SearchForm containerSx={{ mr: 0 }} />
+      </Box>
       <StyledTable heads={heads} body={tableBody} />
     </Box>
   );
