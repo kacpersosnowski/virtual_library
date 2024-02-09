@@ -23,7 +23,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,7 +88,6 @@ public class ReviewService {
 
         review.setBook(book);
         review.setAuthor(getUser());
-        review.setDate(LocalDate.now());
 
         return modelMapper.toReviewDto(reviewRepository.save(review));
     }
@@ -116,8 +114,12 @@ public class ReviewService {
                 .orElseThrow(() -> new BookNotFoundException(BOOK_NOT_FOUND_MSG + reviewDto.getBookId()));
         review.setBook(book);
 
-        if (!reviewDto.getAuthor().getId().equals(review.getAuthor().getId())) {
+        if (reviewDto.getAuthor() != null && !reviewDto.getAuthor().getId().equals(review.getAuthor().getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You cannot change review's author");
+        }
+
+        if (!reviewDto.getBookId().equals(review.getBook().getId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You cannot change review's book");
         }
 
         if (review.getRating() < MIN_REVIEW_RATE || review.getRating() > MAX_REVIEW_RATE) {
@@ -128,9 +130,11 @@ public class ReviewService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot edit this review.");
         }
 
-        return modelMapper.toReviewDto(
-                reviewRepository.save(modelMapper.toReviewEntity(reviewDto))
-        );
+        review.setTitle(reviewDto.getTitle());
+        review.setContent(reviewDto.getContent());
+        review.setRating(reviewDto.getRating());
+
+        return modelMapper.toReviewDto(reviewRepository.save(review));
     }
 
     private User getUser() {

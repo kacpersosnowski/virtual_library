@@ -26,5 +26,8 @@ public class ReviewDto {
     @NotEmpty(message = "BookId is mandatory.")
     private String bookId;
 
-    private LocalDate date;
+    private LocalDate created;
+
+    private LocalDate lastModified;
+
 }

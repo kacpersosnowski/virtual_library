@@ -1,21 +1,34 @@
 package com.skr.virtuallibrary.entities;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDate;
+
+@Getter
+@Setter
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AuditData {
 
     @CreatedBy
-    private User creator;
+    private String creator;
 
     @CreatedDate
-    private Long createdDate;
+    private LocalDate createdDate;
 
     @LastModifiedBy
-    private User modifiedBy;
+    private String modifiedBy;
 
     @LastModifiedDate
-    private Long lastModifiedDate;
+    private LocalDate lastModifiedDate;
+
 }
