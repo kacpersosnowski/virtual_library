@@ -43,11 +43,6 @@ public class ReviewService {
 
     public static final String BOOK_NOT_FOUND_MSG = "Not found book with id: ";
 
-    private static final int MIN_REVIEW_RATE = 1;
-
-    private static final int MAX_REVIEW_RATE = 5;
-
-
     public ReviewDto findReviewById(String id) {
         return reviewRepository.findById(id).map(modelMapper::toReviewDto)
                 .orElseThrow(() -> new ReviewNotFoundException(ERROR_NOT_FOUND_MSG + id));

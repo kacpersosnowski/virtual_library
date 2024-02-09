@@ -2,7 +2,6 @@ package com.skr.virtuallibrary.dto;
 
 import com.skr.virtuallibrary.validation.ValidRating;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
