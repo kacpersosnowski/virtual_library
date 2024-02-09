@@ -5,6 +5,7 @@ import {
   parseBookFormDataForCreate,
   parseBookItemForDetails,
   parseBookItems,
+  parseBookItemsForAdmin,
 } from "./books.parsers";
 
 const url = "/books";
@@ -14,6 +15,10 @@ export const booksApi: BooksApi = {
   getAllBooks: async () => {
     const response = await axios.get(url);
     return parseBookItems(response.data);
+  },
+  getAllBooksForAdmin: async () => {
+    const response = await axios.get(url);
+    return parseBookItemsForAdmin(response.data);
   },
   getBookDetails: async (id: string) => {
     const response = await axios.get<Book>(`${url}/${id}`);
@@ -35,5 +40,8 @@ export const booksApi: BooksApi = {
       headers: { "Content-Type": "multipart/form-data" },
     });
     return response.data;
+  },
+  deleteBook: async (id: string) => {
+    await axios.delete(`${url}/${id}`);
   },
 };

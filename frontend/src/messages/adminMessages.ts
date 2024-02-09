@@ -71,6 +71,71 @@ const adminMessages: Message = {
     pl: "Książka została dodana pomyślnie",
     en: "A new book was created successfully",
   },
+  deleteBookFormSuccessMessage: {
+    key: "admin_panel >> delete_book_form >> success_message",
+    pl: "Książka została usunięta pomyślnie",
+    en: "A book was deleted successfully",
+  },
+  listBookTableNumberHeader: {
+    key: "admin_panel >> list_book_table >> number_header",
+    pl: "Lp.",
+    en: "No.",
+  },
+  listBookTableTitleHeader: {
+    key: "admin_panel >> list_book_table >> title_header",
+    pl: "Tytuł",
+    en: "Title",
+  },
+  listBookTableAuthorHeader: {
+    key: "admin_panel >> list_book_table >> author_header",
+    pl: "Autor",
+    en: "Author",
+  },
+  listBookTableGenreHeader: {
+    key: "admin_panel >> list_book_table >> genre_header",
+    pl: "Gatunek",
+    en: "Genre",
+  },
+  listBookTableActionsHeader: {
+    key: "admin_panel >> list_book_table >> actions_header",
+    pl: "Akcje",
+    en: "Actions",
+  },
+  listBookTableActionsDetails: {
+    key: "admin_panel >> list_book_table >> actions_details",
+    pl: "Przejdź do szczegółów",
+    en: "Go to details",
+  },
+  listBookTableActionsEdit: {
+    key: "admin_panel >> list_book_table >> actions_edit",
+    pl: "Edytuj",
+    en: "Edit",
+  },
+  listBookTableActionsDelete: {
+    key: "admin_panel >> list_book_table >> actions_delete",
+    pl: "Usuń",
+    en: "Delete",
+  },
+  deleteBookAlertDialogTitle: {
+    key: "admin_panel >> delete_book_alert_dialog >> title",
+    pl: "Czy na pewno chcesz usunąć tę książkę?",
+    en: "Are you sure you want to delete this book?",
+  },
+  deleteBookAlertDialogContentText: {
+    key: "admin_panel >> delete_book_alert_dialog >> content_text",
+    pl: "Operacja nie może być cofnięta.",
+    en: "The operation cannot be undone.",
+  },
+  deleteBookAlertDialogCancelButton: {
+    key: "admin_panel >> delete_book_alert_dialog >> cancel_button",
+    pl: "Anuluj",
+    en: "Cancel",
+  },
+  deleteBookAlertDialogDeleteButton: {
+    key: "admin_panel >> delete_book_alert_dialog >> delete_button",
+    pl: "Usuń",
+    en: "Delete",
+  },
   addAuthorFormFirstName: {
     key: "admin_panel >> add_author_form >> first_name",
     pl: "Imię",

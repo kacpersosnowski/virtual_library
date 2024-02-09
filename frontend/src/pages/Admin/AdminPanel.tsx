@@ -26,6 +26,12 @@ const AdminPanel = () => {
       icon: <BookmarkAddIcon />,
       iconPosition: "start" as const,
     },
+    {
+      label: "Książki",
+      value: "books",
+      icon: <BookmarkAddIcon />,
+      iconPosition: "start" as const,
+    },
   ];
 
   const [activeTab, setActiveTab] = useState(adminTabs[0].value);

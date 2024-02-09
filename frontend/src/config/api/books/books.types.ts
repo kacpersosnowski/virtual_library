@@ -17,8 +17,9 @@ export type BookItemData = {
   id: string;
   title: string;
   authorList: string;
-  shortDescription: string;
-  cover: string;
+  genreList?: string;
+  shortDescription?: string;
+  cover?: string;
 };
 
 export type ReadBookDTO = {
@@ -45,7 +46,9 @@ export type CreateBookDTO = {
 
 export type BooksApi = {
   getAllBooks: () => Promise<BookItemData[]>;
+  getAllBooksForAdmin: () => Promise<BookItemData[]>;
   getBookDetails: (id: string) => Promise<ReadBookDTO>;
   getBookContent: (id: string) => Promise<Uint8Array>;
   createBook: (book: CreateBookDTO) => Promise<Book>;
+  deleteBook: (id: string) => Promise<void>;
 };
