@@ -1,23 +1,28 @@
-import { Box, Button } from "@mui/material";
-import React, { useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  Avatar,
+  Box,
+  SxProps,
+  Theme,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import { AuthContext } from "../../store/AuthContext/AuthContext";
-import authMessages from "../../messages/authMessages";
 import useFetchUserData from "../../hooks/useFetchUserData";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import ErrorMessage from "../UI/ErrorMessage";
 import { LANGUAGES } from "../../constants/languages";
+import errorMessages from "../../messages/errorMessages";
 
 type Props = {
   variant: "drawer" | "navbar";
+  toggleDrawerHandler?: () => void;
+  sx?: SxProps<Theme>;
 };
 
 const Profile: React.FC<Props> = (props) => {
-  const { logout } = useContext(AuthContext);
   const { i18n, t } = useTranslation();
-  const navigate = useNavigate();
   const { data: user, isLoading, isError } = useFetchUserData();
 
   useEffect(() => {
@@ -30,43 +35,68 @@ const Profile: React.FC<Props> = (props) => {
     }
   }, [user]);
 
+  const stringToColor = (string: string) => {
+    let hash = 0;
+    let i: number;
+
+    for (i = 0; i < string.length; i += 1) {
+      hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    let color = "#";
+
+    for (i = 0; i < 3; i += 1) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += `00${value.toString(16)}`.slice(-2);
+    }
+
+    return color;
+  };
+
+  const stringAvatar = (name: string) => {
+    return {
+      sx: {
+        bgcolor: stringToColor(name),
+        cursor: props.variant === "navbar" ? "pointer" : "default",
+      },
+      children: name[0],
+    };
+  };
+
   if (isError) {
-    return <ErrorMessage message="Failed to load user data. Try again later" />;
+    return <ErrorMessage message={t(errorMessages.userDataError.key)} />;
   }
 
   if (isLoading) {
     return <LoadingSpinner color="secondary" boxSx={{ marginY: 0 }} />;
   }
 
-  const logoutHandler = () => {
-    logout();
-    localStorage.removeItem("email");
-    navigate("/");
-  };
-
-  const buttonTextColor = props.variant === "navbar" ? "white" : "black";
-  const buttonBgColor =
-    props.variant === "navbar" ? "primary.dark" : "primary.main";
-
   return (
     <Box
       sx={{
         display:
-          props.variant === "navbar"
-            ? { xs: "none", md: "flex" }
-            : { xs: "flex", md: "none" },
+          props.variant === "navbar" ? { xs: "none", md: "flex" } : "flex",
         alignItems: "center",
         justifyContent: "center",
-        flexDirection: props.variant === "navbar" ? "row" : "column",
+        gap: 1,
+        flexWrap: "wrap",
+        ...props.sx,
       }}
     >
-      <Box sx={{ margin: 0, textAlign: "center" }}>Witaj {user.email}!</Box>
-      <Button
-        sx={{ color: buttonTextColor, bgcolor: buttonBgColor, ml: "15px" }}
-        onClick={logoutHandler}
+      <Tooltip
+        title={props.variant === "navbar" ? user.email : ""}
+        arrow
+        onClick={props.toggleDrawerHandler}
       >
-        {t(authMessages.logoutButton.key)}
-      </Button>
+        <Avatar {...stringAvatar(user.email.toUpperCase())} />
+      </Tooltip>
+      {props.variant === "drawer" && (
+        <Tooltip title={user.email.length > 25 ? user.email : ""} arrow>
+          <Typography>
+            {user.email.slice(0, 25) + (user.email.length > 25 ? "..." : "")}
+          </Typography>
+        </Tooltip>
+      )}
     </Box>
   );
 };

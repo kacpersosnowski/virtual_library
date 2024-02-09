@@ -8,6 +8,7 @@ import {
 } from "./books.parsers";
 
 const url = "/books";
+const pdfUrl = "/files/content";
 
 export const booksApi: BooksApi = {
   getAllBooks: async () => {
@@ -17,6 +18,16 @@ export const booksApi: BooksApi = {
   getBookDetails: async (id: string) => {
     const response = await axios.get<Book>(`${url}/${id}`);
     return parseBookItemForDetails(response.data);
+  },
+  getBookContent: async (id: string) => {
+    const details = await booksApi.getBookDetails(id);
+    const response = await axios.get<Uint8Array>(
+      `${pdfUrl}/${details.bookContentId}`,
+      {
+        responseType: "arraybuffer",
+      },
+    );
+    return response.data;
   },
   createBook: async (book: CreateBookDTO) => {
     const formData = parseBookFormDataForCreate(book);

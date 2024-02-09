@@ -13,13 +13,16 @@ type Props = {
   id: string;
   title: string;
   formik: FormikProps<FormikValues>;
+  acceptedFormats?: string;
   onFileSelected?: (file: File | null) => void;
   previewEnabled?: boolean;
 };
 
 const FilePicker = React.forwardRef((props: Props, ref) => {
   const { t } = useTranslation();
-  const { id, title, formik, onFileSelected, previewEnabled } = props;
+  const { id, title, formik, acceptedFormats, onFileSelected, previewEnabled } =
+    props;
+  const [selectedFile, setSelectedFile] = useState<File>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   useImperativeHandle(
@@ -41,6 +44,7 @@ const FilePicker = React.forwardRef((props: Props, ref) => {
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
+    setSelectedFile(file);
     formik.setFieldValue(id, file);
 
     if (onFileSelected) {
@@ -90,7 +94,16 @@ const FilePicker = React.forwardRef((props: Props, ref) => {
 
   return (
     <>
-      <Box sx={{ display: "flex", my: "1rem", alignItems: "center" }}>
+      <Box
+        sx={{
+          display: "flex",
+          my: "1rem",
+          justifyContent: "center",
+          alignItems: "center",
+          flexWrap: "wrap",
+          rowGap: 1,
+        }}
+      >
         <Box
           sx={{
             display: "flex",
@@ -104,7 +117,7 @@ const FilePicker = React.forwardRef((props: Props, ref) => {
         </Box>
         <Input
           type="file"
-          inputProps={{ accept: "image/*" }}
+          inputProps={{ accept: acceptedFormats || "image/*" }}
           style={{ display: "none" }}
           id={id}
           onChange={handleFileChange}
@@ -116,6 +129,9 @@ const FilePicker = React.forwardRef((props: Props, ref) => {
           </Button>
         </Box>
         {previewEnabled && preview}
+        {!previewEnabled && selectedFile && (
+          <Box sx={{ color: "#666666", ml: "1rem" }}>{selectedFile.name}</Box>
+        )}
       </Box>
       {errorMessage && (
         <ErrorMessage
