@@ -45,13 +45,20 @@ export type CreateBookDTO = {
   content: File;
 };
 
+export type UpdateBookData = {
+  id: string;
+  book: CreateBookDTO;
+};
+
 export type BooksApi = {
   getAllBooks: () => Promise<BookItemData[]>;
   getAllBooksForAdmin: () => Promise<BookItemData[]>;
   getBookDetails: (id: string) => Promise<ReadBookDTO>;
   getRawBookDetails: (id: string) => Promise<Book>;
   getBookContent: (id: string) => Promise<Uint8Array>;
+  getBookContentFile: (id: string) => Promise<File>;
   getBookCoverFile: (id: string) => Promise<File>;
   createBook: (book: CreateBookDTO) => Promise<Book>;
+  updateBook: (data: UpdateBookData) => Promise<Book>;
   deleteBook: (id: string) => Promise<void>;
 };

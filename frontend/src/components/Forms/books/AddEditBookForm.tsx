@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 import * as Yup from "yup";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -33,8 +33,9 @@ type Props = {
   initialValues?: CreateBookDTO;
 };
 
-const AddBookForm: React.FC<Props> = (props) => {
+const AddEditBookForm: React.FC<Props> = (props) => {
   const { t } = useTranslation();
+  const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const filePickerRef = useRef(null);
@@ -67,6 +68,18 @@ const AddBookForm: React.FC<Props> = (props) => {
       );
       formik.handleReset(null);
       filePickerRef.current.resetPreview();
+    },
+  });
+  const {
+    isLoading: isUpdatingLoading,
+    isError: isUpdatingError,
+    mutate: updateBook,
+  } = useMutation({
+    mutationFn: booksApi.updateBook,
+    onSuccess: () => {
+      dispatch(
+        snackbarActions.show(t(adminMessages.updateBookFormSuccessMessage.key)),
+      );
     },
   });
 
@@ -106,7 +119,11 @@ const AddBookForm: React.FC<Props> = (props) => {
       content: Yup.mixed().required(t(validationMessages.fieldRequired.key)),
     }),
     onSubmit: (values) => {
-      createBook(values);
+      if (!props.initialValues) {
+        createBook(values);
+      } else {
+        updateBook({ id, book: values });
+      }
     },
   });
 
@@ -143,11 +160,13 @@ const AddBookForm: React.FC<Props> = (props) => {
       <Box sx={{ width: "100%", textAlign: "left", mb: "0.5rem" }}>
         <ActionButton onClick={() => navigate("/admin/books")}>
           <ArrowBackIcon />
-          Wróć do listy książek
+          {t(adminMessages.addBookFormBackToList.key)}
         </ActionButton>
       </Box>
       <Typography variant="h4" sx={{ mb: "1rem" }}>
-        {props.initialValues ? "Edytuj książkę" : "Dodaj książkę"}
+        {props.initialValues
+          ? t(adminMessages.updateBookFormHeader.key)
+          : t(adminMessages.addBookFormHeader.key)}
       </Typography>
       <Input
         id="title"
@@ -242,20 +261,22 @@ const AddBookForm: React.FC<Props> = (props) => {
         formik={formik}
         acceptedFormats="application/pdf"
       />
-      {isCreatingLoading && <LoadingSpinner />}
-      {!isCreatingLoading && (
+      {(isCreatingLoading || isUpdatingLoading) && <LoadingSpinner />}
+      {!isCreatingLoading && !isUpdatingLoading && (
         <ActionButton
           sx={{ mt: "0.5rem", width: "80%", mb: "1rem" }}
           type="submit"
         >
-          {t(adminMessages.addBookFormSubmitButton.key)}
+          {props.initialValues
+            ? t(adminMessages.updateBookFormSubmitButton.key)
+            : t(adminMessages.addBookFormSubmitButton.key)}
         </ActionButton>
       )}
-      {isCreatingError && (
+      {(isCreatingError || isUpdatingError) && (
         <ErrorMessage message={t(errorMessages.somethingWentWrongError.key)} />
       )}
     </Box>
   );
 };
 
-export default AddBookForm;
+export default AddEditBookForm;

@@ -40,19 +40,41 @@ export const booksApi: BooksApi = {
     );
     return response.data;
   },
+  getBookContentFile: async (id: string) => {
+    const details = await booksApi.getBookDetails(id);
+    const bookContent = await booksApi.getBookContent(id);
+    const fileNameResponse = await axios.get<string>(
+      `${BACKEND_BASE_URL}${pdfUrl}/${details.bookContentId}/filename`,
+    );
+    const blob = new Blob([bookContent], { type: "application/pdf" });
+    const contentFile = new File([blob], fileNameResponse.data, {
+      type: "application/pdf",
+    });
+    return contentFile;
+  },
   getBookCoverFile: async (id: string) => {
     const details = await booksApi.getRawBookDetails(id);
     const response = await fetch(
       `${BACKEND_BASE_URL}${coverUrl}/${details.bookCoverId}`,
     );
     const blob = await response.blob();
-    const fileName = "obrazek.jpg";
+    const fileNameResponse = await axios.get<string>(
+      `${BACKEND_BASE_URL}${coverUrl}/${details.bookCoverId}/filename`,
+    );
+    const fileName = fileNameResponse.data;
     const imageFile = new File([blob], fileName, { type: blob.type });
     return imageFile;
   },
   createBook: async (book: CreateBookDTO) => {
     const formData = parseBookFormDataForCreate(book);
     const response = await axios.post<Book>(url, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return response.data;
+  },
+  updateBook: async ({ id, book }) => {
+    const formData = parseBookFormDataForCreate(book);
+    const response = await axios.put<Book>(`${url}/${id}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     return response.data;

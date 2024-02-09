@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 
 import { booksApi } from "../../../config/api/books/books";
 import { Book, CreateBookDTO } from "../../../config/api/books/books.types";
-import AddBookForm from "./AddBookForm";
+import AddEditBookForm from "./AddEditBookForm";
 import LoadingSpinner from "../../UI/LoadingSpinner";
+import ErrorMessage from "../../UI/ErrorMessage";
+import errorMessages from "../../../messages/errorMessages";
 
 const BookForm = () => {
   const [book, setBook] = useState<Book>();
-  const [bookContent, setBookContent] = useState<Uint8Array>();
+  const [bookContentFile, setBookContentFile] = useState<File>();
   const [bookCoverFile, setBookCoverFile] = useState<File>(null);
+  const [isError, setIsError] = useState(false);
   const { id } = useParams();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (id) {
@@ -20,15 +25,15 @@ const BookForm = () => {
           setBook(response);
         })
         .catch(() => {
-          console.error("errro");
+          setIsError(true);
         });
       booksApi
-        .getBookContent(id)
+        .getBookContentFile(id)
         .then((response) => {
-          setBookContent(response);
+          setBookContentFile(response);
         })
         .catch(() => {
-          console.error("errro");
+          setIsError(true);
         });
       booksApi
         .getBookCoverFile(id)
@@ -36,17 +41,13 @@ const BookForm = () => {
           setBookCoverFile(response);
         })
         .catch(() => {
-          console.error("errro");
+          setIsError(true);
         });
     }
   }, [id]);
 
   let initialValues: CreateBookDTO = null;
-  if (book && bookContent && bookCoverFile) {
-    const blob = new Blob([bookContent], { type: "application/pdf" });
-    const contentFile = new File([blob], "nazwa_pliku.pdf", {
-      type: "application/pdf",
-    });
+  if (book && bookContentFile && bookCoverFile) {
     initialValues = {
       title: book.title,
       shortDescription: book.shortDescription,
@@ -55,20 +56,26 @@ const BookForm = () => {
       genres: book.genreList,
       tags: book.tagList,
       cover: bookCoverFile,
-      content: contentFile,
+      content: bookContentFile,
     };
+  }
+
+  if (isError) {
+    return (
+      <ErrorMessage message={t(errorMessages.somethingWentWrongError.key)} />
+    );
   }
 
   return (
     <>
       {id ? (
-        book && bookContent && bookCoverFile ? (
-          <AddBookForm initialValues={initialValues} />
+        book && bookContentFile && bookCoverFile ? (
+          <AddEditBookForm initialValues={initialValues} />
         ) : (
           <LoadingSpinner />
         )
       ) : (
-        <AddBookForm />
+        <AddEditBookForm />
       )}
     </>
   );

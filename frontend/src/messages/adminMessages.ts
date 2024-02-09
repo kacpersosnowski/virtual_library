@@ -11,8 +11,18 @@ const adminMessages: Message = {
     pl: "Strona główna",
     en: "Home",
   },
-  addBookTab: {
-    key: "admin_panel >> tab >> add_book",
+  booksTab: {
+    key: "admin_panel >> tab >> books",
+    pl: "Książki",
+    en: "Books",
+  },
+  addBookFormBackToList: {
+    key: "admin_panel >> add_book_form >> back_to_list",
+    pl: "Wróć do listy książek",
+    en: "Back to the list of books",
+  },
+  addBookFormHeader: {
+    key: "admin_panel >> add_book_form >> header",
     pl: "Dodaj książkę",
     en: "Add book",
   },
@@ -71,10 +81,30 @@ const adminMessages: Message = {
     pl: "Książka została dodana pomyślnie",
     en: "A new book was created successfully",
   },
+  updateBookFormSuccessMessage: {
+    key: "admin_panel >> update_book_form >> success_message",
+    pl: "Książka została zaktualizowana pomyślnie",
+    en: "A book was updated successfully",
+  },
   deleteBookFormSuccessMessage: {
     key: "admin_panel >> delete_book_form >> success_message",
     pl: "Książka została usunięta pomyślnie",
     en: "A book was deleted successfully",
+  },
+  updateBookFormHeader: {
+    key: "admin_panel >> update_book_form >> header",
+    pl: "Edytuj książkę",
+    en: "Edit book",
+  },
+  updateBookFormSubmitButton: {
+    key: "admin_panel >> update_book_form >> submit_button",
+    pl: "Zaktualizuj książkę",
+    en: "Update book",
+  },
+  listBookAddBookButton: {
+    key: "admin_panel >> list_book >> add_book",
+    pl: "Dodaj książkę",
+    en: "Add book",
   },
   listBookTableNumberHeader: {
     key: "admin_panel >> list_book_table >> number_header",

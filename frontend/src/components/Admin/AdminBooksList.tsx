@@ -177,7 +177,7 @@ const AdminBooksList = () => {
         }}
       >
         <ActionButton onClick={() => navigate("add")}>
-          Dodaj książkę
+          {t(adminMessages.listBookAddBookButton.key)}
         </ActionButton>
         <SearchForm containerSx={{ mr: 0 }} />
       </Box>

@@ -21,7 +21,7 @@ const AdminPanel = () => {
       iconPosition: "start" as const,
     },
     {
-      label: "Książki",
+      label: t(adminMessages.booksTab.key),
       value: "books",
       icon: <BookmarkAddIcon />,
       iconPosition: "start" as const,
