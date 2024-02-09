@@ -1,5 +1,6 @@
 package com.skr.virtuallibrary.dto;
 
+import com.skr.virtuallibrary.validation.ValidRating;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class ReviewDto {
     @NotEmpty(message = "Content is mandatory.")
     private String content;
 
-    @NotNull(message = "Rating is mandatory.")
+    @ValidRating
     private Integer rating;
 
     private UserDto author;

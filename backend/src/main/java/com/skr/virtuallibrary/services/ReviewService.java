@@ -82,10 +82,6 @@ public class ReviewService {
         Book book = bookRepository.findById(reviewDto.getBookId())
                 .orElseThrow(() -> new BookNotFoundException(BOOK_NOT_FOUND_MSG + reviewDto.getBookId()));
 
-        if (review.getRating() < MIN_REVIEW_RATE || review.getRating() > MAX_REVIEW_RATE) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Review rate out of bound (1-5)");
-        }
-
         review.setBook(book);
         review.setAuthor(getUser());
 
@@ -120,10 +116,6 @@ public class ReviewService {
 
         if (!reviewDto.getBookId().equals(review.getBook().getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You cannot change review's book");
-        }
-
-        if (review.getRating() < MIN_REVIEW_RATE || review.getRating() > MAX_REVIEW_RATE) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Review rate out of bound (1-5)");
         }
 
         if (!review.getAuthor().equals(getUser())) {
