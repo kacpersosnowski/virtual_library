@@ -1,8 +1,12 @@
 package com.skr.virtuallibrary.services.testData;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.entities.Author;
+import org.springframework.core.io.ClassPathResource;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,42 +58,12 @@ public class AuthorTestDataBuilder {
     }
 
     public static List<Author> exampleAuthorList() {
-        Author author1 = Author.builder()
-                .id("id1")
-                .firstName("exampleName1")
-                .lastName("exampleLastName1")
-                .build();
-        Author author2 = Author.builder()
-                .id("id2")
-                .firstName("exampleName2")
-                .lastName("exampleLastName3")
-                .build();
-        Author author3 = Author.builder()
-                .id("id3")
-                .firstName("exampleName3")
-                .lastName("exampleLastName3")
-                .build();
-
-        return new ArrayList<>(Arrays.asList(author1, author2, author3));
+        JsonResourceBuilder jsonDataBuilder = new JsonResourceBuilder();
+        return jsonDataBuilder.loadModelList("services/authors.json", Author.class);
     }
 
     public static List<AuthorDto> exampleAuthorDtoList() {
-        AuthorDto authorDto1 = AuthorDto.builder()
-                .id("id1")
-                .firstName("exampleName1")
-                .lastName("exampleLastName1")
-                .build();
-        AuthorDto authorDto2 = AuthorDto.builder()
-                .id("id2")
-                .firstName("exampleName2")
-                .lastName("exampleLastName3")
-                .build();
-        AuthorDto authorDto3 = AuthorDto.builder()
-                .id("id3")
-                .firstName("exampleName3")
-                .lastName("exampleLastName3")
-                .build();
-
-        return new ArrayList<>(Arrays.asList(authorDto1, authorDto2, authorDto3));
+        JsonResourceBuilder jsonDataBuilder = new JsonResourceBuilder();
+        return jsonDataBuilder.loadModelList("services/authorDtos.json", AuthorDto.class);
     }
 }
