@@ -6,7 +6,7 @@ import com.skr.virtuallibrary.auth.JwtService;
 import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.dto.BookDto;
 import com.skr.virtuallibrary.services.BookService;
-import com.skr.virtuallibrary.services.PdfFileService;
+import com.skr.virtuallibrary.services.FileService;
 import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ class BookControllerTest {
     private JwtService jwtService;
 
     @MockBean
-    private PdfFileService pdfFileService;
+    private FileService fileService;
 
     @Test
     void testFindBookById() throws Exception {

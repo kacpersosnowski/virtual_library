@@ -4,14 +4,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skr.virtuallibrary.auth.JwtService;
 import com.skr.virtuallibrary.dto.AuthorDto;
-import com.skr.virtuallibrary.dto.BookDto;
 import com.skr.virtuallibrary.services.AuthorService;
-import io.swagger.v3.core.util.Json;
-import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -20,15 +16,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(AuthorController.class)
@@ -53,7 +45,7 @@ class AuthorControllerTest {
         when(authorService.findAuthorById(authorDto.getId())).thenReturn(authorDto);
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/authors/{id}", authorDto.getId())
                         .contentType(MediaType.APPLICATION_JSON))
-                        .andReturn();
+                .andReturn();
         AuthorDto actualAuthorDto = objectMapper.readValue(result.getResponse().getContentAsString(), AuthorDto.class);
 
         Assertions.assertThat(result.getResponse().getStatus()).isEqualTo(200);
@@ -68,7 +60,8 @@ class AuthorControllerTest {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/authors")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-        List<AuthorDto> actualAuthorDtoList = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {});
+        List<AuthorDto> actualAuthorDtoList = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+        });
 
         Assertions.assertThat(result.getResponse().getStatus()).isEqualTo(200);
         Assertions.assertThat(actualAuthorDtoList).usingRecursiveComparison().isEqualTo(authorDtoList);
