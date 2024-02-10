@@ -1,4 +1,4 @@
-package com.skr.virtuallibrary.services.testData;
+package com.skr.virtuallibrary.services.testData.records;
 
 import com.skr.virtuallibrary.entities.Author;
 

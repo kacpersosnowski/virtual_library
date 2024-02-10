@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 
 @Slf4j
 @SpringBootTest(classes = {BookRepository.class})
-public class BookServiceTests {
+class BookServiceTests {
 
     @InjectMocks
     private BookService bookService;

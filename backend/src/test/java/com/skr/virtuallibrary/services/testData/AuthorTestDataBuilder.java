@@ -2,6 +2,8 @@ package com.skr.virtuallibrary.services.testData;
 
 import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.entities.Author;
+import com.skr.virtuallibrary.services.testData.records.AuthorDtoExample;
+import com.skr.virtuallibrary.services.testData.records.AuthorExample;
 
 import java.util.List;
 

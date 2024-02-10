@@ -2,6 +2,8 @@ package com.skr.virtuallibrary.services.testData;
 
 import com.skr.virtuallibrary.dto.BookDto;
 import com.skr.virtuallibrary.entities.Book;
+import com.skr.virtuallibrary.services.testData.records.BookDtoExample;
+import com.skr.virtuallibrary.services.testData.records.BookExample;
 
 import java.util.List;
 

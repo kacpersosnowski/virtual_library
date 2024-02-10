@@ -2,6 +2,8 @@ package com.skr.virtuallibrary.services.testData;
 
 import com.skr.virtuallibrary.dto.GenreDto;
 import com.skr.virtuallibrary.entities.Genre;
+import com.skr.virtuallibrary.services.testData.records.GenreDtoExample;
+import com.skr.virtuallibrary.services.testData.records.GenreExample;
 
 import java.util.List;
 
