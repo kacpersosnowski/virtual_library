@@ -10,6 +10,8 @@ import com.skr.virtuallibrary.repositories.AuthorRepository;
 import com.skr.virtuallibrary.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -43,6 +45,11 @@ public class BookService {
         return bookRepository.findAll().stream().map(modelMapper::toBookDto).toList();
     }
 
+    public List<BookDto> findAllBooks(Integer page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        return bookRepository.findAll(pageable).stream().map(modelMapper::toBookDto).toList();
+    }
+
     public BookDto addBook(BookDto bookDto) {
         return saveBook(bookDto);
     }
@@ -74,6 +81,25 @@ public class BookService {
                     Criteria.where("authorList.lastName").regex(phrase, "i")
             ));
             books.addAll(mongoTemplate.find(query, Book.class));
+        }
+        return books.stream()
+                .map(modelMapper::toBookDto)
+                .distinct()
+                .toList();
+    }
+
+    public List<BookDto> findBooksByTitleOrAuthor(String searchPhrase, Integer page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        String[] searchPhrases = searchPhrase.trim().split(" ");
+        List<Book> books = new ArrayList<>();
+
+        for (String phrase : searchPhrases) {
+            Query query = new Query().addCriteria(new Criteria().orOperator(
+                    Criteria.where("title").regex(phrase, "i"),
+                    Criteria.where("authorList.firstName").regex(phrase, "i"),
+                    Criteria.where("authorList.lastName").regex(phrase, "i")
+            ));
+            books.addAll(mongoTemplate.find(query.with(pageable), Book.class));
         }
         return books.stream()
                 .map(modelMapper::toBookDto)

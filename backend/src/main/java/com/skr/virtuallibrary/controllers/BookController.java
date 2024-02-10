@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -37,7 +38,17 @@ public class BookController {
 
     @Operation(summary = "Find all Books")
     @GetMapping
-    public List<BookDto> findAllBooks() {
+    public List<BookDto> findAllBooks(@PathParam("search") String search, @PathParam("page") Integer page) {
+        if (search != null) {
+            if (page != null) {
+                return bookService.findBooksByTitleOrAuthor(search, page);
+            }
+            return bookService.findBooksByTitleOrAuthor(search);
+        }
+
+        if (page != null) {
+            return bookService.findAllBooks(page);
+        }
         return bookService.findAllBooks();
     }
 
@@ -74,11 +85,5 @@ public class BookController {
         bookDto.setBookCoverId(bookCoverId);
         bookDto.setBookContentId(bookContentId);
         return bookService.updateBook(id, bookDto);
-    }
-
-    @Operation(summary = "Find Books by title or Author")
-    @GetMapping("/search/{searchPhrase}")
-    public List<BookDto> findAllBooks(@PathVariable String searchPhrase) {
-        return bookService.findBooksByTitleOrAuthor(searchPhrase);
     }
 }
