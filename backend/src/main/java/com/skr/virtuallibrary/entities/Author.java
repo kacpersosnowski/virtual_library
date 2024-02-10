@@ -19,6 +19,8 @@ public class Author {
     @Id
     private String id;
 
+    private AuditData auditData;
+
     private String firstName;
 
     private String lastName;
