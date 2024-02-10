@@ -16,7 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -75,10 +76,6 @@ class AuthorServiceTest {
         // given
         List<Author> authorsExample = AuthorTestDataBuilder.exampleAuthorList();
         List<AuthorDto> authorDtosExample = AuthorTestDataBuilder.exampleAuthorDtoList();
-        if (authorsExample == null || authorDtosExample == null) {
-            log.error("Error loading authorsExample or authorDtosExample");
-            fail();
-        }
 
         // when
         when(authorRepository.findAll()).thenReturn(authorsExample);
