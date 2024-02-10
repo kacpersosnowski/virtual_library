@@ -9,6 +9,7 @@ import useFormikLanguage from "../../../hooks/useFormikLanguage";
 import Input from "../common/Input";
 import ActionButton from "../../UI/ActionButton";
 import validationMessages from "../../../messages/validationMessages";
+import errorMessages from "../../../messages/errorMessages";
 import AutocompleteInput from "../common/AutocompleteInput";
 import authorsApi from "../../../config/api/authors/authors";
 import genresApi from "../../../config/api/genres/genres";
@@ -66,6 +67,7 @@ const AddBookForm = () => {
       genres: [],
       tags: [],
       cover: null,
+      content: null,
     } as CreateBookDTO,
     validationSchema: Yup.object({
       title: Yup.string().required(t(validationMessages.fieldRequired.key)),
@@ -85,6 +87,7 @@ const AddBookForm = () => {
         required: t(validationMessages.fieldRequired.key),
       }),
       cover: Yup.mixed().required(t(validationMessages.fieldRequired.key)),
+      content: Yup.mixed().required(t(validationMessages.fieldRequired.key)),
     }),
     onSubmit: (values) => {
       createBook(values);
@@ -92,7 +95,9 @@ const AddBookForm = () => {
   });
 
   if (isFetchingAuthorsError || isFetchingGenresError) {
-    return <ErrorMessage message="Something went wrong. Try again later" />;
+    return (
+      <ErrorMessage message={t(errorMessages.somethingWentWrongError.key)} />
+    );
   }
 
   if (isFetchingAuthorsLoading || isFetchingGenresLoading) {
@@ -170,6 +175,12 @@ const AddBookForm = () => {
         previewEnabled
         ref={filePickerRef}
       />
+      <FilePicker
+        id="content"
+        title="Treść:"
+        formik={formik}
+        acceptedFormats="application/pdf"
+      />
       {isCreatingLoading && <LoadingSpinner />}
       {!isCreatingLoading && (
         <ActionButton
@@ -180,7 +191,7 @@ const AddBookForm = () => {
         </ActionButton>
       )}
       {isCreatingError && (
-        <ErrorMessage message="Something went wrong. Try again later" />
+        <ErrorMessage message={t(errorMessages.somethingWentWrongError.key)} />
       )}
     </Box>
   );

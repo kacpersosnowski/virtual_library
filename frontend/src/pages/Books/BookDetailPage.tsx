@@ -1,6 +1,6 @@
 import { Box, Divider } from "@mui/material";
 import { useQuery } from "react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import BookIcon from "@mui/icons-material/Book";
 import { useTranslation } from "react-i18next";
 
@@ -28,6 +28,7 @@ const BookDetailPage = () => {
     queryFn: () => booksApi.getBookDetails(id),
   });
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   let content = null;
 
@@ -53,7 +54,11 @@ const BookDetailPage = () => {
             <BookInfosTiles book={book} />
             <Divider sx={{ margin: "1rem 0" }} />
 
-            <ActionButton sx={{ mt: "1rem" }} scaleOnHover={1.04}>
+            <ActionButton
+              sx={{ mt: "1rem" }}
+              scaleOnHover={1.04}
+              onClick={() => navigate(`/book/read/${book.id}`)}
+            >
               <Box
                 sx={{
                   display: "flex",
