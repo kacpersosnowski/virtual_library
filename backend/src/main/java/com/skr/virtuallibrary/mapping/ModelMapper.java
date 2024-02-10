@@ -11,6 +11,7 @@ import com.skr.virtuallibrary.entities.Genre;
 import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.entities.Review;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper
 public interface ModelMapper {
@@ -31,8 +32,13 @@ public interface ModelMapper {
 
     User toUserEntity(UserDto userDto);
 
+    @Mapping(target = "created", source = "auditData.createdDate")
+    @Mapping(target = "lastModified", source = "auditData.lastModifiedDate")
+    @Mapping(target = "bookId", source = "book.id")
     ReviewDto toReviewDto(Review review);
 
+    @Mapping(target = "auditData.createdDate", source = "created")
+    @Mapping(target = "auditData.lastModifiedDate", source = "lastModified")
     Review toReviewEntity(ReviewDto reviewDto);
 
 }

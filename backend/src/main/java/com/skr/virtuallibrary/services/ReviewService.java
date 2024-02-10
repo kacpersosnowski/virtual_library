@@ -23,7 +23,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,11 +42,6 @@ public class ReviewService {
     private static final String ERROR_NOT_FOUND_MSG = "Not found review with id: ";
 
     public static final String BOOK_NOT_FOUND_MSG = "Not found book with id: ";
-
-    private static final int MIN_REVIEW_RATE = 1;
-
-    private static final int MAX_REVIEW_RATE = 5;
-
 
     public ReviewDto findReviewById(String id) {
         return reviewRepository.findById(id).map(modelMapper::toReviewDto)
@@ -83,13 +77,8 @@ public class ReviewService {
         Book book = bookRepository.findById(reviewDto.getBookId())
                 .orElseThrow(() -> new BookNotFoundException(BOOK_NOT_FOUND_MSG + reviewDto.getBookId()));
 
-        if (review.getRating() < MIN_REVIEW_RATE || review.getRating() > MAX_REVIEW_RATE) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Review rate out of bound (1-5)");
-        }
-
         review.setBook(book);
         review.setAuthor(getUser());
-        review.setDate(LocalDate.now());
 
         return modelMapper.toReviewDto(reviewRepository.save(review));
     }
@@ -116,21 +105,23 @@ public class ReviewService {
                 .orElseThrow(() -> new BookNotFoundException(BOOK_NOT_FOUND_MSG + reviewDto.getBookId()));
         review.setBook(book);
 
-        if (!reviewDto.getAuthor().getId().equals(review.getAuthor().getId())) {
+        if (reviewDto.getAuthor() != null && !reviewDto.getAuthor().getId().equals(review.getAuthor().getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You cannot change review's author");
         }
 
-        if (review.getRating() < MIN_REVIEW_RATE || review.getRating() > MAX_REVIEW_RATE) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Review rate out of bound (1-5)");
+        if (!reviewDto.getBookId().equals(review.getBook().getId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You cannot change review's book");
         }
 
         if (!review.getAuthor().equals(getUser())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot edit this review.");
         }
 
-        return modelMapper.toReviewDto(
-                reviewRepository.save(modelMapper.toReviewEntity(reviewDto))
-        );
+        review.setTitle(reviewDto.getTitle());
+        review.setContent(reviewDto.getContent());
+        review.setRating(reviewDto.getRating());
+
+        return modelMapper.toReviewDto(reviewRepository.save(review));
     }
 
     private User getUser() {

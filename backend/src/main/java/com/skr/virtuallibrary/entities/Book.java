@@ -17,6 +17,8 @@ public class Book {
 
     private String title;
 
+    private AuditData auditData;
+
     private List<Author> authorList;
 
     private String shortDescription;

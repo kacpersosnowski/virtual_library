@@ -13,4 +13,6 @@ public class File {
 
     private byte[] file;
 
+    private AuditData auditData;
+
 }
