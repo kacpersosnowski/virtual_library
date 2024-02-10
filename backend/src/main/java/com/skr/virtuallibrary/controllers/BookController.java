@@ -1,13 +1,9 @@
 package com.skr.virtuallibrary.controllers;
 
 import com.skr.virtuallibrary.dto.BookDto;
-import com.skr.virtuallibrary.exceptions.BookNotFoundException;
 import com.skr.virtuallibrary.services.BookService;
 import com.skr.virtuallibrary.services.FileService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -30,41 +26,22 @@ public class BookController {
 
     private final FileService fileService;
 
-    @Operation(
-            summary = "Find Book by id",
-            description = "Get a Book by specifying its id."
-    )
-    @ApiResponse(
-            responseCode = "200",
-            content = {
-                    @Content(schema = @Schema(implementation = BookDto.class), mediaType = "application/json")})
-    @ApiResponse(
-            responseCode = "404",
-            content = {@Content(schema = @Schema(implementation = BookNotFoundException.class))})
-    @ApiResponse(
-            responseCode = "500",
-            content = {@Content(schema = @Schema())})
+    @Operation(summary = "Find Book by id")
+    @ApiResponse(responseCode = "200")
+    @ApiResponse(responseCode = "404")
+    @ApiResponse(responseCode = "500")
     @GetMapping("/{id}")
-    public BookDto findBookById(
-            @Parameter(description = "Book id.", example = "1")
-            @PathVariable String id
-    ) {
+    public BookDto findBookById(@PathVariable String id) {
         return bookService.findBookById(id);
     }
 
-    @Operation(
-            summary = "Find all Books",
-            description = "Get all Book instances."
-    )
+    @Operation(summary = "Find all Books")
     @GetMapping
     public List<BookDto> findAllBooks() {
         return bookService.findAllBooks();
     }
 
-    @Operation(
-            summary = "Post Book",
-            description = "Post a Book to database."
-    )
+    @Operation(summary = "Post Book")
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public BookDto addBook(
             @Valid @RequestPart("book") BookDto bookDto,
@@ -78,22 +55,13 @@ public class BookController {
         return bookService.addBook(bookDto);
     }
 
-    @Operation(
-            summary = "Delete Book by id",
-            description = "Delete a Book by specifying its id."
-    )
+    @Operation(summary = "Delete Book by id")
     @DeleteMapping("/{id}")
-    public void deleteBook(
-            @Parameter(description = "Book id.", example = "1")
-            @PathVariable String id
-    ) {
+    public void deleteBook(@PathVariable String id) {
         bookService.deleteBook(id);
     }
 
-    @Operation(
-            summary = "Update Book by id",
-            description = "Put a Book by specifying its id and providing new Book."
-    )
+    @Operation(summary = "Update Book by id")
     @PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public BookDto updateBook(
             @PathVariable String id,
@@ -108,15 +76,9 @@ public class BookController {
         return bookService.updateBook(id, bookDto);
     }
 
-    @Operation(
-            summary = "Find Books by title or Author",
-            description = "Get all Book by title or authors' firstName or lastName."
-    )
+    @Operation(summary = "Find Books by title or Author")
     @GetMapping("/search/{searchPhrase}")
-    public List<BookDto> findAllBooks(
-            @Parameter(description = "Search phrase", example = "teoria")
-            @PathVariable String searchPhrase
-    ) {
+    public List<BookDto> findAllBooks(@PathVariable String searchPhrase) {
         return bookService.findBooksByTitleOrAuthor(searchPhrase);
     }
 }
