@@ -1,19 +1,14 @@
 package com.skr.virtuallibrary.services.testData;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.entities.Author;
-import org.springframework.core.io.ClassPathResource;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class AuthorTestDataBuilder {
 
-    private AuthorTestDataBuilder(){}
+    private AuthorTestDataBuilder() {
+    }
 
     public static AuthorExample authorExample() {
         String authorId = "foo";

@@ -75,7 +75,7 @@ class AuthorServiceTest {
         // given
         List<Author> authorsExample = AuthorTestDataBuilder.exampleAuthorList();
         List<AuthorDto> authorDtosExample = AuthorTestDataBuilder.exampleAuthorDtoList();
-        if(authorsExample == null || authorDtosExample == null) {
+        if (authorsExample == null || authorDtosExample == null) {
             log.error("Error loading authorsExample or authorDtosExample");
             fail();
         }
