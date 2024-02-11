@@ -2,6 +2,7 @@ package com.skr.virtuallibrary.services.testData;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
@@ -12,6 +13,7 @@ public final class JsonResourceBuilder {
 
     public <T> List<T> loadModelList(String resourcePath, Class<T> valueType) {
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
         try (InputStream json = new ClassPathResource(resourcePath).getInputStream()) {
             JavaType type = objectMapper.getTypeFactory().constructCollectionType(List.class, valueType);
             return objectMapper.readValue(json, type);

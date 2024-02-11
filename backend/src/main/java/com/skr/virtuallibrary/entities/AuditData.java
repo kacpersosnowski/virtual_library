@@ -10,7 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -20,15 +20,15 @@ import java.time.LocalDate;
 public class AuditData {
 
     @CreatedBy
-    private String creator;
+    private String createdBy;
 
     @CreatedDate
-    private LocalDate createdDate;
+    private LocalDateTime createdDate;
 
     @LastModifiedBy
-    private String modifiedBy;
+    private String lastModifiedBy;
 
     @LastModifiedDate
-    private LocalDate lastModifiedDate;
+    private LocalDateTime lastModifiedDate;
 
 }
