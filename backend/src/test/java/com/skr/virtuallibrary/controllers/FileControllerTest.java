@@ -1,6 +1,5 @@
 package com.skr.virtuallibrary.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skr.virtuallibrary.auth.JwtService;
 import com.skr.virtuallibrary.entities.File;
 import com.skr.virtuallibrary.services.FileService;
@@ -24,9 +23,6 @@ class FileControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @MockBean
     private FileService fileService;
