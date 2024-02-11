@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Slf4j
@@ -36,14 +38,15 @@ public class BookController {
         return bookService.findBookById(id);
     }
 
-    @Operation(summary = "Find all Books")
+    @Operation(summary = "Find all Books or search by title or author")
     @GetMapping
     public List<BookDto> findAllBooks(@PathParam("search") String search, @PathParam("page") Integer page) {
-        if (search != null) {
+        if (search != null && !search.isEmpty()) {
+            String decodedSearch = URLDecoder.decode(search, StandardCharsets.UTF_8);
             if (page != null) {
-                return bookService.findBooksByTitleOrAuthor(search, page);
+                return bookService.findBooksByTitleOrAuthor(decodedSearch, page);
             }
-            return bookService.findBooksByTitleOrAuthor(search);
+            return bookService.findBooksByTitleOrAuthor(decodedSearch);
         }
 
         if (page != null) {
@@ -77,7 +80,7 @@ public class BookController {
     public BookDto updateBook(
             @PathVariable String id,
             @Valid @RequestPart("book") BookDto bookDto,
-            @RequestPart("cover")  MultipartFile bookCover,
+            @RequestPart("cover") MultipartFile bookCover,
             @RequestPart("content") MultipartFile bookContent
     ) {
         String bookCoverId = fileService.addFile(bookCover, "image/png");
