@@ -46,21 +46,15 @@ public class BookController {
         if (search != null && !search.isEmpty()) {
             String decodedSearch = URLDecoder.decode(search, StandardCharsets.UTF_8);
             if (page != null) {
-                Pair<Long, List<BookDto>> result = bookService.findBooksByTitleOrAuthor(decodedSearch, page);
-                return new PagedResponse<>(result.getFirst(), result.getSecond());
+                return new PagedResponse<>(bookService.findBooksByTitleOrAuthor(decodedSearch, page));
             }
-
-            List<BookDto> books = bookService.findBooksByTitleOrAuthor(decodedSearch);
-            return new PagedResponse<>((long) books.size(), books);
+            return new PagedResponse<>(bookService.findBooksByTitleOrAuthor(decodedSearch));
         }
 
         if (page != null) {
-            Pair<Long, List<BookDto>> result = bookService.findAllBooks(page);
-            return new PagedResponse<>(result.getFirst(), result.getSecond());
+            return new PagedResponse<>(bookService.findAllBooks(page));
         }
-
-        List<BookDto> books = bookService.findAllBooks();
-        return new PagedResponse<>((long) books.size(), books);
+        return new PagedResponse<>(bookService.findAllBooks());
     }
 
     @Operation(summary = "Post Book")
