@@ -17,7 +17,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.util.Pair;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +50,10 @@ public class BookService {
     }
 
     public Pair<Long, List<BookDto>> findAllBooks(int page) {
+        if (page < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page number cannot be negative.");
+        }
+
         Pageable pageable = PageRequest.of(page, 10);
         Page<Book> bookPage = bookRepository.findAll(pageable);
 
@@ -96,6 +102,10 @@ public class BookService {
     }
 
     public Pair<Long, List<BookDto>> findBooksByTitleOrAuthor(String searchPhrase, Integer page) {
+        if (page < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page number cannot be negative.");
+        }
+
         Pageable pageable = PageRequest.of(page, 10);
         String[] searchPhrases = searchPhrase.trim().split(" ");
         Criteria[] criteria = new Criteria[searchPhrases.length];
