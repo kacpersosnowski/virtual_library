@@ -40,9 +40,6 @@ public class ReviewServiceTests {
     private ReviewRepository reviewRepository;
 
     @Mock
-    private AuthorRepository authorRepository;
-
-    @Mock
     private UserRepository userRepository;
 
     @Mock
