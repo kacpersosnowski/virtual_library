@@ -19,11 +19,9 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
@@ -173,16 +171,18 @@ public class ReviewServiceTests {
         when(reviewRepository.findById(idToUpdate)).thenReturn(Optional.ofNullable(oldReview));
         when(bookRepository.findById(newReviewDto.getBookId())).thenReturn(Optional.ofNullable(newReview.getBook()));
         when(userRepository.findByEmail(USERNAME)).thenReturn(Optional.ofNullable(exampleUser));
-        when(reviewRepository.save(newReview)).thenReturn(newReview); //TODO: exclude audit data somehow
+
+        assert oldReview != null;
+        oldReview.setTitle(newReviewDto.getTitle());
+        oldReview.setContent(newReviewDto.getContent());
+        oldReview.setRating(newReviewDto.getRating());
+        when(reviewRepository.save(oldReview)).thenReturn(newReview);
         when(modelMapper.toReviewDto(newReview)).thenReturn(newReviewDto);
 
         ReviewDto expected = newReviewDto;
         ReviewDto actual = reviewService.updateReview(idToUpdate, newReviewDto);
 
         // then
-        assertThat(actual)
-                .usingRecursiveComparison()
-                .ignoringFieldsOfTypes(LocalDateTime.class)
-                .isEqualTo(expected);
+        assertEquals(expected, actual);
     }
 }
