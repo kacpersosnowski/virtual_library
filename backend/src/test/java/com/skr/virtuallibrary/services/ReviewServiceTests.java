@@ -5,7 +5,6 @@ import com.skr.virtuallibrary.entities.Review;
 import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.exceptions.ReviewNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
-import com.skr.virtuallibrary.repositories.AuthorRepository;
 import com.skr.virtuallibrary.repositories.BookRepository;
 import com.skr.virtuallibrary.repositories.ReviewRepository;
 import com.skr.virtuallibrary.repositories.UserRepository;
