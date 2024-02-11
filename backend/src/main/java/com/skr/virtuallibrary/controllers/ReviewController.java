@@ -1,5 +1,6 @@
 package com.skr.virtuallibrary.controllers;
 
+import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.ReviewDto;
 import com.skr.virtuallibrary.services.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,11 +38,11 @@ public class ReviewController {
 
     @Operation(summary = "Find Reviews by book id and page number.")
     @GetMapping("/book/{id}")
-    public List<ReviewDto> findReviewsByBookId(@PathVariable String id, @PathParam("page") Integer page) {
+    public PagedResponse<ReviewDto> findReviewsByBookId(@PathVariable String id, @PathParam("page") Integer page) {
         if (page == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page number is mandatory.");
+            return new PagedResponse<>(reviewService.findReviewsByBookId(id));
         }
-        return reviewService.findReviewsByBookId(id, page);
+        return new PagedResponse<>(reviewService.findReviewsByBookId(id, page));
     }
 
     @Operation(summary = "Post Review.")
