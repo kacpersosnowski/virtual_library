@@ -1,5 +1,6 @@
 package com.skr.virtuallibrary.controllers;
 
+import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.BookDto;
 import com.skr.virtuallibrary.services.BookService;
 import com.skr.virtuallibrary.services.FileService;
@@ -10,6 +11,7 @@ import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.util.Pair;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,19 +42,25 @@ public class BookController {
 
     @Operation(summary = "Find all Books or search by title or author")
     @GetMapping
-    public List<BookDto> findAllBooks(@PathParam("search") String search, @PathParam("page") Integer page) {
+    public PagedResponse<BookDto> findAllBooks(@PathParam("search") String search, @PathParam("page") Integer page) {
         if (search != null && !search.isEmpty()) {
             String decodedSearch = URLDecoder.decode(search, StandardCharsets.UTF_8);
             if (page != null) {
-                return bookService.findBooksByTitleOrAuthor(decodedSearch, page);
+                Pair<Long, List<BookDto>> result = bookService.findBooksByTitleOrAuthor(decodedSearch, page);
+                return new PagedResponse<>(result.getFirst(), result.getSecond());
             }
-            return bookService.findBooksByTitleOrAuthor(decodedSearch);
+
+            List<BookDto> books = bookService.findBooksByTitleOrAuthor(decodedSearch);
+            return new PagedResponse<>((long) books.size(), books);
         }
 
         if (page != null) {
-            return bookService.findAllBooks(page);
+            Pair<Long, List<BookDto>> result = bookService.findAllBooks(page);
+            return new PagedResponse<>(result.getFirst(), result.getSecond());
         }
-        return bookService.findAllBooks();
+
+        List<BookDto> books = bookService.findAllBooks();
+        return new PagedResponse<>((long) books.size(), books);
     }
 
     @Operation(summary = "Post Book")

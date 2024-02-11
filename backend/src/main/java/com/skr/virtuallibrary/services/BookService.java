@@ -10,11 +10,13 @@ import com.skr.virtuallibrary.repositories.AuthorRepository;
 import com.skr.virtuallibrary.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -45,9 +47,14 @@ public class BookService {
         return bookRepository.findAll().stream().map(modelMapper::toBookDto).toList();
     }
 
-    public List<BookDto> findAllBooks(Integer page) {
+    public Pair<Long, List<BookDto>> findAllBooks(int page) {
         Pageable pageable = PageRequest.of(page, 10);
-        return bookRepository.findAll(pageable).stream().map(modelMapper::toBookDto).toList();
+        Page<Book> bookPage = bookRepository.findAll(pageable);
+
+        return Pair.of(
+                bookPage.getTotalElements(),
+                bookPage.stream().map(modelMapper::toBookDto).toList()
+        );
     }
 
     public BookDto addBook(BookDto bookDto) {
@@ -88,23 +95,27 @@ public class BookService {
                 .toList();
     }
 
-    public List<BookDto> findBooksByTitleOrAuthor(String searchPhrase, Integer page) {
+    public Pair<Long, List<BookDto>> findBooksByTitleOrAuthor(String searchPhrase, Integer page) {
         Pageable pageable = PageRequest.of(page, 10);
         String[] searchPhrases = searchPhrase.trim().split(" ");
-        List<Book> books = new ArrayList<>();
+        Criteria[] criteria = new Criteria[searchPhrases.length];
 
-        for (String phrase : searchPhrases) {
-            Query query = new Query().addCriteria(new Criteria().orOperator(
-                    Criteria.where("title").regex(phrase, "i"),
-                    Criteria.where("authorList.firstName").regex(phrase, "i"),
-                    Criteria.where("authorList.lastName").regex(phrase, "i")
-            ));
-            books.addAll(mongoTemplate.find(query.with(pageable), Book.class));
+        for (int i = 0; i < searchPhrases.length; i++) {
+            criteria[i] = new Criteria().orOperator(
+                    Criteria.where("title").regex(searchPhrases[i], "i"),
+                    Criteria.where("authorList.firstName").regex(searchPhrases[i], "i"),
+                    Criteria.where("authorList.lastName").regex(searchPhrases[i], "i")
+            );
         }
-        return books.stream()
-                .map(modelMapper::toBookDto)
-                .distinct()
-                .toList();
+        Query query = new Query().addCriteria(new Criteria().orOperator(criteria));
+
+        long totalElements = mongoTemplate.count(query, Book.class);
+        List<Book> bookPage = mongoTemplate.find(query.with(pageable), Book.class);
+
+        return Pair.of(
+                totalElements,
+                bookPage.stream().map(modelMapper::toBookDto).distinct().toList()
+        );
     }
 
     private BookDto saveBook(BookDto bookDto) {
