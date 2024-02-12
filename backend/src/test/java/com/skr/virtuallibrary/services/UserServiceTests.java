@@ -1,4 +1,4 @@
-package com.skr.virtuallibrary.services.testData;
+package com.skr.virtuallibrary.services;
 
 import com.skr.virtuallibrary.dto.UserDto;
 import com.skr.virtuallibrary.entities.User;
@@ -6,6 +6,7 @@ import com.skr.virtuallibrary.entities.enums.Language;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.UserRepository;
 import com.skr.virtuallibrary.services.UserService;
+import com.skr.virtuallibrary.services.testData.UserTestDataBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

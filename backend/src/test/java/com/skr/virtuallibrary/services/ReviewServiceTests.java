@@ -105,6 +105,7 @@ public class ReviewServiceTests {
     }
 
     @Test
+    @WithMockUser(username = USERNAME, password = PASSWORD, roles = "USER")
     void addReview_shouldReturnReviewDto() {
         // given
         ReviewDto reviewDto = ReviewTestDataBuilder.reviewDtoExample().reviewDto();
@@ -112,12 +113,15 @@ public class ReviewServiceTests {
 
         // when
         when(modelMapper.toReviewEntity(reviewDto)).thenReturn(review);
-        when(modelMapper.toReviewDto(review)).thenReturn(reviewDto);
-        when(userRepository.findById(reviewDto.getAuthor().getId())).thenReturn(Optional.ofNullable(review.getAuthor()));
+        when(bookRepository.findById(reviewDto.getBookId())).thenReturn(Optional.ofNullable(review.getBook()));
+        when(userRepository.findByEmail(USERNAME)).thenReturn(Optional.ofNullable(exampleUser));
         when(reviewRepository.save(review)).thenReturn(review);
+        when(modelMapper.toReviewDto(review)).thenReturn(reviewDto);
+        ReviewDto expected = reviewDto;
+        ReviewDto actual = reviewService.addReview(reviewDto);
 
         // then
-        assertEquals(reviewDto, reviewService.addReview(reviewDto));
+        assertEquals(expected, actual);
     }
 
     @Test

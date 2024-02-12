@@ -2,8 +2,8 @@ package com.skr.virtuallibrary.entities;
 
 import com.skr.virtuallibrary.entities.enums.Authority;
 import com.skr.virtuallibrary.entities.enums.Language;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,8 +14,12 @@ import java.util.Collection;
 import java.util.List;
 
 @Data
-@Builder
+@Getter
+@Setter
 @Document
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements UserDetails {
 
     @Id
