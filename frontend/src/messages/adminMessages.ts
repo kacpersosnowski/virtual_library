@@ -106,6 +106,11 @@ const adminMessages: Message = {
     pl: "Dodaj książkę",
     en: "Add book",
   },
+  listBookTableNoBooks: {
+    key: "admin_panel >> list_book_table >> no_books",
+    pl: "Brak książek",
+    en: "No books",
+  },
   listBookTableNumberHeader: {
     key: "admin_panel >> list_book_table >> number_header",
     pl: "Lp.",

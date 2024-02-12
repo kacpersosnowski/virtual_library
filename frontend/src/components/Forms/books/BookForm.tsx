@@ -19,26 +19,15 @@ const BookForm = () => {
 
   useEffect(() => {
     if (id) {
-      booksApi
-        .getRawBookDetails(id)
-        .then((response) => {
-          setBook(response);
-        })
-        .catch(() => {
-          setIsError(true);
-        });
-      booksApi
-        .getBookContentFile(id)
-        .then((response) => {
-          setBookContentFile(response);
-        })
-        .catch(() => {
-          setIsError(true);
-        });
-      booksApi
-        .getBookCoverFile(id)
-        .then((response) => {
-          setBookCoverFile(response);
+      Promise.all([
+        booksApi.getRawBookDetails(id),
+        booksApi.getBookContentFile(id),
+        booksApi.getBookCoverFile(id),
+      ])
+        .then(([bookDetails, contentFile, coverFile]) => {
+          setBook(bookDetails);
+          setBookContentFile(contentFile);
+          setBookCoverFile(coverFile);
         })
         .catch(() => {
           setIsError(true);

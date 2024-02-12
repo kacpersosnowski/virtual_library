@@ -4,6 +4,9 @@ import { useTranslation } from "react-i18next";
 import mainPageMessages from "../../../messages/mainPageMessages";
 
 type Props = {
+  id: string;
+  value?: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   containerSx?: SxProps<Theme>;
   inputSx?: SxProps<Theme>;
 };
@@ -24,10 +27,12 @@ const SearchForm: React.FC<Props> = (props) => {
       <SearchIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
       <TextField
         color="info"
-        id="search-input"
+        id={props.id}
         label={t(mainPageMessages.searchPlaceholder.key)}
         variant="standard"
         sx={{ width: { xs: "12.5rem" }, ...props.inputSx }}
+        value={props.value || ""}
+        onChange={props.onChange}
       />
     </Box>
   );

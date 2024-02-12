@@ -2,7 +2,7 @@ import { RouteObject } from "react-router-dom";
 
 import AdminPanel from "./AdminPanel";
 import AdminProtectedRoute from "../../router/AdminProtectedRoute";
-import AdminBooksList from "../../components/Admin/AdminBooksList";
+import AdminBooksList from "../../components/Admin/books/AdminBooksList";
 import BookForm from "../../components/Forms/books/BookForm";
 
 const routes: RouteObject[] = [

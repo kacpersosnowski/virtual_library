@@ -1,9 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useMutation, useQuery } from "react-query";
 import { useTranslation } from "react-i18next";
-import { Box, Button, IconButton, TableBody, Tooltip } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Pagination,
+  TableBody,
+  Tooltip,
+} from "@mui/material";
 
 import DetailsIcon from "@mui/icons-material/Details";
 import EditIcon from "@mui/icons-material/Edit";
@@ -12,30 +19,34 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import StyledTable, {
   StyledTableCell,
   StyledTableRow,
-} from "../Layout/common/StyledTable";
-import { booksApi } from "../../config/api/books/books";
-import LoadingSpinner from "../UI/LoadingSpinner";
-import ErrorMessage from "../UI/ErrorMessage";
-import AlertDialog from "../Layout/common/AlertDialog";
-import { BookItemData } from "../../config/api/books/books.types";
-import { queryClient } from "../../config/api";
-import { snackbarActions } from "../../store/redux/slices/snackbar-slice";
-import adminMessages from "../../messages/adminMessages";
-import errorMessages from "../../messages/errorMessages";
-import ActionButton from "../UI/ActionButton";
-import SearchForm from "../Forms/common/SearchForm";
+} from "../../Layout/common/StyledTable";
+import { booksApi } from "../../../config/api/books/books";
+import LoadingSpinner from "../../UI/LoadingSpinner";
+import ErrorMessage from "../../UI/ErrorMessage";
+import AlertDialog from "../../Layout/common/AlertDialog";
+import { BookItemData } from "../../../config/api/books/books.types";
+import { queryClient } from "../../../config/api";
+import { snackbarActions } from "../../../store/redux/slices/snackbar-slice";
+import adminMessages from "../../../messages/adminMessages";
+import errorMessages from "../../../messages/errorMessages";
+import { RootState } from "../../../store/redux";
 
-const AdminBooksList = () => {
+const AdminBooksTable = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [bookToDelete, setBookToDelete] = useState<BookItemData>(null);
+  const searchText = useSelector(
+    (state: RootState) => state.search.searchText.booksTable,
+  );
+  const [currentPage, setCurrentPage] = useState(0);
   const { t } = useTranslation();
   const {
-    data: books,
+    data: booksResponse,
     isLoading: isListLoading,
     isError: isListError,
   } = useQuery({
-    queryKey: ["books"],
-    queryFn: booksApi.getAllBooksForAdmin,
+    queryKey: ["books", { page: currentPage, search: searchText }],
+    queryFn: () =>
+      booksApi.getAllBooksForAdmin({ page: currentPage, search: searchText }),
   });
   const {
     mutate: deleteBook,
@@ -71,6 +82,18 @@ const AdminBooksList = () => {
     deleteBook(bookToDelete.id);
   };
 
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number,
+  ) => {
+    setCurrentPage(value - 1);
+  };
+
+  const books = booksResponse?.content;
+  const totalPages = booksResponse
+    ? Math.ceil(booksResponse.totalElements / 10)
+    : 0;
+
   if (isListLoading || isDeletingLoading) {
     return <LoadingSpinner />;
   }
@@ -88,10 +111,19 @@ const AdminBooksList = () => {
   ];
   const tableBody = (
     <TableBody>
+      {books.length === 0 && (
+        <StyledTableRow>
+          <StyledTableCell colSpan={heads.length} align="center">
+            {t(adminMessages.listBookTableNoBooks.key)}
+          </StyledTableCell>
+        </StyledTableRow>
+      )}
       {books.map((book, index) => {
         return (
           <StyledTableRow key={book.id}>
-            <StyledTableCell align="center">{index + 1}</StyledTableCell>
+            <StyledTableCell align="center">
+              {index + 1 + 10 * currentPage}
+            </StyledTableCell>
             <StyledTableCell align="center">{book.title}</StyledTableCell>
             <StyledTableCell align="center">{book.authorList}</StyledTableCell>
             <StyledTableCell align="center">{book.genreList}</StyledTableCell>
@@ -136,12 +168,7 @@ const AdminBooksList = () => {
   );
 
   return (
-    <Box
-      sx={{
-        width: { xs: "95%", sm: "90%", md: "80%", lg: "70%" },
-        py: "1rem",
-      }}
-    >
+    <>
       {isDeletingError && (
         <ErrorMessage message={t(errorMessages.deleteBookError.key)} />
       )}
@@ -166,24 +193,28 @@ const AdminBooksList = () => {
           </Button>
         }
       />
+      <StyledTable heads={heads} body={tableBody} />
       <Box
         sx={{
           display: "flex",
-          justifyContent: { xs: "center", md: "space-between" },
+          justifyContent: "center",
           alignItems: "center",
-          mb: "1rem",
-          flexWrap: "wrap",
-          columnGap: 2,
+          mt: "1rem",
         }}
       >
-        <ActionButton onClick={() => navigate("add")}>
-          {t(adminMessages.listBookAddBookButton.key)}
-        </ActionButton>
-        <SearchForm containerSx={{ mr: 0 }} />
+        {books.length > 0 && (
+          <Pagination
+            color="secondary"
+            count={totalPages}
+            siblingCount={2}
+            page={currentPage + 1}
+            onChange={handlePageChange}
+            disabled={totalPages <= 1}
+          />
+        )}
       </Box>
-      <StyledTable heads={heads} body={tableBody} />
-    </Box>
+    </>
   );
 };
 
-export default AdminBooksList;
+export default AdminBooksTable;

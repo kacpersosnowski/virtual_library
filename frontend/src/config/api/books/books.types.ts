@@ -1,4 +1,5 @@
 import { Author } from "../authors/authors.types";
+import { PageSearchData, PagedResponse } from "../common/common.types";
 import { Genre } from "../genres/genres.types";
 
 export type Book = {
@@ -52,7 +53,9 @@ export type UpdateBookData = {
 
 export type BooksApi = {
   getAllBooks: () => Promise<BookItemData[]>;
-  getAllBooksForAdmin: () => Promise<BookItemData[]>;
+  getAllBooksForAdmin: (
+    queryData: PageSearchData,
+  ) => Promise<PagedResponse<BookItemData>>;
   getBookDetails: (id: string) => Promise<ReadBookDTO>;
   getRawBookDetails: (id: string) => Promise<Book>;
   getBookContent: (id: string) => Promise<Uint8Array>;

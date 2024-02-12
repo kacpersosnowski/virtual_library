@@ -73,7 +73,7 @@ const MainNavbar = () => {
             Liber Mundi
           </Typography>
           <Box sx={{ display: "block", flexGrow: 1 }} />
-          <SearchForm />
+          <SearchForm id="search-books" />
           {!isAuthenticated && (
             <Box
               sx={{

@@ -8,6 +8,7 @@ import {
   parseBookItemsForAdmin,
 } from "./books.parsers";
 import { BACKEND_BASE_URL } from "../../../constants/api";
+import { PagedResponse } from "../common/common.types";
 
 const url = "/books";
 const coverUrl = "/files/cover";
@@ -15,12 +16,15 @@ const pdfUrl = "/files/content";
 
 export const booksApi: BooksApi = {
   getAllBooks: async () => {
-    const response = await axios.get(url);
-    return parseBookItems(response.data);
+    const response = await axios.get<PagedResponse<Book>>(url);
+    return parseBookItems(response.data.content);
   },
-  getAllBooksForAdmin: async () => {
-    const response = await axios.get(url);
-    return parseBookItemsForAdmin(response.data);
+  getAllBooksForAdmin: async (params) => {
+    const response = await axios.get<PagedResponse<Book>>(url, { params });
+    return {
+      totalElements: response.data.totalElements,
+      content: parseBookItemsForAdmin(response.data.content),
+    };
   },
   getBookDetails: async (id: string) => {
     const response = await axios.get<Book>(`${url}/${id}`);
