@@ -6,6 +6,10 @@ import com.skr.virtuallibrary.exceptions.AuthorNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.AuthorRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,6 +52,23 @@ public class AuthorService {
         } else {
             throw new AuthorNotFoundException(ERROR_NOT_FOUND_MSG + id);
         }
+    }
+
+    public List<AuthorDto> searchAuthors(String name) {
+        return authorRepository.findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(name)
+                .stream()
+                .map(modelMapper::toAuthorDto)
+                .toList();
+    }
+
+    public Pair<Long, List<AuthorDto>> searchAuthors(String name, int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Author> authors = authorRepository.findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(name, pageable);
+
+        return Pair.of(
+                authors.getTotalElements(),
+                authors.stream().map(modelMapper::toAuthorDto).toList()
+        );
     }
 
     private AuthorDto saveAuthor(AuthorDto authorDto) {
