@@ -24,6 +24,12 @@ public class SecurityConfig {
 
     private static final String ADMIN_AUTHORITY = "ADMIN";
 
+    private static final String BOOK_ENDPOINT = "/books/**";
+
+    private static final String AUTHOR_ENDPOINT = "/authors/**";
+
+    private static final String GENRE_ENDPOINT = "/genres/**";
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,
                                            CorsConfigurationSource corsConfigurationSource) throws Exception {
@@ -33,14 +39,25 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
                         auth
-                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/auth/quick-register").hasAuthority(ADMIN_AUTHORITY)
-                                .requestMatchers("/auth/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/books/**").permitAll()
+
+                                .requestMatchers(HttpMethod.POST, BOOK_ENDPOINT).hasAuthority(ADMIN_AUTHORITY)
+                                .requestMatchers(HttpMethod.PUT, BOOK_ENDPOINT).hasAuthority(ADMIN_AUTHORITY)
+                                .requestMatchers(HttpMethod.DELETE, BOOK_ENDPOINT).hasAuthority(ADMIN_AUTHORITY)
+
+                                .requestMatchers(HttpMethod.POST, AUTHOR_ENDPOINT).hasAuthority(ADMIN_AUTHORITY)
+                                .requestMatchers(HttpMethod.PUT, AUTHOR_ENDPOINT).hasAuthority(ADMIN_AUTHORITY)
+                                .requestMatchers(HttpMethod.DELETE, AUTHOR_ENDPOINT).hasAuthority(ADMIN_AUTHORITY)
+
+                                .requestMatchers(HttpMethod.POST, GENRE_ENDPOINT).hasAuthority(ADMIN_AUTHORITY)
+                                .requestMatchers(HttpMethod.PUT, GENRE_ENDPOINT).hasAuthority(ADMIN_AUTHORITY)
+                                .requestMatchers(HttpMethod.DELETE, GENRE_ENDPOINT).hasAuthority(ADMIN_AUTHORITY)
+
+                                .requestMatchers(HttpMethod.GET, BOOK_ENDPOINT).permitAll()
                                 .requestMatchers(HttpMethod.GET, "/files/cover/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/books/**").hasAuthority(ADMIN_AUTHORITY)
-                                .requestMatchers(HttpMethod.POST, "/authors/**").hasAuthority(ADMIN_AUTHORITY)
                                 .requestMatchers(HttpMethod.GET, "/reviews/**").permitAll()
+                                .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .requestMatchers("/error").anonymous()
                                 .anyRequest().authenticated()
                 )
