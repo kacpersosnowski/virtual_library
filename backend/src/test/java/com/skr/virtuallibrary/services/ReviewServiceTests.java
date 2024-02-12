@@ -10,7 +10,6 @@ import com.skr.virtuallibrary.repositories.ReviewRepository;
 import com.skr.virtuallibrary.repositories.UserRepository;
 import com.skr.virtuallibrary.services.testData.ReviewTestDataBuilder;
 import com.skr.virtuallibrary.services.testData.UserTestDataBuilder;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -26,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@Slf4j
 @SpringBootTest(classes = {ReviewRepository.class})
 public class ReviewServiceTests {
 

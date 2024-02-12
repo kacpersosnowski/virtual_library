@@ -1,17 +1,13 @@
 package com.skr.virtuallibrary.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
 @Document
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Review {

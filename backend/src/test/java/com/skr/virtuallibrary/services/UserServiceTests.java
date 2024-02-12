@@ -5,9 +5,7 @@ import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.entities.enums.Language;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.UserRepository;
-import com.skr.virtuallibrary.services.UserService;
 import com.skr.virtuallibrary.services.testData.UserTestDataBuilder;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -20,7 +18,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-@Slf4j
 @SpringBootTest(classes = {UserRepository.class})
 public class UserServiceTests {
 

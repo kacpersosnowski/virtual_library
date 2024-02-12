@@ -1,20 +1,20 @@
 package com.skr.virtuallibrary.dto;
 
 import jakarta.validation.constraints.NotEmpty;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Getter
-@Setter
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class GenreDto {
 
-        private String id;
+    private String id;
 
-        @NotEmpty(message = "Genre name is mandatory.")
-        private String name;
+    @NotEmpty(message = "Genre name is mandatory.")
+    private String name;
 
 }

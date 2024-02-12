@@ -6,7 +6,6 @@ import com.skr.virtuallibrary.exceptions.GenreNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.GenreRepository;
 import com.skr.virtuallibrary.services.testData.GenreTestDataBuilder;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -21,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@Slf4j
 @SpringBootTest(classes = {GenreRepository.class})
 class GenreServiceTests {
 
@@ -75,7 +73,6 @@ class GenreServiceTests {
     void updateGenre_shouldReturnGenreDto() {
         // given
         String idToUpdate = "foo";
-        GenreDto genreDtoToUpdate = GenreTestDataBuilder.genreDtoExample().genreDto();
         GenreDto genreDtoToUpdateWith = GenreTestDataBuilder.genreDtoExample().genreDto();
         genreDtoToUpdateWith.setName("updatedName");
         Genre updatedGenre = Genre.builder()
