@@ -3,14 +3,13 @@ package com.skr.virtuallibrary.services;
 import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.entities.Author;
 import com.skr.virtuallibrary.exceptions.AuthorAlreadyExistsException;
+import com.skr.virtuallibrary.exceptions.AuthorAssignedToBookException;
 import com.skr.virtuallibrary.exceptions.AuthorNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.AuthorRepository;
 import com.skr.virtuallibrary.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -48,7 +47,7 @@ public class AuthorService {
                 .orElseThrow(() -> new AuthorNotFoundException(ERROR_NOT_FOUND_MSG + id));
 
         if (!bookRepository.findAllByAuthorListContains(author).isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Author is assigned to book(s)");
+            throw new AuthorAssignedToBookException();
         }
 
         authorRepository.deleteById(id);
