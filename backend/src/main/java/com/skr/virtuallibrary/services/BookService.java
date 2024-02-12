@@ -5,6 +5,7 @@ import com.skr.virtuallibrary.dto.BookDto;
 import com.skr.virtuallibrary.entities.Author;
 import com.skr.virtuallibrary.entities.Book;
 import com.skr.virtuallibrary.exceptions.BookNotFoundException;
+import com.skr.virtuallibrary.exceptions.IllegalPageNumberException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.AuthorRepository;
 import com.skr.virtuallibrary.repositories.BookRepository;
@@ -17,9 +18,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.util.Pair;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +50,7 @@ public class BookService {
 
     public Pair<Long, List<BookDto>> findAllBooks(int page) {
         if (page < 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page number cannot be negative.");
+            throw new IllegalPageNumberException();
         }
 
         Pageable pageable = PageRequest.of(page, 10);
@@ -103,7 +102,7 @@ public class BookService {
 
     public Pair<Long, List<BookDto>> findBooksByTitleOrAuthor(String searchPhrase, Integer page) {
         if (page < 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page number cannot be negative.");
+            throw new IllegalPageNumberException();
         }
 
         Pageable pageable = PageRequest.of(page, 10);
