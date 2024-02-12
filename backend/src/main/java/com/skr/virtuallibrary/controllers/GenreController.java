@@ -5,9 +5,12 @@ import com.skr.virtuallibrary.services.GenreService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -25,9 +28,13 @@ public class GenreController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all genres.")
-    public List<GenreDto> getAllGenres() {
-        return genreService.getAllGenres();
+    @Operation(summary = "Get all genres and search genres by name.")
+    public PagedResponse<GenreDto> getAllGenres(@PathParam("name") String name) {
+        if (name != null) {
+            String decryptedName = URLDecoder.decode(name, StandardCharsets.UTF_8).trim();
+            return new PagedResponse(genreService.searchGenres(decryptedName));
+        }
+        return new PagedResponse(genreService.getAllGenres());
     }
 
     @GetMapping("/{id}")

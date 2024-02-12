@@ -1,10 +1,15 @@
 package com.skr.virtuallibrary.services;
 
 import com.skr.virtuallibrary.dto.GenreDto;
+import com.skr.virtuallibrary.entities.Genre;
 import com.skr.virtuallibrary.exceptions.GenreNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.GenreRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,6 +47,16 @@ public class GenreService {
 
     public void deleteGenre(String id) {
         genreRepository.deleteById(id);
+    }
+
+    public Pair<Long, List<GenreDto>> searchGenres(String name) {
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Genre> genres = genreRepository.findAllByNameLikeIgnoreCase(name, pageable);
+
+        return Pair.of(
+                (long) genres.getNumberOfElements(),
+                genres.stream().map(modelMapper::toGenreDto).toList()
+        );
     }
 
     private GenreDto saveGenre(GenreDto genreDto) {
