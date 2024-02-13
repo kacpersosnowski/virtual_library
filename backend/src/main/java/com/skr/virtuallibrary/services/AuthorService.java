@@ -2,9 +2,12 @@ package com.skr.virtuallibrary.services;
 
 import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.entities.Author;
+import com.skr.virtuallibrary.exceptions.AuthorAlreadyExistsException;
+import com.skr.virtuallibrary.exceptions.AuthorAssignedToBookException;
 import com.skr.virtuallibrary.exceptions.AuthorNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.AuthorRepository;
+import com.skr.virtuallibrary.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,8 @@ import java.util.List;
 public class AuthorService {
 
     private final AuthorRepository authorRepository;
+
+    private final BookRepository bookRepository;
 
     private final ModelMapper modelMapper;
 
@@ -30,15 +35,22 @@ public class AuthorService {
     }
 
     public AuthorDto addAuthor(AuthorDto authorDto) {
+        if (authorRepository.findByFirstNameAndLastName(authorDto.getFirstName(), authorDto.getLastName()).isPresent()) {
+            throw new AuthorAlreadyExistsException(authorDto.getFirstName() + " " + authorDto.getLastName());
+        }
+
         return saveAuthor(authorDto);
     }
 
     public void deleteAuthor(String id) {
-        if (authorRepository.findById(id).isPresent()) {
-            authorRepository.deleteById(id);
-        } else {
-            throw new AuthorNotFoundException(ERROR_NOT_FOUND_MSG + id);
+        Author author = authorRepository.findById(id)
+                .orElseThrow(() -> new AuthorNotFoundException(ERROR_NOT_FOUND_MSG + id));
+
+        if (!bookRepository.findAllByAuthorListContains(author).isEmpty()) {
+            throw new AuthorAssignedToBookException();
         }
+
+        authorRepository.deleteById(id);
     }
 
     public AuthorDto updateAuthor(String id, AuthorDto authorDto) {
