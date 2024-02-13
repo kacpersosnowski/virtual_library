@@ -38,6 +38,16 @@ public class AuthorService {
         return authorRepository.findAll().stream().map(modelMapper::toAuthorDto).toList();
     }
 
+    public Pair<Long, List<AuthorDto>> findAllAuthors(int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Author> authors = authorRepository.findAll(pageable);
+
+        return Pair.of(
+                authors.getTotalElements(),
+                authors.stream().map(modelMapper::toAuthorDto).toList()
+        );
+    }
+
     public AuthorDto addAuthor(AuthorDto authorDto) {
         if (authorRepository.findByFirstNameAndLastName(authorDto.getFirstName(), authorDto.getLastName()).isPresent()) {
             throw new AuthorAlreadyExistsException(authorDto.getFirstName() + " " + authorDto.getLastName());
