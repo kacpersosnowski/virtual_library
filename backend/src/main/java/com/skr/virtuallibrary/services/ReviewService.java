@@ -14,9 +14,11 @@ import com.skr.virtuallibrary.repositories.ReviewRepository;
 import com.skr.virtuallibrary.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -55,7 +57,7 @@ public class ReviewService {
                 .toList();
     }
 
-    public List<ReviewDto> findReviewsByBookId(String id, int pageNr) {
+    public Pair<Long, List<ReviewDto>> findReviewsByBookId(String id, int pageNr) {
         if (pageNr < 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page number cannot be negative.");
         }
@@ -65,11 +67,20 @@ public class ReviewService {
         }
 
         Pageable pageable = PageRequest.of(pageNr, 5, Sort.by("date").descending());
+        Page<Review> reviews = reviewRepository.findAllByBookId(id, pageable);
 
-        return reviewRepository.findAllByBookId(id, pageable)
-                .stream()
-                .map(modelMapper::toReviewDto)
-                .toList();
+        return Pair.of(
+                reviews.getTotalElements(),
+                reviews.stream().map(modelMapper::toReviewDto).toList()
+        );
+    }
+
+    public List<ReviewDto> findReviewsByBookId(String id) {
+        if (bookRepository.findById(id).isEmpty()) {
+            throw new BookNotFoundException(BOOK_NOT_FOUND_MSG + id);
+        }
+
+        return reviewRepository.findAllByBookId(id).stream().map(modelMapper::toReviewDto).toList();
     }
 
     public ReviewDto addReview(ReviewDto reviewDto) {
