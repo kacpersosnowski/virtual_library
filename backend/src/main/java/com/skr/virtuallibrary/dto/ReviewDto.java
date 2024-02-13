@@ -2,13 +2,15 @@ package com.skr.virtuallibrary.dto;
 
 import com.skr.virtuallibrary.validation.ValidRating;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReviewDto {
 
     private String id;
@@ -26,8 +28,8 @@ public class ReviewDto {
     @NotEmpty(message = "BookId is mandatory.")
     private String bookId;
 
-    private LocalDate created;
+    private LocalDateTime created;
 
-    private LocalDate lastModified;
+    private LocalDateTime lastModified;
 
 }

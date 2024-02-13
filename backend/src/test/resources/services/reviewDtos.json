@@ -1,0 +1,47 @@
+[
+  {
+    "id": "1",
+    "created": "2024-02-11T16:02:44.0390871",
+    "lastModified": "2024-02-11T16:02:44.0390871",
+    "title": "review title 1",
+    "content": "review content 1",
+    "rating": 5,
+    "author": {
+      "id": "1",
+      "email": "email@example.com",
+      "authority": "USER",
+      "language": "ENG"
+    },
+    "bookId": "1"
+  },
+  {
+    "id": "2",
+    "created": "2024-02-11T16:02:44.0390871",
+    "lastModified": "2024-02-11T16:02:44.0390871",
+    "title": "review title 2",
+    "content": "review content 2",
+    "rating": 4,
+    "author": {
+      "id": "2",
+      "email": "email2@example.com",
+      "authority": "USER",
+      "language": "ENG"
+    },
+    "bookId": "2"
+  },
+  {
+    "id": "3",
+    "created": "2024-02-11T16:02:44.0390871",
+    "lastModified": "2024-02-11T16:02:44.0390871",
+    "title": "review title 3",
+    "content": "review content 3",
+    "rating": 3,
+    "author": {
+      "id": "3",
+      "email": "email3@example.com",
+      "authority": "USER",
+      "language": "ENG"
+    },
+    "bookId": "3"
+  }
+]
