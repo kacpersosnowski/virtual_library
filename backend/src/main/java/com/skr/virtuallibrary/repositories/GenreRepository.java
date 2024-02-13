@@ -5,7 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.Optional;
+
 public interface GenreRepository extends MongoRepository<Genre, String> {
+
+    Optional<Genre> findByName(String name);
 
     Page<Genre> findAllByNameLikeIgnoreCase(String name, Pageable pageable);
 }

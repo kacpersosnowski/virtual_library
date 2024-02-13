@@ -1,5 +1,6 @@
 package com.skr.virtuallibrary.controllers;
 
+import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.GenreDto;
 import com.skr.virtuallibrary.services.GenreService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 @RestController
 @RequestMapping("/genres")
@@ -29,12 +29,12 @@ public class GenreController {
 
     @GetMapping
     @Operation(summary = "Get all genres and search genres by name.")
-    public PagedResponse<GenreDto> getAllGenres(@PathParam("name") String name, @PathParam("page") Integer page) { //TODO: Add page parameter
+    public PagedResponse<GenreDto> getAllGenres(@PathParam("name") String name, @PathParam("page") Integer page) {
         if (name != null) {
             String decryptedName = URLDecoder.decode(name, StandardCharsets.UTF_8).trim();
-            return new PagedResponse(genreService.searchGenres(decryptedName));
+            return new PagedResponse<>(genreService.searchGenres(decryptedName));
         }
-        return new PagedResponse(genreService.getAllGenres());
+        return new PagedResponse<>(genreService.getAllGenres());
     }
 
     @GetMapping("/{id}")

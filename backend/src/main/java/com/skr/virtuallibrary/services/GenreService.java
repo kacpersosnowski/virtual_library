@@ -2,6 +2,7 @@ package com.skr.virtuallibrary.services;
 
 import com.skr.virtuallibrary.dto.GenreDto;
 import com.skr.virtuallibrary.entities.Genre;
+import com.skr.virtuallibrary.exceptions.GenreAlreadyExistsException;
 import com.skr.virtuallibrary.exceptions.GenreNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.GenreRepository;
@@ -60,6 +61,9 @@ public class GenreService {
     }
 
     private GenreDto saveGenre(GenreDto genreDto) {
+        if (genreRepository.findByName(genreDto.getName()).isPresent()) {
+            throw new GenreAlreadyExistsException(genreDto.getName());
+        }
         return modelMapper.toGenreDto(genreRepository.save(modelMapper.toGenreEntity(genreDto)));
     }
 
