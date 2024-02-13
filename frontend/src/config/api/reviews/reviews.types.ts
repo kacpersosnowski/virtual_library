@@ -1,0 +1,22 @@
+import { PageSearchData, PagedResponse } from "../common/common.types";
+import { UserData } from "../users/users.types";
+
+export type Review = {
+  id: string;
+  title: string;
+  content: string;
+  rating: number;
+  author: UserData;
+  bookId: string;
+  created: string;
+  lastModified: string;
+};
+
+export type GetReviewData = {
+  bookId: string;
+  queryData: PageSearchData;
+};
+
+export type ReviewsApi = {
+  getReviewsForBook: (data: GetReviewData) => Promise<PagedResponse<Review>>;
+};

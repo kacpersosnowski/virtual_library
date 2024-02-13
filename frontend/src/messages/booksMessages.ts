@@ -36,6 +36,26 @@ const booksMessages: Message = {
     pl: "Opis",
     en: "Description",
   },
+  bookReviewsTitle: {
+    key: "books >> reviews >> title",
+    pl: "Recenzje",
+    en: "Reviews",
+  },
+  bookReviewsNoReviews: {
+    key: "books >> reviews >> no_reviews",
+    pl: "Ta książka nie ma jeszcze recenzji.",
+    en: "This book doesn't have any reviews yet.",
+  },
+  bookReviewsEditTooltip: {
+    key: "books >> reviews >> edit_tooltip",
+    pl: "Edytuj",
+    en: "Edit",
+  },
+  bookReviewsDeleteTooltip: {
+    key: "books >> reviews >> delete_tooltip",
+    pl: "Usuń",
+    en: "Delete",
+  },
   enterFullscreen: {
     key: "books >> read_book >> enter_full_screen",
     pl: "Pełny ekran (f)",
