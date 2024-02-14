@@ -1,5 +1,6 @@
 package com.skr.virtuallibrary.services;
 
+import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.dto.BookDto;
 import com.skr.virtuallibrary.entities.Author;
@@ -9,11 +10,13 @@ import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.AuthorRepository;
 import com.skr.virtuallibrary.repositories.BookRepository;
 import com.skr.virtuallibrary.services.testData.BookTestDataBuilder;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -87,11 +90,11 @@ class BookServiceTests {
             when(modelMapper.toBookDto(booksExamples.get(i)))
                     .thenReturn(bookDtosExamples.get(i));
         }
-        List<BookDto> expected = bookDtosExamples;
-        List<BookDto> actual = bookService.findAllBooks();
+        PagedResponse<BookDto> expected = new PagedResponse<>(bookDtosExamples);
+        PagedResponse<BookDto> actual = bookService.findAllBooks();
 
         // then
-        assertEquals(expected, actual);
+        Assertions.assertThat(expected).usingRecursiveComparison().isEqualTo(actual);
     }
 
     @Test

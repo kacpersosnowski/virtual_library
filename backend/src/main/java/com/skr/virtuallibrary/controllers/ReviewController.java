@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -40,9 +39,9 @@ public class ReviewController {
     @GetMapping("/book/{id}")
     public PagedResponse<ReviewDto> findReviewsByBookId(@PathVariable String id, @PathParam("page") Integer page) {
         if (page == null) {
-            return new PagedResponse<>(reviewService.findReviewsByBookId(id));
+            return reviewService.findReviewsByBookId(id);
         }
-        return new PagedResponse<>(reviewService.findReviewsByBookId(id, page));
+        return reviewService.findReviewsByBookId(id, page);
     }
 
     @Operation(summary = "Post Review.")
