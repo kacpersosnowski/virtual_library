@@ -23,7 +23,14 @@ export type GetReviewData = {
   queryData: PageSearchData;
 };
 
+export type UpdateReviewData = {
+  id: string;
+  newData: CreateReviewDTO;
+};
+
 export type ReviewsApi = {
   getReviewsForBook: (data: GetReviewData) => Promise<PagedResponse<Review>>;
   createReview: (review: CreateReviewDTO) => Promise<Review>;
+  updateReview: (data: UpdateReviewData) => Promise<Review>;
+  deleteReview: (id: string) => Promise<void>;
 };

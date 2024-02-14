@@ -17,4 +17,11 @@ export const reviewsApi: ReviewsApi = {
     const response = await axios.post<Review>(url, review);
     return response.data;
   },
+  updateReview: async (data) => {
+    const response = await axios.put<Review>(`${url}/${data.id}`, data.newData);
+    return response.data;
+  },
+  deleteReview: async (id) => {
+    await axios.delete(`${url}/${id}`);
+  },
 };

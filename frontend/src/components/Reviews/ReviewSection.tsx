@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 
 import COLORS from "../../palette/colors";
-import AddReviewForm from "../Forms/reviews/AddReviewForm";
+import AddEditReviewForm from "../Forms/reviews/AddEditReviewForm";
 import ReviewsList from "./ReviewsList";
 import booksMessages from "../../messages/booksMessages";
 import { AuthContext } from "../../store/AuthContext/AuthContext";
@@ -27,7 +27,7 @@ const ReviewsSection = () => {
         {t(booksMessages.bookReviewsTitle.key)}
       </Typography>
       {isAuthenticated ? (
-        <AddReviewForm />
+        <AddEditReviewForm />
       ) : (
         <ActionButton onClick={() => navigate("/login")} sx={{ mb: "2rem" }}>
           {t(booksMessages.bookReviewsAddFormLogin.key)}

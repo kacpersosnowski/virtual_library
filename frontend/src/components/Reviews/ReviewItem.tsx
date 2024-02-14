@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Box, IconButton, Rating, Tooltip, Typography } from "@mui/material";
 
@@ -11,8 +12,27 @@ import FormattedDateParagraph from "../Layout/common/FormattedDateParagraph";
 import booksMessages from "../../messages/booksMessages";
 import { UserData } from "../../config/api/users/users.types";
 import { AUTHORITIES } from "../../constants/authorities";
+import AddEditReviewForm from "../Forms/reviews/AddEditReviewForm";
 
-const ReviewActions = () => {
+const canEditReview = (user: UserData, review: Review) => {
+  return user && user.id === review.author.id;
+};
+
+const canDeleteReview = (user: UserData, review: Review) => {
+  return (
+    user &&
+    (user.authority === AUTHORITIES.ADMIN || user.id === review.author.id)
+  );
+};
+
+type ActionsProps = {
+  review: Review;
+  user: UserData;
+  setIsEditMode: Dispatch<SetStateAction<boolean>>;
+  handleDeleteDialogOpen: (review: Review) => void;
+};
+
+const ReviewActions: React.FC<ActionsProps> = (props) => {
   const { t } = useTranslation();
 
   return (
@@ -23,16 +43,23 @@ const ReviewActions = () => {
         alignItems: "center",
       }}
     >
-      <Tooltip title={t(booksMessages.bookReviewsEditTooltip.key)} arrow>
-        <IconButton color="primary">
-          <EditIcon />
-        </IconButton>
-      </Tooltip>
-      <Tooltip title={t(booksMessages.bookReviewsDeleteTooltip.key)} arrow>
-        <IconButton color="error">
-          <DeleteIcon />
-        </IconButton>
-      </Tooltip>
+      {canEditReview(props.user, props.review) && (
+        <Tooltip title={t(booksMessages.bookReviewsEditTooltip.key)} arrow>
+          <IconButton color="primary" onClick={() => props.setIsEditMode(true)}>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+      )}
+      {canDeleteReview(props.user, props.review) && (
+        <Tooltip title={t(booksMessages.bookReviewsDeleteTooltip.key)} arrow>
+          <IconButton
+            color="error"
+            onClick={() => props.handleDeleteDialogOpen(props.review)}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      )}
     </Box>
   );
 };
@@ -40,16 +67,24 @@ const ReviewActions = () => {
 type Props = {
   review: Review;
   currentUser: UserData;
+  handleDeleteDialogOpen: (review: Review) => void;
 };
 
 const ReviewItem: React.FC<Props> = (props) => {
-  const canEditAndDelete = () => {
-    return (
-      props.currentUser &&
-      (props.currentUser.id === props.review.author.id ||
-        props.currentUser.authority === AUTHORITIES.ADMIN)
-    );
-  };
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  const editForm = (
+    <AddEditReviewForm
+      initialValues={{
+        id: props.review.id,
+        rating: props.review.rating,
+        content: props.review.content,
+      }}
+      sx={{ flex: 1, border: "none", m: 0 }}
+      inputSx={{ width: "100%" }}
+      onCancel={() => setIsEditMode(false)}
+    />
+  );
 
   return (
     <Box
@@ -73,6 +108,7 @@ const ReviewItem: React.FC<Props> = (props) => {
           justifyContent: "space-between",
           alignItems: "center",
           flexDirection: { xs: "column", sm: "row" },
+          gap: "1rem",
         }}
       >
         <Box sx={{ display: "flex", gap: "0.5rem" }}>
@@ -88,32 +124,44 @@ const ReviewItem: React.FC<Props> = (props) => {
               tooltipTitle={props.review.author.email}
             />
           </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-              maxWidth: { xs: "250px", sm: "500px" },
-            }}
-          >
-            <Typography
+          {!isEditMode && (
+            <Box
               sx={{
-                overflowWrap: "break-word",
-                textAlign: "left",
-                maxWidth: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                maxWidth: { xs: "250px", sm: "500px" },
               }}
             >
-              {props.review.author.email.slice(0, 37)}
-            </Typography>
-            <Box sx={{ display: "flex", gap: "0.5rem" }}>
-              <Rating value={props.review.rating} readOnly />
-              <FormattedDateParagraph date={props.review.created} />
+              <Typography
+                sx={{
+                  overflowWrap: "break-word",
+                  textAlign: "left",
+                  maxWidth: "100%",
+                }}
+              >
+                {props.review.author.email.slice(0, 37)}
+              </Typography>
+              <Box sx={{ display: "flex", gap: "0.5rem" }}>
+                <Rating value={props.review.rating} readOnly />
+                <FormattedDateParagraph date={props.review.created} />
+              </Box>
             </Box>
-          </Box>
+          )}
         </Box>
-        {canEditAndDelete() && <ReviewActions />}
+        {isEditMode && editForm}
+        {!isEditMode && (
+          <ReviewActions
+            setIsEditMode={setIsEditMode}
+            review={props.review}
+            user={props.currentUser}
+            handleDeleteDialogOpen={props.handleDeleteDialogOpen}
+          />
+        )}
       </Box>
-      <Box sx={{ textAlign: "justify" }}>{props.review.content}</Box>
+      {!isEditMode && (
+        <Box sx={{ textAlign: "justify" }}>{props.review.content}</Box>
+      )}
     </Box>
   );
 };

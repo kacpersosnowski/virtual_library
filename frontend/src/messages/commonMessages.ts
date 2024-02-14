@@ -61,6 +61,16 @@ const commonMessages: Message = {
     pl: "gru",
     en: "Dec",
   },
+  deleteButtonText: {
+    key: "common >> buttons >> delete",
+    pl: "Usuń",
+    en: "Delete",
+  },
+  cancelButtonText: {
+    key: "common >> buttons >> cancel",
+    pl: "Anuluj",
+    en: "Cancel",
+  },
 };
 
 export default commonMessages;

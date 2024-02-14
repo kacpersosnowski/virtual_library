@@ -1,4 +1,10 @@
-import { Typography, Rating as MUIRating, SxProps, Theme } from "@mui/material";
+import {
+  Typography,
+  Rating as MUIRating,
+  SxProps,
+  Theme,
+  Box,
+} from "@mui/material";
 import { FormikProps, FormikValues } from "formik";
 import ErrorMessage from "../../UI/ErrorMessage";
 
@@ -18,7 +24,7 @@ const Rating: React.FC<Props> = (props) => {
     touched[id] && errors[id] ? formik.errors[id].toString() : null;
 
   return (
-    <>
+    <Box>
       <Typography component="legend">{label}</Typography>
       <MUIRating
         id={id}
@@ -36,7 +42,7 @@ const Rating: React.FC<Props> = (props) => {
           alertStyle={{ flex: 1 }}
         />
       )}
-    </>
+    </Box>
   );
 };
 
