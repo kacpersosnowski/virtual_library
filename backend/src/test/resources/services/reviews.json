@@ -1,0 +1,134 @@
+[
+  {
+    "id": "1",
+    "auditData": {
+      "createdBy": "email@example.com",
+      "createdDate": "2024-02-11T16:02:44.0390871",
+      "lastModifiedBy": "email@example.com",
+      "lastModifiedDate": "2024-02-11T16:02:44.0390871"
+    },
+    "title": "review title 1",
+    "content": "review content 1",
+    "rating": 5,
+    "author": {
+      "id": "1",
+      "email": "email@example.com",
+      "password": "password",
+      "authority": "USER",
+      "language": "ENG"
+    },
+    "book": {
+      "id": "1",
+      "title": "Example 1",
+      "authorList": [
+        {
+          "id": "1",
+          "firstName": "John",
+          "lastName": "Doe"
+        }
+      ],
+      "shortDescription": "This is an example of a short description",
+      "longDescription": "This is an example of a long description",
+      "tagList": [
+        "example",
+        "test"
+      ],
+      "genreList": [
+        {
+          "id": "1",
+          "name": "Science Fiction"
+        }
+      ],
+      "bookCoverId": null,
+      "bookContentId": null
+    }
+  },
+  {
+    "id": "2",
+    "auditData": {
+      "createdBy": "email2@example.com",
+      "createdDate": "2024-02-11T16:02:44.0390871",
+      "lastModifiedBy": "email2@example.com",
+      "lastModifiedDate": "2024-02-11T16:02:44.0390871"
+    },
+    "title": "review title 2",
+    "content": "review content 2",
+    "rating": 4,
+    "author": {
+      "id": "2",
+      "email": "email2@example.com",
+      "password": "password",
+      "authority": "USER",
+      "language": "ENG"
+    },
+    "book": {
+      "id": "2",
+      "title": "Example 2",
+      "authorList": [
+        {
+          "id": "2",
+          "firstName": "Jane",
+          "lastName": "Doe"
+        }
+      ],
+      "shortDescription": "This is an example of a short description",
+      "longDescription": "This is an example of a long description",
+      "tagList": [
+        "example",
+        "test"
+      ],
+      "genreList": [
+        {
+          "id": "2",
+          "name": "Science Fiction"
+        }
+      ],
+      "bookCoverId": null,
+      "bookContentId": null
+    }
+  },
+  {
+    "id": "3",
+    "auditData": {
+      "createdBy": "email3@example.com",
+      "createdDate": "2024-02-11T16:02:44.0390871",
+      "lastModifiedBy": "email3@example.com",
+      "lastModifiedDate": "2024-02-11T16:02:44.0390871"
+    },
+    "title": "review title 3",
+    "content": "review content 3",
+    "rating": 3,
+    "author": {
+      "id": "3",
+      "email": "email3@example.com",
+      "password": "password",
+      "authority": "USER",
+      "language": "ENG"
+    },
+    "book": {
+      "id": "3",
+      "title": "Example 3",
+      "authorList": [
+        {
+          "id": "3",
+          "firstName": "John",
+          "lastName": "Doe"
+        }
+      ],
+      "shortDescription": "This is an example of a short description",
+      "longDescription": "This is an example of a long description",
+      "tagList": [
+        "example",
+        "test"
+      ],
+      "genreList": [
+        {
+          "id": "3",
+          "name": "Science Fiction"
+        }
+      ],
+      "bookCoverId": null,
+      "bookContentId": null
+    }
+  }
+]
