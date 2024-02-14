@@ -24,6 +24,8 @@ public class SecurityConfig {
 
     private static final String ADMIN_AUTHORITY = "ADMIN";
 
+    private static final String REVIEW_ENDPOINT = "/reviews/**";
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,
                                            CorsConfigurationSource corsConfigurationSource) throws Exception {
@@ -33,18 +35,23 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
                         auth
-                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                                .requestMatchers("/error").anonymous()
+                                .requestMatchers("/email/**").hasAuthority(ADMIN_AUTHORITY)
+                                .requestMatchers(HttpMethod.POST, "/auth/quick-register").hasAuthority(ADMIN_AUTHORITY)
 
+                                .requestMatchers(HttpMethod.POST, REVIEW_ENDPOINT).authenticated()
+                                .requestMatchers(HttpMethod.PUT, REVIEW_ENDPOINT).authenticated()
+                                .requestMatchers(HttpMethod.DELETE, REVIEW_ENDPOINT).authenticated()
+
+                                .requestMatchers(HttpMethod.GET, REVIEW_ENDPOINT).permitAll()
                                 .requestMatchers(HttpMethod.GET, "/books/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/authors/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/genres/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/files/cover/**").permitAll()
-                                .requestMatchers("/reviews/**").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
-                                .requestMatchers("/email/**").permitAll()
 
-                                .requestMatchers(HttpMethod.POST, "/auth/quick-register").hasAuthority(ADMIN_AUTHORITY)
+                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                                .requestMatchers("/error").anonymous()
+
                                 .anyRequest().hasAuthority(ADMIN_AUTHORITY)
                 )
                 .sessionManagement(session ->
