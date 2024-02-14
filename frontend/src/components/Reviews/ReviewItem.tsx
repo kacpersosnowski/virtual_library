@@ -10,6 +10,7 @@ import ColoredAvatar from "../Layout/common/ColoredAvatar";
 import FormattedDateParagraph from "../Layout/common/FormattedDateParagraph";
 import booksMessages from "../../messages/booksMessages";
 import { UserData } from "../../config/api/users/users.types";
+import { AUTHORITIES } from "../../constants/authorities";
 
 const ReviewActions = () => {
   const { t } = useTranslation();
@@ -39,14 +40,14 @@ const ReviewActions = () => {
 type Props = {
   review: Review;
   currentUser: UserData;
-  isAdmin: boolean;
 };
 
 const ReviewItem: React.FC<Props> = (props) => {
   const canEditAndDelete = () => {
     return (
-      (props.currentUser && props.currentUser.id === props.review.author.id) ||
-      props.isAdmin
+      props.currentUser &&
+      (props.currentUser.id === props.review.author.id ||
+        props.currentUser.authority === AUTHORITIES.ADMIN)
     );
   };
 

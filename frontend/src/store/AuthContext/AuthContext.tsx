@@ -52,8 +52,6 @@ export const AuthContextProvider: React.FC<PropsWithChildren> = ({
 
     let refreshInterval: NodeJS.Timeout;
     if (isAuthenticated) {
-      refresh();
-
       refreshInterval = setInterval(
         () => {
           refresh();

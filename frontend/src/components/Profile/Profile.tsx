@@ -17,7 +17,7 @@ type Props = {
 
 const Profile: React.FC<Props> = (props) => {
   const { i18n, t } = useTranslation();
-  const { data: user, isLoading, isError } = useFetchUserData();
+  const { user, isLoading, error } = useFetchUserData();
 
   useEffect(() => {
     if (user) {
@@ -29,12 +29,16 @@ const Profile: React.FC<Props> = (props) => {
     }
   }, [user]);
 
-  if (isError) {
+  if (error) {
     return <ErrorMessage message={t(errorMessages.userDataError.key)} />;
   }
 
   if (isLoading) {
     return <LoadingSpinner color="secondary" boxSx={{ marginY: 0 }} />;
+  }
+
+  if (!user) {
+    return null;
   }
 
   return (

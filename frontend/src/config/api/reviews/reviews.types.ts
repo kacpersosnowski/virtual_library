@@ -12,6 +12,12 @@ export type Review = {
   lastModified: string;
 };
 
+export type CreateReviewDTO = {
+  bookId: string;
+  rating: number;
+  content: string;
+};
+
 export type GetReviewData = {
   bookId: string;
   queryData: PageSearchData;
@@ -19,4 +25,5 @@ export type GetReviewData = {
 
 export type ReviewsApi = {
   getReviewsForBook: (data: GetReviewData) => Promise<PagedResponse<Review>>;
+  createReview: (review: CreateReviewDTO) => Promise<Review>;
 };

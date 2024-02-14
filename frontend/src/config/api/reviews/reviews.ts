@@ -13,4 +13,8 @@ export const reviewsApi: ReviewsApi = {
     );
     return response.data;
   },
+  createReview: async (review) => {
+    const response = await axios.post<Review>(url, review);
+    return response.data;
+  },
 };

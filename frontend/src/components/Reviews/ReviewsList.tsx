@@ -10,7 +10,6 @@ import ErrorMessage from "../UI/ErrorMessage";
 import ReviewItem from "./ReviewItem";
 import booksMessages from "../../messages/booksMessages";
 import errorMessages from "../../messages/errorMessages";
-import useIsAdmin from "../../hooks/useIsAdmin";
 import useFetchUserData from "../../hooks/useFetchUserData";
 
 const ReviewsList = () => {
@@ -29,11 +28,10 @@ const ReviewsList = () => {
         queryData: { page: currentPage },
       }),
   });
-  const isAdmin = useIsAdmin();
   const {
-    data: user,
+    user,
     isLoading: isFetchingUserLoading,
-    isError: isFetchingUserError,
+    error: fetchingUserError,
   } = useFetchUserData();
 
   const handlePageChange = (
@@ -48,8 +46,6 @@ const ReviewsList = () => {
     ? Math.ceil(reviewsReponse.totalElements / 5)
     : 0;
 
-  let currentUser = user;
-
   if (isFetchingReviewsLoading || isFetchingUserLoading) {
     return <LoadingSpinner />;
   }
@@ -60,8 +56,10 @@ const ReviewsList = () => {
     );
   }
 
-  if (isFetchingUserError) {
-    currentUser = null;
+  if (fetchingUserError) {
+    return (
+      <ErrorMessage message={t(errorMessages.somethingWentWrongError.key)} />
+    );
   }
 
   return (
@@ -82,14 +80,7 @@ const ReviewsList = () => {
         </Typography>
       )}
       {reviews.map((review, index) => {
-        return (
-          <ReviewItem
-            review={review}
-            currentUser={currentUser}
-            isAdmin={isAdmin}
-            key={index}
-          />
-        );
+        return <ReviewItem review={review} currentUser={user} key={index} />;
       })}
       {totalPages > 1 && (
         <Pagination

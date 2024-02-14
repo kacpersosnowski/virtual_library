@@ -56,6 +56,31 @@ const booksMessages: Message = {
     pl: "Usuń",
     en: "Delete",
   },
+  bookReviewsAddFormLogin: {
+    key: "books >> reviews_form >> login",
+    pl: "Zaloguj się, aby dodać recenzję",
+    en: "Log in to add a review",
+  },
+  bookReviewsAddFormRating: {
+    key: "books >> reviews_form >> rating",
+    pl: "Ocena",
+    en: "Rating",
+  },
+  bookReviewsAddFormContent: {
+    key: "books >> reviews_form >> content",
+    pl: "Treść",
+    en: "Content",
+  },
+  bookReviewsAddFormSubmitButton: {
+    key: "books >> reviews_form >> submit_button",
+    pl: "Dodaj recenzję",
+    en: "Add review",
+  },
+  bookReviewsAddFormSuccess: {
+    key: "books >> reviews_form >> add_success",
+    pl: "Recenzja została dodana pomyślnie.",
+    en: "The review was added successfully.",
+  },
   enterFullscreen: {
     key: "books >> read_book >> enter_full_screen",
     pl: "Pełny ekran (f)",
