@@ -3,6 +3,7 @@ package com.skr.virtuallibrary.controllers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skr.virtuallibrary.auth.JwtService;
+import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.GenreDto;
 import com.skr.virtuallibrary.services.GenreService;
 import org.assertj.core.api.Assertions;
@@ -56,7 +57,7 @@ class GenreControllerTest {
     void testGetAllGenres() throws Exception {
         List<GenreDto> genreDtoList = Instancio.ofList(GenreDto.class).size(3).create();
 
-        when(genreService.getAllGenres()).thenReturn(genreDtoList);
+        when(genreService.getAllGenres()).thenReturn(new PagedResponse<>(genreDtoList));
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/genres")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();

@@ -32,9 +32,16 @@ public class GenreController {
     public PagedResponse<GenreDto> getAllGenres(@PathParam("name") String name, @PathParam("page") Integer page) {
         if (name != null) {
             String decryptedName = URLDecoder.decode(name, StandardCharsets.UTF_8).trim();
-            return new PagedResponse<>(genreService.searchGenres(decryptedName));
+            if (page != null) {
+                return genreService.searchGenres(decryptedName, page);
+            }
+            return genreService.searchGenres(decryptedName);
         }
-        return new PagedResponse<>(genreService.getAllGenres());
+
+        if (page != null) {
+            return genreService.getAllGenres(page);
+        }
+        return genreService.getAllGenres();
     }
 
     @GetMapping("/{id}")

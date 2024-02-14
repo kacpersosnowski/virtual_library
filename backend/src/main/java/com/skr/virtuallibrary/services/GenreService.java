@@ -1,5 +1,6 @@
 package com.skr.virtuallibrary.services;
 
+import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.GenreDto;
 import com.skr.virtuallibrary.entities.Genre;
 import com.skr.virtuallibrary.exceptions.GenreAlreadyExistsException;
@@ -10,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +27,18 @@ public class GenreService {
         return saveGenre(genreDto);
     }
 
-    public List<GenreDto> getAllGenres() {
-        return genreRepository.findAll().stream().map(modelMapper::toGenreDto).toList();
+    public PagedResponse<GenreDto> getAllGenres() {
+        return new PagedResponse<>(genreRepository.findAll().stream().map(modelMapper::toGenreDto).toList());
+    }
+
+    public PagedResponse<GenreDto> getAllGenres(int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Genre> genres = genreRepository.findAllByNameLikeIgnoreCase(pageable);
+
+        return new PagedResponse<>(
+                (long) genres.getNumberOfElements(),
+                genres.stream().map(modelMapper::toGenreDto).toList()
+        );
     }
 
     public GenreDto getGenreById(String id) {
@@ -50,13 +58,19 @@ public class GenreService {
         genreRepository.deleteById(id);
     }
 
-    public Pair<Long, List<GenreDto>> searchGenres(String name) {
-        Pageable pageable = PageRequest.of(0, 10);
+    public PagedResponse<GenreDto> searchGenres(String name, int page) {
+        Pageable pageable = PageRequest.of(page, 10);
         Page<Genre> genres = genreRepository.findAllByNameLikeIgnoreCase(name, pageable);
 
-        return Pair.of(
+        return new PagedResponse<>(
                 (long) genres.getNumberOfElements(),
                 genres.stream().map(modelMapper::toGenreDto).toList()
+        );
+    }
+
+    public PagedResponse<GenreDto> searchGenres(String name) {
+        return new PagedResponse<>(
+                genreRepository.findAllByNameLikeIgnoreCase(name).stream().map(modelMapper::toGenreDto).toList()
         );
     }
 

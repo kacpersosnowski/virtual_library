@@ -1,5 +1,6 @@
 package com.skr.virtuallibrary.services;
 
+import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.GenreDto;
 import com.skr.virtuallibrary.entities.Genre;
 import com.skr.virtuallibrary.exceptions.GenreNotFoundException;
@@ -145,8 +146,8 @@ class GenreServiceTests {
         for (int i = 0; i < exampleGenreList.size(); i++) {
             when(modelMapper.toGenreDto(exampleGenreList.get(i))).thenReturn(exampleGenreDtoList.get(i));
         }
-        List<GenreDto> expected = exampleGenreDtoList;
-        List<GenreDto> actual = genreService.getAllGenres();
+        PagedResponse<GenreDto> expected = new PagedResponse<>(exampleGenreDtoList);
+        PagedResponse<GenreDto> actual = genreService.getAllGenres();
 
         // then
         assertEquals(expected, actual);
