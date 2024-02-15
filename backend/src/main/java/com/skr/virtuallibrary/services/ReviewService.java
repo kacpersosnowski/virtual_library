@@ -99,7 +99,7 @@ public class ReviewService {
         }
 
         User user = getUser();
-        boolean isAdminOrAuthor = user.getAuthority().equals(Authority.ADMIN) || user.equals(review.get().getAuthor());
+        boolean isAdminOrAuthor = user.getAuthority().equals(Authority.ADMIN) || user.getId().equals(review.get().getAuthor().getId());
         if (!isAdminOrAuthor) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot delete this review.");
         }
