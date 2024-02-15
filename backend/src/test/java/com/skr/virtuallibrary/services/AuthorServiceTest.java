@@ -6,6 +6,7 @@ import com.skr.virtuallibrary.entities.Author;
 import com.skr.virtuallibrary.exceptions.AuthorNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.AuthorRepository;
+import com.skr.virtuallibrary.repositories.BookRepository;
 import com.skr.virtuallibrary.services.testData.AuthorTestDataBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,9 @@ class AuthorServiceTest {
 
     @Mock
     private AuthorRepository authorRepository;
+
+    @Mock
+    private BookRepository bookRepository;
 
     @Mock
     private ModelMapper modelMapper;

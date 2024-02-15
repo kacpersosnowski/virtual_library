@@ -1,5 +1,6 @@
 package com.skr.virtuallibrary.services;
 
+import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.dto.BookDto;
 import com.skr.virtuallibrary.entities.Author;
@@ -10,21 +11,18 @@ import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.AuthorRepository;
 import com.skr.virtuallibrary.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class BookService {
@@ -44,11 +42,13 @@ public class BookService {
                 .orElseThrow(() -> new BookNotFoundException(ERROR_NOT_FOUND_MSG + id));
     }
 
-    public List<BookDto> findAllBooks() {
-        return bookRepository.findAll().stream().map(modelMapper::toBookDto).toList();
+    public PagedResponse<BookDto> findAllBooks() {
+        return new PagedResponse<>(
+                bookRepository.findAll().stream().map(modelMapper::toBookDto).toList()
+        );
     }
 
-    public Pair<Long, List<BookDto>> findAllBooks(int page) {
+    public PagedResponse<BookDto> findAllBooks(int page) {
         if (page < 0) {
             throw new IllegalPageNumberException();
         }
@@ -56,7 +56,7 @@ public class BookService {
         Pageable pageable = PageRequest.of(page, 10);
         Page<Book> bookPage = bookRepository.findAll(pageable);
 
-        return Pair.of(
+        return new PagedResponse<>(
                 bookPage.getTotalElements(),
                 bookPage.stream().map(modelMapper::toBookDto).toList()
         );
@@ -82,7 +82,7 @@ public class BookService {
         return saveBook(bookDto);
     }
 
-    public List<BookDto> findBooksByTitleOrAuthor(String searchPhrase) {
+    public PagedResponse<BookDto> findBooksByTitleOrAuthor(String searchPhrase) {
         String[] searchPhrases = searchPhrase.trim().split(" ");
         List<Book> books = new ArrayList<>();
 
@@ -94,13 +94,12 @@ public class BookService {
             ));
             books.addAll(mongoTemplate.find(query, Book.class));
         }
-        return books.stream()
-                .map(modelMapper::toBookDto)
-                .distinct()
-                .toList();
+        return new PagedResponse<>(
+                books.stream().map(modelMapper::toBookDto).distinct().toList()
+        );
     }
 
-    public Pair<Long, List<BookDto>> findBooksByTitleOrAuthor(String searchPhrase, Integer page) {
+    public PagedResponse<BookDto> findBooksByTitleOrAuthor(String searchPhrase, Integer page) {
         if (page < 0) {
             throw new IllegalPageNumberException();
         }
@@ -121,7 +120,7 @@ public class BookService {
         long totalElements = mongoTemplate.count(query, Book.class);
         List<Book> bookPage = mongoTemplate.find(query.with(pageable), Book.class);
 
-        return Pair.of(
+        return new PagedResponse<>(
                 totalElements,
                 bookPage.stream().map(modelMapper::toBookDto).distinct().toList()
         );

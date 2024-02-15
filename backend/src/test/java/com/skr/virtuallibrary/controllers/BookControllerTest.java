@@ -3,8 +3,10 @@ package com.skr.virtuallibrary.controllers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skr.virtuallibrary.auth.JwtService;
+import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.dto.BookDto;
+import com.skr.virtuallibrary.entities.Book;
 import com.skr.virtuallibrary.services.BookService;
 import com.skr.virtuallibrary.services.FileService;
 import org.assertj.core.api.Assertions;
@@ -66,16 +68,17 @@ class BookControllerTest {
         List<BookDto> bookDtoList = Instancio.ofList(BookDto.class).size(3)
                 .set(field(BookDto::getAuthorList), Instancio.ofList(AuthorDto.class).size(2).create())
                 .create();
+        PagedResponse<BookDto> pagedResponse = new PagedResponse<>(bookDtoList);
 
-        when(bookService.findAllBooks()).thenReturn(bookDtoList);
+        when(bookService.findAllBooks()).thenReturn(pagedResponse);
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/books")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-        List<BookDto> actualBookDtoList = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+        PagedResponse<BookDto> actualPagedResponse = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
         });
 
         Assertions.assertThat(result.getResponse().getStatus()).isEqualTo(200);
-        Assertions.assertThat(actualBookDtoList).usingRecursiveComparison().isEqualTo(bookDtoList);
+        Assertions.assertThat(actualPagedResponse).usingRecursiveComparison().isEqualTo(pagedResponse);
     }
 
     @Test

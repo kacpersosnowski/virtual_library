@@ -39,9 +39,9 @@ public class ReviewController {
     @GetMapping("/book/{id}")
     public PagedResponse<ReviewDto> findReviewsByBookId(@PathVariable String id, @PathParam("page") Integer page) {
         if (page == null) {
-            return new PagedResponse<>(reviewService.findReviewsByBookId(id));
+            return reviewService.findReviewsByBookId(id);
         }
-        return new PagedResponse<>(reviewService.findReviewsByBookId(id, page));
+        return reviewService.findReviewsByBookId(id, page);
     }
 
     @Operation(summary = "Post Review.")

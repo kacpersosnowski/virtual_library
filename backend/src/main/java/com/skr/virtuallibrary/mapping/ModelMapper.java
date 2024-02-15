@@ -1,15 +1,7 @@
 package com.skr.virtuallibrary.mapping;
 
-import com.skr.virtuallibrary.dto.AuthorDto;
-import com.skr.virtuallibrary.dto.BookDto;
-import com.skr.virtuallibrary.dto.GenreDto;
-import com.skr.virtuallibrary.dto.UserDto;
-import com.skr.virtuallibrary.dto.ReviewDto;
-import com.skr.virtuallibrary.entities.Author;
-import com.skr.virtuallibrary.entities.Book;
-import com.skr.virtuallibrary.entities.Genre;
-import com.skr.virtuallibrary.entities.User;
-import com.skr.virtuallibrary.entities.Review;
+import com.skr.virtuallibrary.dto.*;
+import com.skr.virtuallibrary.entities.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
