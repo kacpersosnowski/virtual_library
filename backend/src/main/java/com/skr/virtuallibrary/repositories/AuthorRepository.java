@@ -12,8 +12,6 @@ public interface AuthorRepository extends MongoRepository<Author, String> {
 
     Optional<Author> findByFirstNameAndLastName(String firstName, String lastName);
 
-    List<Author> findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(String name);
-
-    Page<Author> findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(String name, Pageable pageable);
+    List<Author> findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(String firstName, String lastName);
 
 }

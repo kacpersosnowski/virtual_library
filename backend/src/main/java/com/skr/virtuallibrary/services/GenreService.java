@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,11 +33,11 @@ public class GenreService {
     }
 
     public PagedResponse<GenreDto> getAllGenres(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("name").descending());
         Page<Genre> genres = genreRepository.findAllByNameLikeIgnoreCase(pageable);
 
         return new PagedResponse<>(
-                (long) genres.getNumberOfElements(),
+                genres.getTotalElements(),
                 genres.stream().map(modelMapper::toGenreDto).toList()
         );
     }
@@ -59,11 +60,11 @@ public class GenreService {
     }
 
     public PagedResponse<GenreDto> searchGenres(String name, int page) {
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("name").descending());
         Page<Genre> genres = genreRepository.findAllByNameLikeIgnoreCase(name, pageable);
 
         return new PagedResponse<>(
-                (long) genres.getNumberOfElements(),
+                genres.getTotalElements(),
                 genres.stream().map(modelMapper::toGenreDto).toList()
         );
     }

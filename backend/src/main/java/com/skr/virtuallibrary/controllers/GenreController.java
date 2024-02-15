@@ -29,9 +29,9 @@ public class GenreController {
 
     @GetMapping
     @Operation(summary = "Get all genres and search genres by name.")
-    public PagedResponse<GenreDto> getAllGenres(@PathParam("name") String name, @PathParam("page") Integer page) {
-        if (name != null) {
-            String decryptedName = URLDecoder.decode(name, StandardCharsets.UTF_8).trim();
+    public PagedResponse<GenreDto> getAllGenres(@PathParam("search") String search, @PathParam("page") Integer page) {
+        if (search != null) {
+            String decryptedName = URLDecoder.decode(search, StandardCharsets.UTF_8).trim();
             if (page != null) {
                 return genreService.searchGenres(decryptedName, page);
             }

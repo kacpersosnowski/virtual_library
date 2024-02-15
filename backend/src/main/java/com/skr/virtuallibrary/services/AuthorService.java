@@ -10,16 +10,10 @@ import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.AuthorRepository;
 import com.skr.virtuallibrary.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.util.Pair;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Service
@@ -43,7 +37,7 @@ public class AuthorService {
     }
 
     public PagedResponse<AuthorDto> findAllAuthors(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("lastName").ascending());
         Page<Author> authors = authorRepository.findAll(pageable);
 
         return new PagedResponse<>(
@@ -83,22 +77,25 @@ public class AuthorService {
     public PagedResponse<AuthorDto> searchAuthors(String name) {
         String[] searchPhrases = name.trim().split(" ");
 
-        List<Author> authors = authorRepository.findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(searchPhrases[0]);
-        for(int i = 1; i < searchPhrases.length; i++) {
-            authors.addAll(authorRepository.findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(searchPhrases[i]));
+        List<Author> authors = authorRepository
+                .findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(searchPhrases[0], searchPhrases[0]);
+        for (int i = 1; i < searchPhrases.length; i++) {
+            authors.addAll(authorRepository
+                    .findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(searchPhrases[i], searchPhrases[i])
+            );
         }
 
         return new PagedResponse<>(authors.stream().distinct().map(modelMapper::toAuthorDto).toList());
     }
 
     public PagedResponse<AuthorDto> searchAuthors(String name, int page) {
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("lastName").ascending());
         String[] searchPhrases = name.trim().split(" ");
 
         List<Author> authors = authorRepository
-                .findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(searchPhrases[0]);
-        for(int i = 1; i < searchPhrases.length; i++) {
-            authors.addAll(authorRepository.findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(searchPhrases[i]));
+                .findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(searchPhrases[0], searchPhrases[0]);
+        for (int i = 1; i < searchPhrases.length; i++) {
+            authors.addAll(authorRepository.findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(searchPhrases[i], searchPhrases[i]));
         }
         authors = authors.stream().distinct().toList();
         Page<Author> authorsPage = new PageImpl<>(authors, pageable, authors.size());
