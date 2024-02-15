@@ -3,6 +3,7 @@ package com.skr.virtuallibrary.controllers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skr.virtuallibrary.auth.JwtService;
+import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.services.AuthorService;
 import org.assertj.core.api.Assertions;
@@ -56,7 +57,7 @@ class AuthorControllerTest {
     void testFindAllAuthors() throws Exception {
         List<AuthorDto> authorDtoList = Instancio.ofList(AuthorDto.class).size(3).create();
 
-        when(authorService.findAllAuthors()).thenReturn(authorDtoList);
+        when(authorService.findAllAuthors()).thenReturn(new PagedResponse<>(authorDtoList));
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/authors")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();

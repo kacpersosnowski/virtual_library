@@ -45,15 +45,15 @@ public class AuthorController {
         if (search != null && !search.isEmpty()) {
             String decryptedSearch = URLDecoder.decode(search, StandardCharsets.UTF_8).trim();
             if (page != null) {
-                return new PagedResponse<>(authorService.searchAuthors(decryptedSearch, page));
+                return authorService.searchAuthors(decryptedSearch, page);
             }
-            return new PagedResponse<>(authorService.searchAuthors(decryptedSearch));
+            return authorService.searchAuthors(decryptedSearch);
         }
 
         if (page != null) {
-            return new PagedResponse<>(authorService.findAllAuthors(page));
+            return authorService.findAllAuthors(page);
         }
-        return new PagedResponse<>(authorService.findAllAuthors());
+        return authorService.findAllAuthors();
     }
 
     @Operation(summary = "Post Author")

@@ -1,5 +1,6 @@
 package com.skr.virtuallibrary.services;
 
+import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.entities.Author;
 import com.skr.virtuallibrary.exceptions.AuthorNotFoundException;
@@ -81,8 +82,8 @@ class AuthorServiceTest {
             when(modelMapper.toAuthorDto(authorsExample.get(i)))
                     .thenReturn(authorDtosExample.get(i));
         }
-        List<AuthorDto> expected = authorDtosExample;
-        List<AuthorDto> actual = authorService.findAllAuthors();
+        PagedResponse<AuthorDto> expected = new PagedResponse<>(authorDtosExample);
+        PagedResponse<AuthorDto> actual = authorService.findAllAuthors();
 
         // then
         assertEquals(expected, actual);
