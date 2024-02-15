@@ -22,7 +22,7 @@ public class ReviewTestDataBuilder {
                 .title("exampleTitle")
                 .content("exampleContent")
                 .rating(5)
-                .book(BookTestDataBuilder.bookExample().book())
+                .bookId(BookTestDataBuilder.bookExample().book().getId())
                 .author(UserTestDataBuilder.userExample().user())
                 .auditData(AuditData.builder()
                         .createdBy(UserTestDataBuilder.userExample().user().getId())

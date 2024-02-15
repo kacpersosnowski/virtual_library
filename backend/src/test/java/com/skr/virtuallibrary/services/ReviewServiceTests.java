@@ -29,7 +29,9 @@ import static org.mockito.Mockito.when;
 public class ReviewServiceTests {
 
     public static final String USERNAME = "email@example.com";
+
     public static final String PASSWORD = "Password123!";
+
     @InjectMocks
     private ReviewService reviewService;
 
@@ -38,9 +40,6 @@ public class ReviewServiceTests {
 
     @Mock
     private UserRepository userRepository;
-
-    @Mock
-    private BookRepository bookRepository;
 
     @Mock
     private ModelMapper modelMapper;
@@ -111,7 +110,6 @@ public class ReviewServiceTests {
 
         // when
         when(modelMapper.toReviewEntity(reviewDto)).thenReturn(review);
-        when(bookRepository.findById(reviewDto.getBookId())).thenReturn(Optional.ofNullable(review.getBook()));
         when(userRepository.findByEmail(USERNAME)).thenReturn(Optional.ofNullable(exampleUser));
         when(reviewRepository.save(review)).thenReturn(review);
         when(modelMapper.toReviewDto(review)).thenReturn(reviewDto);
@@ -167,7 +165,6 @@ public class ReviewServiceTests {
 
         // when
         when(reviewRepository.findById(idToUpdate)).thenReturn(Optional.ofNullable(oldReview));
-        when(bookRepository.findById(newReviewDto.getBookId())).thenReturn(Optional.ofNullable(newReview.getBook()));
         when(userRepository.findByEmail(USERNAME)).thenReturn(Optional.ofNullable(exampleUser));
 
         assert oldReview != null;

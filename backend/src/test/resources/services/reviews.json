@@ -17,31 +17,7 @@
       "authority": "USER",
       "language": "ENG"
     },
-    "book": {
-      "id": "1",
-      "title": "Example 1",
-      "authorList": [
-        {
-          "id": "1",
-          "firstName": "John",
-          "lastName": "Doe"
-        }
-      ],
-      "shortDescription": "This is an example of a short description",
-      "longDescription": "This is an example of a long description",
-      "tagList": [
-        "example",
-        "test"
-      ],
-      "genreList": [
-        {
-          "id": "1",
-          "name": "Science Fiction"
-        }
-      ],
-      "bookCoverId": null,
-      "bookContentId": null
-    }
+    "bookId": "1"
   },
   {
     "id": "2",
@@ -61,31 +37,7 @@
       "authority": "USER",
       "language": "ENG"
     },
-    "book": {
-      "id": "2",
-      "title": "Example 2",
-      "authorList": [
-        {
-          "id": "2",
-          "firstName": "Jane",
-          "lastName": "Doe"
-        }
-      ],
-      "shortDescription": "This is an example of a short description",
-      "longDescription": "This is an example of a long description",
-      "tagList": [
-        "example",
-        "test"
-      ],
-      "genreList": [
-        {
-          "id": "2",
-          "name": "Science Fiction"
-        }
-      ],
-      "bookCoverId": null,
-      "bookContentId": null
-    }
+    "bookId": "2"
   },
   {
     "id": "3",
@@ -105,30 +57,6 @@
       "authority": "USER",
       "language": "ENG"
     },
-    "book": {
-      "id": "3",
-      "title": "Example 3",
-      "authorList": [
-        {
-          "id": "3",
-          "firstName": "John",
-          "lastName": "Doe"
-        }
-      ],
-      "shortDescription": "This is an example of a short description",
-      "longDescription": "This is an example of a long description",
-      "tagList": [
-        "example",
-        "test"
-      ],
-      "genreList": [
-        {
-          "id": "3",
-          "name": "Science Fiction"
-        }
-      ],
-      "bookCoverId": null,
-      "bookContentId": null
-    }
+    "bookId": "3"
   }
 ]
