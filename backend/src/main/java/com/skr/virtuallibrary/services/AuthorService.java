@@ -95,14 +95,20 @@ public class AuthorService {
         List<Author> authors = authorRepository
                 .findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(searchPhrases[0], searchPhrases[0]);
         for (int i = 1; i < searchPhrases.length; i++) {
-            authors.addAll(authorRepository.findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(searchPhrases[i], searchPhrases[i]));
+            authors.addAll(authorRepository
+                    .findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(searchPhrases[i], searchPhrases[i])
+            );
         }
         authors = authors.stream().distinct().toList();
-        Page<Author> authorsPage = new PageImpl<>(authors, pageable, authors.size());
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), authors.size());
+        List<AuthorDto> pageContent = authors.subList(start, end).stream().map(modelMapper::toAuthorDto).toList();
+        Page<AuthorDto> authorsPage = new PageImpl<>(pageContent, pageable, authors.size());
 
         return new PagedResponse<>(
                 authorsPage.getTotalElements(),
-                authorsPage.stream().map(modelMapper::toAuthorDto).toList()
+                authorsPage.toList()
         );
     }
 
