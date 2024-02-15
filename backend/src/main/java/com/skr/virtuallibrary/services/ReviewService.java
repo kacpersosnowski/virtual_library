@@ -64,7 +64,7 @@ public class ReviewService {
             throw new BookNotFoundException(BOOK_NOT_FOUND_MSG + id);
         }
 
-        Pageable pageable = PageRequest.of(pageNr, 5, Sort.by("date").descending());
+        Pageable pageable = PageRequest.of(pageNr, 10, Sort.by("auditData.lastModifiedDate").descending());
         Page<Review> reviews = reviewRepository.findAllByBookId(id, pageable);
 
         return new PagedResponse<>(
@@ -122,7 +122,7 @@ public class ReviewService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You cannot change review's book");
         }
 
-        if (!review.getAuthor().equals(getUser())) {
+        if (!review.getAuthor().getId().equals(getUser().getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot edit this review.");
         }
 
