@@ -61,11 +61,11 @@ class AuthorControllerTest {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/authors")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-        List<AuthorDto> actualAuthorDtoList = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+        PagedResponse<AuthorDto> actualAuthorDtoList = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
         });
 
         Assertions.assertThat(result.getResponse().getStatus()).isEqualTo(200);
-        Assertions.assertThat(actualAuthorDtoList).usingRecursiveComparison().isEqualTo(authorDtoList);
+        Assertions.assertThat(actualAuthorDtoList).usingRecursiveComparison().isEqualTo(new PagedResponse<>(authorDtoList));
     }
 
     @Test
