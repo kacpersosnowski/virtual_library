@@ -75,30 +75,15 @@ public class AuthorService {
     }
 
     public PagedResponse<AuthorDto> searchAuthors(String name) {
-        String[] searchPhrases = name.trim().split(" ");
-
-        List<Author> authors = authorRepository
-                .findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(searchPhrases[0], searchPhrases[0]);
-        for (int i = 1; i < searchPhrases.length; i++) {
-            authors.addAll(authorRepository
-                    .findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(searchPhrases[i], searchPhrases[i])
-            );
-        }
+        List<Author> authors = getSearchedAuthorsFromDb(name);
 
         return new PagedResponse<>(authors.stream().distinct().map(modelMapper::toAuthorDto).toList());
     }
 
     public PagedResponse<AuthorDto> searchAuthors(String name, int page) {
         Pageable pageable = PageRequest.of(page, 10, Sort.by("lastName").ascending());
-        String[] searchPhrases = name.trim().split(" ");
 
-        List<Author> authors = authorRepository
-                .findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(searchPhrases[0], searchPhrases[0]);
-        for (int i = 1; i < searchPhrases.length; i++) {
-            authors.addAll(authorRepository
-                    .findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(searchPhrases[i], searchPhrases[i])
-            );
-        }
+        List<Author> authors = getSearchedAuthorsFromDb(name);
         authors = authors.stream().distinct().toList();
 
         int start = (int) pageable.getOffset();
@@ -110,6 +95,19 @@ public class AuthorService {
                 authorsPage.getTotalElements(),
                 authorsPage.toList()
         );
+    }
+
+    private List<Author> getSearchedAuthorsFromDb(String name) {
+        String[] searchPhrases = name.trim().split(" ");
+
+        List<Author> authors = authorRepository
+                .findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(searchPhrases[0], searchPhrases[0]);
+        for (int i = 1; i < searchPhrases.length; i++) {
+            authors.addAll(authorRepository
+                    .findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(searchPhrases[i], searchPhrases[i])
+            );
+        }
+        return authors;
     }
 
     private AuthorDto saveAuthor(AuthorDto authorDto) {

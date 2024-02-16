@@ -4,7 +4,6 @@ import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.services.AuthorService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
@@ -26,9 +25,6 @@ public class AuthorController {
     private final AuthorService authorService;
 
     @Operation(summary = "Find Author by id")
-    @ApiResponse(responseCode = "200")
-    @ApiResponse(responseCode = "404")
-    @ApiResponse(responseCode = "500")
     @GetMapping("/{id}")
     public AuthorDto findAuthorById(@PathVariable String id) {
         return authorService.findAuthorById(id);
