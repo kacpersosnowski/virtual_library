@@ -3,6 +3,7 @@ package com.skr.virtuallibrary.services;
 import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.BookRating;
 import com.skr.virtuallibrary.dto.ReviewDto;
+import com.skr.virtuallibrary.repositories.ReviewRepository;
 import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest(classes = {ReviewRepository.class})
 class BookRatingServiceTest {
 
     @InjectMocks
