@@ -2,7 +2,6 @@ package com.skr.virtuallibrary.services;
 
 import com.skr.virtuallibrary.dto.BookRating;
 import com.skr.virtuallibrary.dto.ReviewDto;
-import com.skr.virtuallibrary.exceptions.InternalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +16,7 @@ public class BookRatingService {
     public BookRating getBookRating(String bookId) {
         List<ReviewDto> reviewList = reviewService.findReviewsByBookId(bookId).getContent();
         int rateCount = reviewList.size();
-        double rateMean = reviewList.stream().mapToDouble(ReviewDto::getRating).average()
-                .orElseThrow(() -> new InternalException("Error while calculating rating mean."));
+        double rateMean = reviewList.stream().mapToDouble(ReviewDto::getRating).average().orElse(0);
         return new BookRating(bookId, rateCount, rateMean);
     }
 
