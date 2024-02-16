@@ -5,11 +5,14 @@ import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.dto.BookDto;
 import com.skr.virtuallibrary.entities.Author;
 import com.skr.virtuallibrary.entities.Book;
+import com.skr.virtuallibrary.entities.Genre;
 import com.skr.virtuallibrary.exceptions.BookNotFoundException;
+import com.skr.virtuallibrary.exceptions.GenreNotFoundException;
 import com.skr.virtuallibrary.exceptions.IllegalPageNumberException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.AuthorRepository;
 import com.skr.virtuallibrary.repositories.BookRepository;
+import com.skr.virtuallibrary.repositories.GenreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +33,8 @@ public class BookService {
     private final BookRepository bookRepository;
 
     private final AuthorRepository authorRepository;
+
+    private final GenreRepository genreRepository;
 
     private final ModelMapper modelMapper;
 
@@ -123,6 +128,32 @@ public class BookService {
         return new PagedResponse<>(
                 totalElements,
                 bookPage.stream().map(modelMapper::toBookDto).distinct().toList()
+        );
+    }
+
+    public PagedResponse<BookDto> findBooksByGenre(String genreName) {
+        Genre genre = genreRepository.findByNameIgnoreCase(genreName)
+                .orElseThrow(() -> new GenreNotFoundException("Not found genre with name: " + genreName));
+
+        return new PagedResponse<>(
+                bookRepository.findAllByGenreListContains(genre).stream().map(modelMapper::toBookDto).toList()
+        );
+    }
+
+    public PagedResponse<BookDto> findBooksByGenre(String genreName, int page) {
+        if (page < 0) {
+            throw new IllegalPageNumberException();
+        }
+
+        Pageable pageable = PageRequest.of(page, 10);
+        Genre genre = genreRepository.findByNameIgnoreCase(genreName)
+                .orElseThrow(() -> new GenreNotFoundException("Not found genre with name: " + genreName));
+
+        Page<Book> books = bookRepository.findAllByGenreListContains(genre, pageable);
+
+        return new PagedResponse<>(
+                books.getTotalElements(),
+                books.stream().map(modelMapper::toBookDto).toList()
         );
     }
 
