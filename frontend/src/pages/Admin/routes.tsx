@@ -4,6 +4,8 @@ import AdminPanel from "./AdminPanel";
 import AdminProtectedRoute from "../../router/AdminProtectedRoute";
 import AdminBooksList from "../../components/Admin/books/AdminBooksList";
 import BookForm from "../../components/Forms/books/BookForm";
+import AdminAuthorsList from "../../components/Admin/authors/AdminAuthorsList";
+import AuthorForm from "../../components/Forms/authors/AuthorForm";
 
 const routes: RouteObject[] = [
   {
@@ -20,6 +22,12 @@ const routes: RouteObject[] = [
       },
       { path: "books/add", element: <BookForm /> },
       { path: "books/edit/:id", element: <BookForm /> },
+      {
+        path: "authors",
+        element: <AdminAuthorsList />,
+      },
+      { path: "authors/add", element: <AuthorForm /> },
+      { path: "authors/edit/:id", element: <AuthorForm /> },
     ],
   },
 ];

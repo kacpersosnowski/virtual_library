@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 interface SearchState {
   searchText: {
     booksTable: string;
+    authorsTable: string;
   };
 }
 
@@ -22,7 +23,7 @@ const searchSlice = createSlice({
   },
 });
 
-export type searchStateKey = "booksTable";
+export type searchStateKey = "booksTable" | "authorsTable";
 
 export const searchActions = searchSlice.actions;
 

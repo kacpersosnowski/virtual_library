@@ -2,8 +2,10 @@ import { Box, Divider } from "@mui/material";
 import { Outlet, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+
 import HomeIcon from "@mui/icons-material/Home";
-import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
+import BookIcon from "@mui/icons-material/Book";
+import PersonIcon from "@mui/icons-material/Person";
 
 import Card from "../../components/UI/Card/Card";
 import booksBg from "../../assets/books-bg2.jpg";
@@ -23,7 +25,13 @@ const AdminPanel = () => {
     {
       label: t(adminMessages.booksTab.key),
       value: "books",
-      icon: <BookmarkAddIcon />,
+      icon: <BookIcon />,
+      iconPosition: "start" as const,
+    },
+    {
+      label: t(adminMessages.authorsTab.key),
+      value: "authors",
+      icon: <PersonIcon />,
       iconPosition: "start" as const,
     },
   ];

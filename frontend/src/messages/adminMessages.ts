@@ -16,6 +16,11 @@ const adminMessages: Message = {
     pl: "Książki",
     en: "Books",
   },
+  authorsTab: {
+    key: "admin_panel >> tab >> authors",
+    pl: "Autorzy",
+    en: "Authors",
+  },
   addBookFormBackToList: {
     key: "admin_panel >> add_book_form >> back_to_list",
     pl: "Wróć do listy książek",
@@ -171,6 +176,16 @@ const adminMessages: Message = {
     pl: "Usuń",
     en: "Delete",
   },
+  addAuthorFormHeader: {
+    key: "admin_panel >> add_author_form >> header",
+    pl: "Dodaj autora",
+    en: "Add author",
+  },
+  addAuthorFormBackToList: {
+    key: "admin_panel >> add_author_form >> back_to_list",
+    pl: "Wróć do listy autorów",
+    en: "Back to the list of authors",
+  },
   addAuthorFormFirstName: {
     key: "admin_panel >> add_author_form >> first_name",
     pl: "Imię",
@@ -190,6 +205,86 @@ const adminMessages: Message = {
     key: "admin_panel >> add_author_form >> success_message",
     pl: "Autor został dodany pomyślnie",
     en: "A new author was created successfully",
+  },
+  listAuthorAddBookButton: {
+    key: "admin_panel >> list_author >> add_author",
+    pl: "Dodaj autora",
+    en: "Add author",
+  },
+  listAuthorTableNoBooks: {
+    key: "admin_panel >> list_author_table >> no_authors",
+    pl: "Brak autorów",
+    en: "No authors",
+  },
+  listAuthorTableNumberHeader: {
+    key: "admin_panel >> list_author_table >> number_header",
+    pl: "Lp.",
+    en: "No.",
+  },
+  listAuthorTableFirstNameHeader: {
+    key: "admin_panel >> list_author_table >> first_name_header",
+    pl: "Imię",
+    en: "First name",
+  },
+  listBookTableLastNameHeader: {
+    key: "admin_panel >> list_author_table >> last_name_header",
+    pl: "Nazwisko",
+    en: "Last name",
+  },
+  listAuthorTableActionsHeader: {
+    key: "admin_panel >> list_author_table >> actions_header",
+    pl: "Akcje",
+    en: "Actions",
+  },
+  listAuthorTableActionsEdit: {
+    key: "admin_panel >> list_author_table >> actions_edit",
+    pl: "Edytuj",
+    en: "Edit",
+  },
+  listAuthorTableActionsDelete: {
+    key: "admin_panel >> list_author_table >> actions_delete",
+    pl: "Usuń",
+    en: "Delete",
+  },
+  updateAuthorFormSuccessMessage: {
+    key: "admin_panel >> update_author_form >> success_message",
+    pl: "Autor został zaktualizowany pomyślnie",
+    en: "An author was updated successfully",
+  },
+  updateAuthorFormHeader: {
+    key: "admin_panel >> update_author_form >> header",
+    pl: "Edytuj autora",
+    en: "Edit author",
+  },
+  updateAuthorFormSubmitButton: {
+    key: "admin_panel >> update_author_form >> submit_button",
+    pl: "Zaktualizuj autora",
+    en: "Update author",
+  },
+  deleteAuthorAlertDialogTitle: {
+    key: "admin_panel >> delete_author_alert_dialog >> title",
+    pl: "Czy na pewno chcesz usunąć tego autora?",
+    en: "Are you sure you want to delete this author?",
+  },
+  deleteAuthorAlertDialogContentText: {
+    key: "admin_panel >> delete_author_alert_dialog >> content_text",
+    pl: "Operacja nie może być cofnięta.",
+    en: "The operation cannot be undone.",
+  },
+  deleteAuthorAlertDialogCancelButton: {
+    key: "admin_panel >> delete_author_alert_dialog >> cancel_button",
+    pl: "Anuluj",
+    en: "Cancel",
+  },
+  deleteAuthorAlertDialogDeleteButton: {
+    key: "admin_panel >> delete_author_alert_dialog >> delete_button",
+    pl: "Usuń",
+    en: "Delete",
+  },
+  deleteAuthorFormSuccessMessage: {
+    key: "admin_panel >> delete_author_form >> success_message",
+    pl: "Autor został usunięty pomyślnie.",
+    en: "An author was deleted successfully.",
   },
   addGenreFormName: {
     key: "admin_panel >> add_genre_form >> name",

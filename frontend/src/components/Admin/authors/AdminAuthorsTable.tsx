@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,7 +13,6 @@ import {
   Tooltip,
 } from "@mui/material";
 
-import DetailsIcon from "@mui/icons-material/Details";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -20,45 +20,51 @@ import StyledTable, {
   StyledTableCell,
   StyledTableRow,
 } from "../../Layout/common/StyledTable";
-import { booksApi } from "../../../config/api/books/books";
 import LoadingSpinner from "../../UI/LoadingSpinner";
 import ErrorMessage from "../../UI/ErrorMessage";
 import AlertDialog from "../../Layout/common/AlertDialog";
-import { BookItemData } from "../../../config/api/books/books.types";
 import { queryClient } from "../../../config/api";
 import { snackbarActions } from "../../../store/redux/slices/snackbar-slice";
 import adminMessages from "../../../messages/adminMessages";
 import errorMessages from "../../../messages/errorMessages";
 import { RootState } from "../../../store/redux";
+import { Author } from "../../../config/api/authors/authors.types";
+import authorsApi from "../../../config/api/authors/authors";
 
-const AdminBooksTable = () => {
+const AdminAuthorsTable = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [bookToDelete, setBookToDelete] = useState<BookItemData>(null);
+  const [authorToDelete, setAuthorToDelete] = useState<Author>(null);
   const searchText = useSelector(
-    (state: RootState) => state.search.searchText.booksTable,
+    (state: RootState) => state.search.searchText.authorsTable,
   );
   const [currentPage, setCurrentPage] = useState(0);
   const { t } = useTranslation();
   const {
-    data: booksResponse,
+    data: authorsResponse,
     isLoading: isListLoading,
     isError: isListError,
   } = useQuery({
-    queryKey: ["books", { page: currentPage, search: searchText }],
+    queryKey: ["authors", { page: currentPage, search: searchText }],
     queryFn: () =>
-      booksApi.getAllBooksForAdmin({ page: currentPage, search: searchText }),
+      authorsApi.getAllAuthorsForAdmin({
+        page: currentPage,
+        search: searchText,
+      }),
   });
   const {
-    mutate: deleteBook,
+    mutate: deleteAuthor,
     isLoading: isDeletingLoading,
     isError: isDeletingError,
+    error: deleteError,
   } = useMutation({
-    mutationFn: booksApi.deleteBook,
+    mutationFn: authorsApi.deleteAuthor,
     onSuccess: () => {
-      queryClient.invalidateQueries(["books"]);
+      queryClient.invalidateQueries(["authors"]);
       handleDeleteDialogClose();
       dispatch(
-        snackbarActions.show(t(adminMessages.deleteBookFormSuccessMessage.key)),
+        snackbarActions.show(
+          t(adminMessages.deleteAuthorFormSuccessMessage.key),
+        ),
       );
     },
     onError: () => {
@@ -68,18 +74,18 @@ const AdminBooksTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleDeleteDialogOpen = (book: BookItemData) => {
-    setBookToDelete(book);
+  const handleDeleteDialogOpen = (author: Author) => {
+    setAuthorToDelete(author);
     setIsDeleteDialogOpen(true);
   };
 
   const handleDeleteDialogClose = () => {
-    setBookToDelete(null);
+    setAuthorToDelete(null);
     setIsDeleteDialogOpen(false);
   };
 
-  const handleDeleteBook = () => {
-    deleteBook(bookToDelete.id);
+  const handleDeleteAuthor = () => {
+    deleteAuthor(authorToDelete.id);
   };
 
   const handlePageChange = (
@@ -89,9 +95,9 @@ const AdminBooksTable = () => {
     setCurrentPage(value - 1);
   };
 
-  const books = booksResponse?.content;
-  const totalPages = booksResponse
-    ? Math.ceil(booksResponse.totalElements / 10)
+  const authors = authorsResponse?.content;
+  const totalPages = authorsResponse
+    ? Math.ceil(authorsResponse.totalElements / 10)
     : 0;
 
   if (isListLoading || isDeletingLoading) {
@@ -99,34 +105,32 @@ const AdminBooksTable = () => {
   }
 
   if (isListError) {
-    return <ErrorMessage message={t(errorMessages.fetchBookListError.key)} />;
+    return <ErrorMessage message={t(errorMessages.fetchAuthorListError.key)} />;
   }
 
   const heads = [
-    t(adminMessages.listBookTableNumberHeader.key),
-    t(adminMessages.listBookTableTitleHeader.key),
-    t(adminMessages.listBookTableAuthorHeader.key),
-    t(adminMessages.listBookTableGenreHeader.key),
-    t(adminMessages.listBookTableActionsHeader.key),
+    t(adminMessages.listAuthorTableNumberHeader.key),
+    t(adminMessages.listAuthorTableFirstNameHeader.key),
+    t(adminMessages.listBookTableLastNameHeader.key),
+    t(adminMessages.listAuthorTableActionsHeader.key),
   ];
   const tableBody = (
     <TableBody>
-      {books.length === 0 && (
+      {authors.length === 0 && (
         <StyledTableRow>
           <StyledTableCell colSpan={heads.length} align="center">
-            {t(adminMessages.listBookTableNoBooks.key)}
+            {t(adminMessages.listAuthorTableNoBooks.key)}
           </StyledTableCell>
         </StyledTableRow>
       )}
-      {books.map((book, index) => {
+      {authors.map((author, index) => {
         return (
-          <StyledTableRow key={book.id}>
+          <StyledTableRow key={author.id}>
             <StyledTableCell align="center">
               {index + 1 + 10 * currentPage}
             </StyledTableCell>
-            <StyledTableCell align="center">{book.title}</StyledTableCell>
-            <StyledTableCell align="center">{book.authorList}</StyledTableCell>
-            <StyledTableCell align="center">{book.genreList}</StyledTableCell>
+            <StyledTableCell align="center">{author.firstName}</StyledTableCell>
+            <StyledTableCell align="center">{author.lastName}</StyledTableCell>
             <StyledTableCell align="center">
               <Box
                 sx={{
@@ -136,26 +140,20 @@ const AdminBooksTable = () => {
                 }}
               >
                 <Tooltip
-                  title={t(adminMessages.listBookTableActionsDetails.key)}
+                  title={t(adminMessages.listAuthorTableActionsEdit.key)}
                   arrow
                 >
-                  <IconButton onClick={() => navigate(`/book/${book.id}`)}>
-                    <DetailsIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip
-                  title={t(adminMessages.listBookTableActionsEdit.key)}
-                  arrow
-                >
-                  <IconButton onClick={() => navigate(`edit/${book.id}`)}>
+                  <IconButton onClick={() => navigate(`edit/${author.id}`)}>
                     <EditIcon />
                   </IconButton>
                 </Tooltip>
                 <Tooltip
-                  title={t(adminMessages.listBookTableActionsDelete.key)}
+                  title={t(adminMessages.listAuthorTableActionsDelete.key)}
                   arrow
                 >
-                  <IconButton onClick={handleDeleteDialogOpen.bind(null, book)}>
+                  <IconButton
+                    onClick={handleDeleteDialogOpen.bind(null, author)}
+                  >
                     <DeleteIcon />
                   </IconButton>
                 </Tooltip>
@@ -167,29 +165,38 @@ const AdminBooksTable = () => {
     </TableBody>
   );
 
+  let deleteErrorMessage = "";
+  if (
+    deleteError &&
+    axios.isAxiosError(deleteError) &&
+    deleteError.response.status === 400
+  ) {
+    deleteErrorMessage = t(errorMessages.deleteAuthorErrorBooksExist.key);
+  } else {
+    deleteErrorMessage = t(errorMessages.deleteAuthorError.key);
+  }
+
   return (
     <>
-      {isDeletingError && (
-        <ErrorMessage message={t(errorMessages.deleteBookError.key)} />
-      )}
+      {isDeletingError && <ErrorMessage message={deleteErrorMessage} />}
       <AlertDialog
         isOpen={isDeleteDialogOpen}
         closeHandler={handleDeleteDialogClose}
-        title={`${t(
-          adminMessages.deleteBookAlertDialogTitle.key,
-        )} (${bookToDelete?.title})`}
-        contentText={t(adminMessages.deleteBookAlertDialogContentText.key)}
+        title={`${t(adminMessages.deleteAuthorAlertDialogTitle.key)} (${
+          authorToDelete?.firstName + " " + authorToDelete?.lastName
+        })`}
+        contentText={t(adminMessages.deleteAuthorAlertDialogContentText.key)}
         cancelButtonText={t(
-          adminMessages.deleteBookAlertDialogCancelButton.key,
+          adminMessages.deleteAuthorAlertDialogCancelButton.key,
         )}
         agreeButton={
           <Button
-            onClick={handleDeleteBook}
+            onClick={handleDeleteAuthor}
             autoFocus
             variant="contained"
             color="error"
           >
-            {t(adminMessages.deleteBookAlertDialogDeleteButton.key)}
+            {t(adminMessages.deleteAuthorAlertDialogDeleteButton.key)}
           </Button>
         }
       />
@@ -217,4 +224,4 @@ const AdminBooksTable = () => {
   );
 };
 
-export default AdminBooksTable;
+export default AdminAuthorsTable;

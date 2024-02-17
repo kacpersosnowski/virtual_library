@@ -1,8 +1,11 @@
 import { useDispatch } from "react-redux";
 import { useMutation } from "react-query";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Box, SxProps, Theme } from "@mui/material";
+import { Box, SxProps, Theme, Typography } from "@mui/material";
 import * as Yup from "yup";
+
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import {
   Author,
@@ -23,16 +26,20 @@ import errorMessages from "../../../messages/errorMessages";
 type Props = {
   sx?: SxProps<Theme>;
   closePopover?: () => void;
+  isPopover?: boolean;
   addChosenAuthor?: (author: Author) => void;
+  initialValues?: CreateAuthorDTO;
 };
 
-const AddAuthorForm: React.FC<Props> = (props) => {
+const AddEditAuthorForm: React.FC<Props> = (props) => {
   const { t } = useTranslation();
+  const { id } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const {
-    isLoading,
-    isError,
+    isLoading: isCreatingLoading,
+    isError: isCreatingError,
     mutate: createAuthor,
   } = useMutation({
     mutationFn: authorsApi.createAuthor,
@@ -50,15 +57,36 @@ const AddAuthorForm: React.FC<Props> = (props) => {
       }
     },
   });
+  const {
+    isLoading: isUpdatingLoading,
+    isError: isUpdatingError,
+    mutate: updateAuthor,
+  } = useMutation({
+    mutationFn: authorsApi.updateAuthor,
+    onSuccess: () => {
+      dispatch(
+        snackbarActions.show(
+          t(adminMessages.updateAuthorFormSuccessMessage.key),
+        ),
+      );
+    },
+  });
+
+  const initialValues =
+    props.initialValues || ({ firstName: "", lastName: "" } as CreateAuthorDTO);
 
   const formik = useFormikLanguage({
-    initialValues: { firstName: "", lastName: "" } as CreateAuthorDTO,
+    initialValues,
     validationSchema: Yup.object({
       firstName: Yup.string().required(t(validationMessages.fieldRequired.key)),
       lastName: Yup.string().required(t(validationMessages.fieldRequired.key)),
     }),
     onSubmit: (values) => {
-      createAuthor(values);
+      if (!props.initialValues) {
+        createAuthor(values);
+      } else {
+        updateAuthor({ id, author: values });
+      }
     },
   });
 
@@ -73,6 +101,21 @@ const AddAuthorForm: React.FC<Props> = (props) => {
       }}
       onSubmit={formik.handleSubmit}
     >
+      {!props.isPopover && (
+        <>
+          <Box sx={{ width: "100%", textAlign: "left", mb: "0.5rem" }}>
+            <ActionButton onClick={() => navigate("/admin/authors")}>
+              <ArrowBackIcon />
+              {t(adminMessages.addAuthorFormBackToList.key)}
+            </ActionButton>
+          </Box>
+          <Typography variant="h4" sx={{ mb: "1rem" }}>
+            {props.initialValues
+              ? t(adminMessages.updateAuthorFormHeader.key)
+              : t(adminMessages.addAuthorFormHeader.key)}
+          </Typography>
+        </>
+      )}
       <Input
         id="firstName"
         label={t(adminMessages.addAuthorFormFirstName.key)}
@@ -83,17 +126,19 @@ const AddAuthorForm: React.FC<Props> = (props) => {
         label={t(adminMessages.addAuthorFormLastName.key)}
         formik={formik}
       />
-      {isLoading && <LoadingSpinner />}
-      {!isLoading && (
+      {(isCreatingLoading || isUpdatingLoading) && <LoadingSpinner />}
+      {!isCreatingLoading && !isUpdatingLoading && (
         <ActionButton type="submit">
-          {t(adminMessages.addAuthorFormSubmitButton.key)}
+          {props.initialValues
+            ? t(adminMessages.updateAuthorFormSubmitButton.key)
+            : t(adminMessages.addAuthorFormSubmitButton.key)}
         </ActionButton>
       )}
-      {isError && (
+      {(isCreatingError || isUpdatingError) && (
         <ErrorMessage message={t(errorMessages.somethingWentWrongError.key)} />
       )}
     </Box>
   );
 };
 
-export default AddAuthorForm;
+export default AddEditAuthorForm;

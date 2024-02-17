@@ -4,7 +4,7 @@ import { Box, IconButton, Popover, Tooltip } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
 
-import AddAuthorForm from "./AddAuthorForm";
+import AddEditAuthorForm from "./AddEditAuthorForm";
 import { Author } from "../../../config/api/authors/authors.types";
 import adminMessages from "../../../messages/adminMessages";
 
@@ -52,10 +52,11 @@ const AddAuthorPopover: React.FC<Props> = (props) => {
           horizontal: "left",
         }}
       >
-        <AddAuthorForm
+        <AddEditAuthorForm
           sx={{ py: "1rem" }}
           closePopover={handleClose}
           addChosenAuthor={props.addChosenAuthor}
+          isPopover
         />
       </Popover>
     </Box>

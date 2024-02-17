@@ -16,6 +16,21 @@ const errorMessages: Message = {
     pl: "Nie udało się usunąć książki. Spróbuj ponownie później.",
     en: "Failed to delete the book. Try again later.",
   },
+  deleteAuthorError: {
+    key: "authors >> delete >> error",
+    pl: "Nie udało się usunąć autora. Spróbuj ponownie później.",
+    en: "Failed to delete the author. Try again later.",
+  },
+  deleteAuthorErrorBooksExist: {
+    key: "authors >> delete >> error_books_exist",
+    pl: "Ten autor jest przypisany do książki (książek) i nie może zostać usunięty.",
+    en: "This author is assigned to book(s) and cannot be deleted.",
+  },
+  fetchAuthorListError: {
+    key: "authors >> fetch_list >> error",
+    pl: "Pobieranie autorów zakończyło się niepowodzeniem. Spróbuj ponownie później.",
+    en: "Failed to fetch authors. Try again later.",
+  },
   bookContentError: {
     key: "books >> read_book >> content",
     pl: "Nie udało się wczytać zawartości książki. Spróbuj ponownie później.",

@@ -1,13 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Box } from "@mui/material";
 
-import ActionButton from "../../UI/ActionButton";
-import SearchForm from "../../Forms/common/SearchForm";
-import { RootState } from "../../../store/redux";
+import ActionButton from "../UI/ActionButton";
+import SearchForm from "../Forms/common/SearchForm";
+import { RootState } from "../../store/redux";
 import {
   searchActions,
   searchStateKey,
-} from "../../../store/redux/slices/search-slice";
+} from "../../store/redux/slices/search-slice";
 
 type Props = {
   actionButtonClickHandler: () => void;
