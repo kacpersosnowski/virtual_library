@@ -21,6 +21,11 @@ const adminMessages: Message = {
     pl: "Autorzy",
     en: "Authors",
   },
+  genresTab: {
+    key: "admin_panel >> tab >> genres",
+    pl: "Gatunki",
+    en: "Genres",
+  },
   addBookFormBackToList: {
     key: "admin_panel >> add_book_form >> back_to_list",
     pl: "Wróć do listy książek",
@@ -206,12 +211,12 @@ const adminMessages: Message = {
     pl: "Autor został dodany pomyślnie",
     en: "A new author was created successfully",
   },
-  listAuthorAddBookButton: {
+  listAuthorAddAuthorButton: {
     key: "admin_panel >> list_author >> add_author",
     pl: "Dodaj autora",
     en: "Add author",
   },
-  listAuthorTableNoBooks: {
+  listAuthorTableNoAuthors: {
     key: "admin_panel >> list_author_table >> no_authors",
     pl: "Brak autorów",
     en: "No authors",
@@ -300,6 +305,91 @@ const adminMessages: Message = {
     key: "admin_panel >> add_genre_form >> success_message",
     pl: "Gatunek został dodany pomyślnie",
     en: "A new genre was created successfully",
+  },
+  addGenreFormHeader: {
+    key: "admin_panel >> add_genre_form >> header",
+    pl: "Dodaj gatunek",
+    en: "Add genre",
+  },
+  addGenreFormBackToList: {
+    key: "admin_panel >> add_genre_form >> back_to_list",
+    pl: "Wróć do listy gatunków",
+    en: "Back to the list of genres",
+  },
+  listGenreAddGenreButton: {
+    key: "admin_panel >> list_genre >> add_genre",
+    pl: "Dodaj gatunek",
+    en: "Add genre",
+  },
+  listGenreTableNoGenres: {
+    key: "admin_panel >> list_genre_table >> no_genres",
+    pl: "Brak gatunków",
+    en: "No genres",
+  },
+  listGenreTableNumberHeader: {
+    key: "admin_panel >> list_genre_table >> number_header",
+    pl: "Lp.",
+    en: "No.",
+  },
+  listGenreTableNameHeader: {
+    key: "admin_panel >> list_genre_table >> name_header",
+    pl: "Nazwa",
+    en: "Name",
+  },
+  listGenreTableActionsHeader: {
+    key: "admin_panel >> list_genre_table >> actions_header",
+    pl: "Akcje",
+    en: "Actions",
+  },
+  listGenreTableActionsEdit: {
+    key: "admin_panel >> list_genre_table >> actions_edit",
+    pl: "Edytuj",
+    en: "Edit",
+  },
+  listGenreTableActionsDelete: {
+    key: "admin_panel >> list_genre_table >> actions_delete",
+    pl: "Usuń",
+    en: "Delete",
+  },
+  updateGenreFormSuccessMessage: {
+    key: "admin_panel >> update_genre_form >> success_message",
+    pl: "Gatunek został zaktualizowany pomyślnie",
+    en: "A genre was updated successfully",
+  },
+  updateGenreFormHeader: {
+    key: "admin_panel >> update_genre_form >> header",
+    pl: "Edytuj gatunek",
+    en: "Edit genre",
+  },
+  updateGenreFormSubmitButton: {
+    key: "admin_panel >> update_genre_form >> submit_button",
+    pl: "Zaktualizuj gatunek",
+    en: "Update genre",
+  },
+  deleteGenreAlertDialogTitle: {
+    key: "admin_panel >> delete_genre_alert_dialog >> title",
+    pl: "Czy na pewno chcesz usunąć ten gatunek?",
+    en: "Are you sure you want to delete this genre?",
+  },
+  deleteGenreAlertDialogContentText: {
+    key: "admin_panel >> delete_genre_alert_dialog >> content_text",
+    pl: "Operacja nie może być cofnięta.",
+    en: "The operation cannot be undone.",
+  },
+  deleteGenreAlertDialogCancelButton: {
+    key: "admin_panel >> delete_genre_alert_dialog >> cancel_button",
+    pl: "Anuluj",
+    en: "Cancel",
+  },
+  deleteGenreAlertDialogDeleteButton: {
+    key: "admin_panel >> delete_genre_alert_dialog >> delete_button",
+    pl: "Usuń",
+    en: "Delete",
+  },
+  deleteGenreFormSuccessMessage: {
+    key: "admin_panel >> delete_genre_form >> success_message",
+    pl: "Gatunek został usunięty pomyślnie.",
+    en: "A genre was deleted successfully.",
   },
 };
 

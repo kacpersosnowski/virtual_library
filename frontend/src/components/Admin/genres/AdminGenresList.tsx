@@ -2,22 +2,22 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import AdminList from "../AdminList";
-import AdminAuthorsTable from "./AdminAuthorsTable";
 import adminMessages from "../../../messages/adminMessages";
+import AdminGenresTable from "./AdminGenresTable";
 
-const AdminAuthorsList = () => {
+const AdminGenresList = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
   return (
     <AdminList
-      actionButtonText={t(adminMessages.listAuthorAddAuthorButton.key)}
+      actionButtonText={t(adminMessages.listGenreAddGenreButton.key)}
       actionButtonClickHandler={() => navigate("add")}
-      searchFormId="admin-search-authors"
-      searchStateKey="authorsTable"
-      table={<AdminAuthorsTable />}
+      searchFormId="admin-search-genres"
+      searchStateKey="genresTable"
+      table={<AdminGenresTable />}
     />
   );
 };
 
-export default AdminAuthorsList;
+export default AdminGenresList;

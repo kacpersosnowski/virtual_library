@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import HomeIcon from "@mui/icons-material/Home";
 import BookIcon from "@mui/icons-material/Book";
 import PersonIcon from "@mui/icons-material/Person";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 
 import Card from "../../components/UI/Card/Card";
 import booksBg from "../../assets/books-bg2.jpg";
@@ -32,6 +33,12 @@ const AdminPanel = () => {
       label: t(adminMessages.authorsTab.key),
       value: "authors",
       icon: <PersonIcon />,
+      iconPosition: "start" as const,
+    },
+    {
+      label: t(adminMessages.genresTab.key),
+      value: "genres",
+      icon: <LibraryBooksIcon />,
       iconPosition: "start" as const,
     },
   ];

@@ -31,6 +31,21 @@ const errorMessages: Message = {
     pl: "Pobieranie autorów zakończyło się niepowodzeniem. Spróbuj ponownie później.",
     en: "Failed to fetch authors. Try again later.",
   },
+  deleteGenreError: {
+    key: "genres >> delete >> error",
+    pl: "Nie udało się usunąć gatunku. Spróbuj ponownie później.",
+    en: "Failed to delete the genre. Try again later.",
+  },
+  deleteGenreErrorBooksExist: {
+    key: "genres >> delete >> error_books_exist",
+    pl: "Ten gatunek jest przypisany do książki (książek) i nie może zostać usunięty.",
+    en: "This genre is assigned to book(s) and cannot be deleted.",
+  },
+  fetchGenreListError: {
+    key: "genres >> fetch_list >> error",
+    pl: "Pobieranie gatunków zakończyło się niepowodzeniem. Spróbuj ponownie później.",
+    en: "Failed to fetch genres. Try again later.",
+  },
   bookContentError: {
     key: "books >> read_book >> content",
     pl: "Nie udało się wczytać zawartości książki. Spróbuj ponownie później.",

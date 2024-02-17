@@ -6,6 +6,8 @@ import AdminBooksList from "../../components/Admin/books/AdminBooksList";
 import BookForm from "../../components/Forms/books/BookForm";
 import AdminAuthorsList from "../../components/Admin/authors/AdminAuthorsList";
 import AuthorForm from "../../components/Forms/authors/AuthorForm";
+import AdminGenresList from "../../components/Admin/genres/AdminGenresList";
+import GenreForm from "../../components/Forms/genres/GenreForm";
 
 const routes: RouteObject[] = [
   {
@@ -28,6 +30,12 @@ const routes: RouteObject[] = [
       },
       { path: "authors/add", element: <AuthorForm /> },
       { path: "authors/edit/:id", element: <AuthorForm /> },
+      {
+        path: "genres",
+        element: <AdminGenresList />,
+      },
+      { path: "genres/add", element: <GenreForm /> },
+      { path: "genres/edit/:id", element: <GenreForm /> },
     ],
   },
 ];

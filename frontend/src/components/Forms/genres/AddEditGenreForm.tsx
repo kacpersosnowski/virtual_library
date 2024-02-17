@@ -1,8 +1,11 @@
 import { useDispatch } from "react-redux";
 import { useMutation } from "react-query";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Box, SxProps, Theme } from "@mui/material";
+import { Box, SxProps, Theme, Typography } from "@mui/material";
 import * as Yup from "yup";
+
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import useFormikLanguage from "../../../hooks/useFormikLanguage";
 import Input from "../common/Input";
@@ -21,15 +24,19 @@ type Props = {
   sx?: SxProps<Theme>;
   closePopover?: () => void;
   addChosenGenre?: (genre: Genre) => void;
+  initialValues?: CreateGenreDTO;
+  isPopover?: boolean;
 };
 
-const AddGenreForm: React.FC<Props> = (props) => {
+const AddEditGenreForm: React.FC<Props> = (props) => {
   const { t } = useTranslation();
+  const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
-    isLoading,
-    isError,
+    isLoading: isCreatingLoading,
+    isError: isCreatingError,
     mutate: createGenre,
   } = useMutation({
     mutationFn: genresApi.createGenre,
@@ -47,14 +54,34 @@ const AddGenreForm: React.FC<Props> = (props) => {
       }
     },
   });
+  const {
+    isLoading: isUpdatingLoading,
+    isError: isUpdatingError,
+    mutate: updateGenre,
+  } = useMutation({
+    mutationFn: genresApi.updateGenre,
+    onSuccess: () => {
+      dispatch(
+        snackbarActions.show(
+          t(adminMessages.updateGenreFormSuccessMessage.key),
+        ),
+      );
+    },
+  });
+
+  const initialValues = props.initialValues || ({ name: "" } as CreateGenreDTO);
 
   const formik = useFormikLanguage({
-    initialValues: { name: "" } as CreateGenreDTO,
+    initialValues,
     validationSchema: Yup.object({
       name: Yup.string().required(t(validationMessages.fieldRequired.key)),
     }),
     onSubmit: (values) => {
-      createGenre(values);
+      if (!props.initialValues) {
+        createGenre(values);
+      } else {
+        updateGenre({ id, genre: values });
+      }
     },
   });
 
@@ -69,22 +96,39 @@ const AddGenreForm: React.FC<Props> = (props) => {
       }}
       onSubmit={formik.handleSubmit}
     >
+      {!props.isPopover && (
+        <>
+          <Box sx={{ width: "100%", textAlign: "left", mb: "0.5rem" }}>
+            <ActionButton onClick={() => navigate("/admin/genres")}>
+              <ArrowBackIcon />
+              {t(adminMessages.addGenreFormBackToList.key)}
+            </ActionButton>
+          </Box>
+          <Typography variant="h4" sx={{ mb: "1rem" }}>
+            {props.initialValues
+              ? t(adminMessages.updateGenreFormHeader.key)
+              : t(adminMessages.addGenreFormHeader.key)}
+          </Typography>
+        </>
+      )}
       <Input
         id="name"
         label={t(adminMessages.addGenreFormName.key)}
         formik={formik}
       />
-      {isLoading && <LoadingSpinner />}
-      {!isLoading && (
+      {(isCreatingLoading || isUpdatingLoading) && <LoadingSpinner />}
+      {!isCreatingLoading && !isUpdatingLoading && (
         <ActionButton type="submit">
-          {t(adminMessages.addGenreFormSubmitButton.key)}
+          {props.initialValues
+            ? t(adminMessages.updateGenreFormSubmitButton.key)
+            : t(adminMessages.addGenreFormSubmitButton.key)}
         </ActionButton>
       )}
-      {isError && (
+      {(isCreatingError || isUpdatingError) && (
         <ErrorMessage message={t(errorMessages.somethingWentWrongError.key)} />
       )}
     </Box>
   );
 };
 
-export default AddGenreForm;
+export default AddEditGenreForm;

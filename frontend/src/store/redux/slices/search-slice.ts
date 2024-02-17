@@ -4,6 +4,7 @@ interface SearchState {
   searchText: {
     booksTable: string;
     authorsTable: string;
+    genresTable: string;
   };
 }
 
@@ -23,7 +24,7 @@ const searchSlice = createSlice({
   },
 });
 
-export type searchStateKey = "booksTable" | "authorsTable";
+export type searchStateKey = "booksTable" | "authorsTable" | "genresTable";
 
 export const searchActions = searchSlice.actions;
 

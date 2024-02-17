@@ -6,7 +6,7 @@ import AddIcon from "@mui/icons-material/Add";
 
 import adminMessages from "../../../messages/adminMessages";
 import { Genre } from "../../../config/api/genres/genres.types";
-import AddGenreForm from "./AddGenreForm";
+import AddGenreForm from "./AddEditGenreForm";
 
 type Props = {
   addChosenGenre?: (genre: Genre) => void;
@@ -56,6 +56,7 @@ const AddGenrePopover: React.FC<Props> = (props) => {
           sx={{ py: "1rem" }}
           closePopover={handleClose}
           addChosenGenre={props.addChosenGenre}
+          isPopover
         />
       </Popover>
     </Box>

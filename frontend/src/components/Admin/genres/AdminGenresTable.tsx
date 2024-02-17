@@ -28,42 +28,42 @@ import { snackbarActions } from "../../../store/redux/slices/snackbar-slice";
 import adminMessages from "../../../messages/adminMessages";
 import errorMessages from "../../../messages/errorMessages";
 import { RootState } from "../../../store/redux";
-import { Author } from "../../../config/api/authors/authors.types";
-import authorsApi from "../../../config/api/authors/authors";
+import genresApi from "../../../config/api/genres/genres";
+import { Genre } from "../../../config/api/genres/genres.types";
 
-const AdminAuthorsTable = () => {
+const AdminGenresTable = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [authorToDelete, setAuthorToDelete] = useState<Author>(null);
+  const [genreToDelete, setGenreToDelete] = useState<Genre>(null);
   const searchText = useSelector(
-    (state: RootState) => state.search.searchText.authorsTable,
+    (state: RootState) => state.search.searchText.genresTable,
   );
   const [currentPage, setCurrentPage] = useState(0);
   const { t } = useTranslation();
   const {
-    data: authorsResponse,
+    data: genresResponse,
     isLoading: isListLoading,
     isError: isListError,
   } = useQuery({
-    queryKey: ["authors", { page: currentPage, search: searchText }],
+    queryKey: ["genres", { page: currentPage, search: searchText }],
     queryFn: () =>
-      authorsApi.getAllAuthorsForAdmin({
+      genresApi.getAllGenresForAdmin({
         page: currentPage,
         search: searchText,
       }),
   });
   const {
-    mutate: deleteAuthor,
+    mutate: deleteGenre,
     isLoading: isDeletingLoading,
     isError: isDeletingError,
     error: deleteError,
   } = useMutation({
-    mutationFn: authorsApi.deleteAuthor,
+    mutationFn: genresApi.deleteGenre,
     onSuccess: () => {
-      queryClient.invalidateQueries(["authors"]);
+      queryClient.invalidateQueries(["genres"]);
       handleDeleteDialogClose();
       dispatch(
         snackbarActions.show(
-          t(adminMessages.deleteAuthorFormSuccessMessage.key),
+          t(adminMessages.deleteGenreFormSuccessMessage.key),
         ),
       );
     },
@@ -74,18 +74,18 @@ const AdminAuthorsTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleDeleteDialogOpen = (author: Author) => {
-    setAuthorToDelete(author);
+  const handleDeleteDialogOpen = (genre: Genre) => {
+    setGenreToDelete(genre);
     setIsDeleteDialogOpen(true);
   };
 
   const handleDeleteDialogClose = () => {
-    setAuthorToDelete(null);
+    setGenreToDelete(null);
     setIsDeleteDialogOpen(false);
   };
 
-  const handleDeleteAuthor = () => {
-    deleteAuthor(authorToDelete.id);
+  const handleDeleteGenre = () => {
+    deleteGenre(genreToDelete.id);
   };
 
   const handlePageChange = (
@@ -95,9 +95,9 @@ const AdminAuthorsTable = () => {
     setCurrentPage(value - 1);
   };
 
-  const authors = authorsResponse?.content;
-  const totalPages = authorsResponse
-    ? Math.ceil(authorsResponse.totalElements / 10)
+  const genres = genresResponse?.content;
+  const totalPages = genresResponse
+    ? Math.ceil(genresResponse.totalElements / 10)
     : 0;
 
   if (isListLoading || isDeletingLoading) {
@@ -105,32 +105,30 @@ const AdminAuthorsTable = () => {
   }
 
   if (isListError) {
-    return <ErrorMessage message={t(errorMessages.fetchAuthorListError.key)} />;
+    return <ErrorMessage message={t(errorMessages.fetchGenreListError.key)} />;
   }
 
   const heads = [
-    t(adminMessages.listAuthorTableNumberHeader.key),
-    t(adminMessages.listAuthorTableFirstNameHeader.key),
-    t(adminMessages.listBookTableLastNameHeader.key),
-    t(adminMessages.listAuthorTableActionsHeader.key),
+    t(adminMessages.listGenreTableNumberHeader.key),
+    t(adminMessages.listGenreTableNameHeader.key),
+    t(adminMessages.listGenreTableActionsHeader.key),
   ];
   const tableBody = (
     <TableBody>
-      {authors.length === 0 && (
+      {genres.length === 0 && (
         <StyledTableRow>
           <StyledTableCell colSpan={heads.length} align="center">
-            {t(adminMessages.listAuthorTableNoAuthors.key)}
+            {t(adminMessages.listGenreTableNoGenres.key)}
           </StyledTableCell>
         </StyledTableRow>
       )}
-      {authors.map((author, index) => {
+      {genres.map((genre, index) => {
         return (
-          <StyledTableRow key={author.id}>
+          <StyledTableRow key={genre.id}>
             <StyledTableCell align="center">
               {index + 1 + 10 * currentPage}
             </StyledTableCell>
-            <StyledTableCell align="center">{author.firstName}</StyledTableCell>
-            <StyledTableCell align="center">{author.lastName}</StyledTableCell>
+            <StyledTableCell align="center">{genre.name}</StyledTableCell>
             <StyledTableCell align="center">
               <Box
                 sx={{
@@ -140,19 +138,19 @@ const AdminAuthorsTable = () => {
                 }}
               >
                 <Tooltip
-                  title={t(adminMessages.listAuthorTableActionsEdit.key)}
+                  title={t(adminMessages.listGenreTableActionsEdit.key)}
                   arrow
                 >
-                  <IconButton onClick={() => navigate(`edit/${author.id}`)}>
+                  <IconButton onClick={() => navigate(`edit/${genre.id}`)}>
                     <EditIcon />
                   </IconButton>
                 </Tooltip>
                 <Tooltip
-                  title={t(adminMessages.listAuthorTableActionsDelete.key)}
+                  title={t(adminMessages.listGenreTableActionsDelete.key)}
                   arrow
                 >
                   <IconButton
-                    onClick={handleDeleteDialogOpen.bind(null, author)}
+                    onClick={handleDeleteDialogOpen.bind(null, genre)}
                   >
                     <DeleteIcon />
                   </IconButton>
@@ -171,9 +169,9 @@ const AdminAuthorsTable = () => {
     axios.isAxiosError(deleteError) &&
     deleteError.response.status === 400
   ) {
-    deleteErrorMessage = t(errorMessages.deleteAuthorErrorBooksExist.key);
+    deleteErrorMessage = t(errorMessages.deleteGenreErrorBooksExist.key);
   } else {
-    deleteErrorMessage = t(errorMessages.deleteAuthorError.key);
+    deleteErrorMessage = t(errorMessages.deleteGenreError.key);
   }
 
   return (
@@ -182,21 +180,21 @@ const AdminAuthorsTable = () => {
       <AlertDialog
         isOpen={isDeleteDialogOpen}
         closeHandler={handleDeleteDialogClose}
-        title={`${t(adminMessages.deleteAuthorAlertDialogTitle.key)} (${
-          authorToDelete?.firstName + " " + authorToDelete?.lastName
-        })`}
-        contentText={t(adminMessages.deleteAuthorAlertDialogContentText.key)}
+        title={`${t(
+          adminMessages.deleteGenreAlertDialogTitle.key,
+        )} (${genreToDelete?.name})`}
+        contentText={t(adminMessages.deleteGenreAlertDialogContentText.key)}
         cancelButtonText={t(
-          adminMessages.deleteAuthorAlertDialogCancelButton.key,
+          adminMessages.deleteGenreAlertDialogCancelButton.key,
         )}
         agreeButton={
           <Button
-            onClick={handleDeleteAuthor}
+            onClick={handleDeleteGenre}
             autoFocus
             variant="contained"
             color="error"
           >
-            {t(adminMessages.deleteAuthorAlertDialogDeleteButton.key)}
+            {t(adminMessages.deleteGenreAlertDialogDeleteButton.key)}
           </Button>
         }
       />
@@ -224,4 +222,4 @@ const AdminAuthorsTable = () => {
   );
 };
 
-export default AdminAuthorsTable;
+export default AdminGenresTable;
