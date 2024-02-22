@@ -12,10 +12,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
@@ -151,5 +156,47 @@ class GenreServiceTests {
 
         // then
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void searchGenres_shouldReturnListOfGenreDto() {
+        // given
+        String name = "name";
+        List<Genre> searchResults = GenreTestDataBuilder.exampleGenreList();
+        List<GenreDto> searchResultsDto = GenreTestDataBuilder.exampleGenreDtoList();
+
+        // when
+        when(genreRepository.findAllByNameLikeIgnoreCase(name)).thenReturn(searchResults);
+        for (int i = 0; i < searchResults.size(); i++) {
+            when(modelMapper.toGenreDto(searchResults.get(i)))
+                    .thenReturn(searchResultsDto.get(i));
+        }
+        PagedResponse<GenreDto> expected = new PagedResponse<>(searchResultsDto);
+        PagedResponse<GenreDto> actual = genreService.searchGenres(name);
+
+        // then
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+    }
+
+    @Test
+    void searchGenres_shouldReturnListOfGenreDtoOnPage() {
+        // given
+        String name = "name";
+        List<Genre> searchResults = GenreTestDataBuilder.exampleGenreList();
+        List<GenreDto> searchResultsDto = GenreTestDataBuilder.exampleGenreDtoList();
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("name").descending());
+
+        // when
+        when(genreRepository.findAllByNameLikeIgnoreCase(name, pageable))
+                .thenReturn(new PageImpl<Genre>(searchResults, pageable, searchResultsDto.size()));
+        for (int i = 0; i < searchResults.size(); i++) {
+            when(modelMapper.toGenreDto(searchResults.get(i)))
+                    .thenReturn(searchResultsDto.get(i));
+        }
+        PagedResponse<GenreDto> expected = new PagedResponse<>(searchResultsDto);
+        PagedResponse<GenreDto> actual = genreService.searchGenres(name, 0);
+
+        // then
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 }
