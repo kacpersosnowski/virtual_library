@@ -32,15 +32,25 @@ public class BookController {
         return bookService.findBookById(id);
     }
 
-    @Operation(summary = "Find all Books or search by title or author")
+    @Operation(summary = "Find all Books or search by title, genre or author")
     @GetMapping
-    public PagedResponse<BookDto> findAllBooks(@PathParam("search") String search, @PathParam("page") Integer page) {
+    public PagedResponse<BookDto> findAllBooks(
+            @PathParam("search") String search,
+            @PathParam("page") Integer page,
+            @PathParam("genre") String genre) {
         if (search != null && !search.isEmpty()) {
             String decodedSearch = URLDecoder.decode(search, StandardCharsets.UTF_8);
             if (page != null) {
                 return bookService.findBooksByTitleOrAuthor(decodedSearch, page);
             }
             return bookService.findBooksByTitleOrAuthor(decodedSearch);
+        }
+
+        if (genre != null && !genre.isEmpty()) {
+            if (page != null) {
+                return bookService.findBooksByGenre(genre, page);
+            }
+            return bookService.findBooksByGenre(genre);
         }
 
         if (page != null) {

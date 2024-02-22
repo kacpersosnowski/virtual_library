@@ -18,4 +18,6 @@ public interface GenreRepository extends MongoRepository<Genre, String> {
 
     Page<Genre> findAllByNameLikeIgnoreCase(Pageable pageable);
 
+    Optional<Genre> findByNameIgnoreCase(String name);
+
 }
