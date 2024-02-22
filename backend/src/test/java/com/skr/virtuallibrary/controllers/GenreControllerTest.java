@@ -54,6 +54,39 @@ class GenreControllerTest {
     }
 
     @Test
+    void testSearchForGenres() throws Exception {
+        List<GenreDto> genreDtoList = Instancio.ofList(GenreDto.class).size(3).create();
+
+        when(genreService.searchGenres("name")).thenReturn(new PagedResponse<>(genreDtoList));
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/genres")
+                        .param("search", "name")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        PagedResponse<GenreDto> actualGenreDtoList = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+        });
+
+        Assertions.assertThat(result.getResponse().getStatus()).isEqualTo(200);
+        Assertions.assertThat(actualGenreDtoList).usingRecursiveComparison().isEqualTo(new PagedResponse<>(genreDtoList));
+    }
+
+    @Test
+    void testSearchForGenresOnPage() throws Exception {
+        List<GenreDto> genreDtoList = Instancio.ofList(GenreDto.class).size(3).create();
+
+        when(genreService.searchGenres("name", 0)).thenReturn(new PagedResponse<>(genreDtoList));
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/genres")
+                        .param("search", "name")
+                        .param("page", "0")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        PagedResponse<GenreDto> actualGenreDtoList = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+        });
+
+        Assertions.assertThat(result.getResponse().getStatus()).isEqualTo(200);
+        Assertions.assertThat(actualGenreDtoList).usingRecursiveComparison().isEqualTo(new PagedResponse<>(genreDtoList));
+    }
+
+    @Test
     void testGetAllGenres() throws Exception {
         List<GenreDto> genreDtoList = Instancio.ofList(GenreDto.class).size(3).create();
 
