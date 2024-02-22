@@ -1,5 +1,6 @@
 package com.skr.virtuallibrary.services;
 
+import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.entities.Author;
 import com.skr.virtuallibrary.exceptions.AuthorNotFoundException;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
@@ -85,11 +87,53 @@ class AuthorServiceTest {
             when(modelMapper.toAuthorDto(authorsExample.get(i)))
                     .thenReturn(authorDtosExample.get(i));
         }
-        List<AuthorDto> expected = authorDtosExample;
-        List<AuthorDto> actual = authorService.findAllAuthors();
+        PagedResponse<AuthorDto> expected = new PagedResponse<>(authorDtosExample);
+        PagedResponse<AuthorDto> actual = authorService.findAllAuthors();
 
         // then
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void searchAuthors_shouldReturnTwoAuthors() {
+        // given
+        String name = "doe";
+        List<Author> searchResults = AuthorTestDataBuilder.authorSearchResult();
+        List<AuthorDto> searchResultsDto = AuthorTestDataBuilder.authorDtoSearchResult();
+
+        // when
+        when(authorRepository.findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(name, name))
+                .thenReturn(searchResults);
+        for (int i = 0; i < searchResults.size(); i++) {
+            when(modelMapper.toAuthorDto(searchResults.get(i)))
+                    .thenReturn(searchResultsDto.get(i));
+        }
+        PagedResponse<AuthorDto> expected = new PagedResponse<>(searchResultsDto);
+        PagedResponse<AuthorDto> actual = authorService.searchAuthors(name);
+
+        // then
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+    }
+
+    @Test
+    void searchAuthors_shouldReturnTwoAuthorsOnPage() {
+        // given
+        String name = "doe";
+        List<Author> searchResults = AuthorTestDataBuilder.authorSearchResult();
+        List<AuthorDto> searchResultsDto = AuthorTestDataBuilder.authorDtoSearchResult();
+
+        // when
+        when(authorRepository.findAllByFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(name, name))
+                .thenReturn(searchResults);
+        for (int i = 0; i < searchResults.size(); i++) {
+            when(modelMapper.toAuthorDto(searchResults.get(i)))
+                    .thenReturn(searchResultsDto.get(i));
+        }
+        PagedResponse<AuthorDto> expected = new PagedResponse<>(searchResultsDto);
+        PagedResponse<AuthorDto> actual = authorService.searchAuthors(name, 0);
+
+        // then
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
     @Test
