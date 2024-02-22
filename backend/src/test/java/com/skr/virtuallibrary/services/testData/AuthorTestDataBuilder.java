@@ -63,4 +63,14 @@ public class AuthorTestDataBuilder {
         JsonResourceBuilder jsonDataBuilder = new JsonResourceBuilder();
         return jsonDataBuilder.loadModelList("services/authorDtos.json", AuthorDto.class);
     }
+
+    public static List<Author> authorSearchResult() {
+        JsonResourceBuilder jsonDataBuilder = new JsonResourceBuilder();
+        return jsonDataBuilder.loadModelList("services/searchedAuthors.json", Author.class);
+    }
+
+    public static List<AuthorDto> authorDtoSearchResult() {
+        JsonResourceBuilder jsonDataBuilder = new JsonResourceBuilder();
+        return jsonDataBuilder.loadModelList("services/searchedAuthorDtos.json", AuthorDto.class);
+    }
 }

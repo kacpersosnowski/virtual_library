@@ -54,6 +54,39 @@ class AuthorControllerTest {
     }
 
     @Test
+    void testSearchForAuthorsOnPage() throws Exception {
+        List<AuthorDto> authorDtoList = Instancio.ofList(AuthorDto.class).size(3).create();
+
+        when(authorService.searchAuthors("example", 0)).thenReturn(new PagedResponse<>(authorDtoList));
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/authors")
+                        .param("search", "example")
+                        .param("page", "0")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        PagedResponse<AuthorDto> actualAuthorDtoList = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+        });
+
+        Assertions.assertThat(result.getResponse().getStatus()).isEqualTo(200);
+        Assertions.assertThat(actualAuthorDtoList).usingRecursiveComparison().isEqualTo(new PagedResponse<>(authorDtoList));
+    }
+
+    @Test
+    void testSearchForAuthors() throws Exception {
+        List<AuthorDto> authorDtoList = Instancio.ofList(AuthorDto.class).size(3).create();
+
+        when(authorService.searchAuthors("example")).thenReturn(new PagedResponse<>(authorDtoList));
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/authors")
+                        .param("search", "example")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        PagedResponse<AuthorDto> actualAuthorDtoList = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+        });
+
+        Assertions.assertThat(result.getResponse().getStatus()).isEqualTo(200);
+        Assertions.assertThat(actualAuthorDtoList).usingRecursiveComparison().isEqualTo(new PagedResponse<>(authorDtoList));
+    }
+
+    @Test
     void testFindAllAuthors() throws Exception {
         List<AuthorDto> authorDtoList = Instancio.ofList(AuthorDto.class).size(3).create();
 
