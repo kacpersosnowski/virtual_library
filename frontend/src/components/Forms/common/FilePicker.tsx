@@ -1,4 +1,9 @@
-import React, { ChangeEvent, useImperativeHandle, useState } from "react";
+import React, {
+  ChangeEvent,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import Button from "@mui/material/Button";
 import Input from "@mui/material/Input";
 import { Box } from "@mui/material";
@@ -37,6 +42,26 @@ const FilePicker = React.forwardRef((props: Props, ref) => {
     [],
   );
 
+  const readPreviewImage = (file: File) => {
+    if (file && file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewImage(null);
+    }
+  };
+
+  useEffect(() => {
+    const file = formik?.values[id];
+    if (file) {
+      setSelectedFile(formik.values[id]);
+      readPreviewImage(file);
+    }
+  }, [id, formik]);
+
   const { touched, errors } = formik;
 
   const errorMessage =
@@ -51,15 +76,7 @@ const FilePicker = React.forwardRef((props: Props, ref) => {
       onFileSelected(file);
     }
 
-    if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setPreviewImage(null);
-    }
+    readPreviewImage(file);
   };
 
   const preview = (

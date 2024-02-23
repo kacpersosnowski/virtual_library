@@ -1,9 +1,10 @@
 import { BACKEND_BASE_URL } from "../../../constants/api";
 import {
+  parseAllAuthorsString,
   parseAuthorsList,
   parseAuthorsString,
 } from "../authors/authors.parsers";
-import { parseGenresList } from "../genres/genres.parsers";
+import { parseGenresList, parseGenresString } from "../genres/genres.parsers";
 import { Book, BookItemData, CreateBookDTO, ReadBookDTO } from "./books.types";
 
 export const parseBookItems = (data: Book[]): BookItemData[] => {
@@ -15,6 +16,17 @@ export const parseBookItems = (data: Book[]): BookItemData[] => {
       authorList: parseAuthorsString(dataItem.authorList),
       shortDescription: dataItem.shortDescription,
       cover: `${BACKEND_BASE_URL}/files/cover/${dataItem.bookCoverId}`,
+    };
+  });
+};
+
+export const parseBookItemsForAdmin = (data: Book[]): BookItemData[] => {
+  return data.map((dataItem: Book) => {
+    return {
+      id: dataItem.id,
+      title: dataItem.title,
+      authorList: parseAllAuthorsString(dataItem.authorList),
+      genreList: parseGenresString(dataItem.genreList),
     };
   });
 };

@@ -1,9 +1,12 @@
 import { useRef } from "react";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import * as Yup from "yup";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery } from "react-query";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
+
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import useFormikLanguage from "../../../hooks/useFormikLanguage";
 import Input from "../common/Input";
@@ -21,10 +24,20 @@ import { booksApi } from "../../../config/api/books/books";
 import { snackbarActions } from "../../../store/redux/slices/snackbar-slice";
 import adminMessages from "../../../messages/adminMessages";
 import arrayNotEmptyValidator from "../../../config/validators/arrayNotEmptyValidator";
+import AddAuthorPopover from "../authors/AddAuthorPopover";
+import { Author } from "../../../config/api/authors/authors.types";
+import { Genre } from "../../../config/api/genres/genres.types";
+import AddGenrePopover from "../genres/AddGenrePopover";
 
-const AddBookForm = () => {
+type Props = {
+  initialValues?: CreateBookDTO;
+};
+
+const AddEditBookForm: React.FC<Props> = (props) => {
   const { t } = useTranslation();
+  const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const filePickerRef = useRef(null);
 
   const {
@@ -57,9 +70,22 @@ const AddBookForm = () => {
       filePickerRef.current.resetPreview();
     },
   });
+  const {
+    isLoading: isUpdatingLoading,
+    isError: isUpdatingError,
+    mutate: updateBook,
+  } = useMutation({
+    mutationFn: booksApi.updateBook,
+    onSuccess: () => {
+      dispatch(
+        snackbarActions.show(t(adminMessages.updateBookFormSuccessMessage.key)),
+      );
+    },
+  });
 
-  const formik = useFormikLanguage({
-    initialValues: {
+  const initialValues =
+    props.initialValues ||
+    ({
       title: "",
       shortDescription: "",
       longDescription: "",
@@ -68,7 +94,10 @@ const AddBookForm = () => {
       tags: [],
       cover: null,
       content: null,
-    } as CreateBookDTO,
+    } as CreateBookDTO);
+
+  const formik = useFormikLanguage({
+    initialValues,
     validationSchema: Yup.object({
       title: Yup.string().required(t(validationMessages.fieldRequired.key)),
       shortDescription: Yup.string().required(
@@ -90,9 +119,21 @@ const AddBookForm = () => {
       content: Yup.mixed().required(t(validationMessages.fieldRequired.key)),
     }),
     onSubmit: (values) => {
-      createBook(values);
+      if (!props.initialValues) {
+        createBook(values);
+      } else {
+        updateBook({ id, book: values });
+      }
     },
   });
+
+  const addChosenAuthor = (author: Author) => {
+    formik.setFieldValue("authors", [...formik.values.authors, author]);
+  };
+
+  const addChosenGenre = (genre: Genre) => {
+    formik.setFieldValue("genres", [...formik.values.genres, genre]);
+  };
 
   if (isFetchingAuthorsError || isFetchingGenresError) {
     return (
@@ -116,6 +157,17 @@ const AddBookForm = () => {
       }}
       onSubmit={formik.handleSubmit}
     >
+      <Box sx={{ width: "100%", textAlign: "left", mb: "0.5rem" }}>
+        <ActionButton onClick={() => navigate("/admin/books")}>
+          <ArrowBackIcon />
+          {t(adminMessages.addBookFormBackToList.key)}
+        </ActionButton>
+      </Box>
+      <Typography variant="h4" sx={{ mb: "1rem" }}>
+        {props.initialValues
+          ? t(adminMessages.updateBookFormHeader.key)
+          : t(adminMessages.addBookFormHeader.key)}
+      </Typography>
       <Input
         id="title"
         label={t(adminMessages.addBookFormTitle.key)}
@@ -136,28 +188,56 @@ const AddBookForm = () => {
         maxRows={10}
         formik={formik}
       />
-      <AutocompleteInput
-        id="authors"
-        label={t(adminMessages.addBookFormAuthors.key)}
-        multiple
-        formik={formik}
-        options={authors}
-        getOptionLabel={(option) => {
-          return option.firstName + " " + option.lastName;
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          mt: "0.5rem",
+          width: "80%",
         }}
-        sx={{ mt: "0.5rem" }}
-      />
-      <AutocompleteInput
-        id="genres"
-        label={t(adminMessages.addBookFormGenres.key)}
-        multiple
-        formik={formik}
-        options={genres}
-        getOptionLabel={(option) => {
-          return option.name;
+      >
+        <AutocompleteInput
+          id="authors"
+          label={t(adminMessages.addBookFormAuthors.key)}
+          multiple
+          formik={formik}
+          options={authors}
+          getOptionLabel={(option) => {
+            return option.firstName + " " + option.lastName;
+          }}
+          sx={{ flex: 1 }}
+          errorSx={{ width: "100%" }}
+          errorPortalId="authors-error"
+        />
+        <AddAuthorPopover addChosenAuthor={addChosenAuthor} />
+      </Box>
+      <Box id="authors-error" sx={{ width: "80%" }}></Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          mt: "1rem",
+          width: "80%",
         }}
-        sx={{ mt: "1rem" }}
-      />
+      >
+        <AutocompleteInput
+          id="genres"
+          label={t(adminMessages.addBookFormGenres.key)}
+          multiple
+          formik={formik}
+          options={genres}
+          getOptionLabel={(option) => {
+            return option.name;
+          }}
+          sx={{ flex: 1 }}
+          errorSx={{ width: "100%" }}
+          errorPortalId="genres-error"
+        />
+        <AddGenrePopover addChosenGenre={addChosenGenre} />
+      </Box>
+      <Box id="genres-error" sx={{ width: "80%" }}></Box>
       <AutocompleteInput
         id="tags"
         label={t(adminMessages.addBookFormTags.key)}
@@ -181,20 +261,22 @@ const AddBookForm = () => {
         formik={formik}
         acceptedFormats="application/pdf"
       />
-      {isCreatingLoading && <LoadingSpinner />}
-      {!isCreatingLoading && (
+      {(isCreatingLoading || isUpdatingLoading) && <LoadingSpinner />}
+      {!isCreatingLoading && !isUpdatingLoading && (
         <ActionButton
           sx={{ mt: "0.5rem", width: "80%", mb: "1rem" }}
           type="submit"
         >
-          {t(adminMessages.addBookFormSubmitButton.key)}
+          {props.initialValues
+            ? t(adminMessages.updateBookFormSubmitButton.key)
+            : t(adminMessages.addBookFormSubmitButton.key)}
         </ActionButton>
       )}
-      {isCreatingError && (
+      {(isCreatingError || isUpdatingError) && (
         <ErrorMessage message={t(errorMessages.somethingWentWrongError.key)} />
       )}
     </Box>
   );
 };
 
-export default AddBookForm;
+export default AddEditBookForm;

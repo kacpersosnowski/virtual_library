@@ -2,8 +2,11 @@ import { Box, Divider } from "@mui/material";
 import { Outlet, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+
 import HomeIcon from "@mui/icons-material/Home";
-import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
+import BookIcon from "@mui/icons-material/Book";
+import PersonIcon from "@mui/icons-material/Person";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 
 import Card from "../../components/UI/Card/Card";
 import booksBg from "../../assets/books-bg2.jpg";
@@ -21,9 +24,21 @@ const AdminPanel = () => {
       iconPosition: "start" as const,
     },
     {
-      label: t(adminMessages.addBookTab.key),
-      value: "add-book",
-      icon: <BookmarkAddIcon />,
+      label: t(adminMessages.booksTab.key),
+      value: "books",
+      icon: <BookIcon />,
+      iconPosition: "start" as const,
+    },
+    {
+      label: t(adminMessages.authorsTab.key),
+      value: "authors",
+      icon: <PersonIcon />,
+      iconPosition: "start" as const,
+    },
+    {
+      label: t(adminMessages.genresTab.key),
+      value: "genres",
+      icon: <LibraryBooksIcon />,
       iconPosition: "start" as const,
     },
   ];
@@ -31,15 +46,21 @@ const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState(adminTabs[0].value);
   const location = useLocation();
 
+  const path = location.pathname.replace("/admin/", "");
+
   useEffect(() => {
-    const path = location.pathname.replace("/admin/", "");
+    if (path === "") {
+      setActiveTab(adminTabs[0].value);
+      return;
+    }
     for (const tab of adminTabs) {
-      if (path === tab.value) {
+      const regex = new RegExp(`^${tab.value}(/|$)`);
+      if (path !== "" && regex.test(path)) {
         setActiveTab(tab.value);
         return;
       }
     }
-  }, []);
+  }, [path]);
 
   return (
     <ImageBackground image={booksBg} containerSx={{ alignItems: "flex-start" }}>

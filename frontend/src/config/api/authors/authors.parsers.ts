@@ -15,6 +15,17 @@ export const parseAuthorsString = (data: Author[]): string => {
   return result;
 };
 
+export const parseAllAuthorsString = (data: Author[]): string => {
+  let result = "";
+  for (let i = 0; i < data.length; i++) {
+    result += data[i].firstName + " " + data[i].lastName;
+    if (i !== data.length - 1) {
+      result += ", ";
+    }
+  }
+  return result;
+};
+
 export const parseAuthorsList = (data: Author[]): string[] => {
   const result = [];
   for (const author of data) {
