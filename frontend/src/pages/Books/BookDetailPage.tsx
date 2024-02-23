@@ -16,6 +16,7 @@ import BookInfosTiles from "../../components/Books/BookInfos/BookInfosTiles";
 import BookDescription from "../../components/Books/BookInfos/BookDescription";
 import booksMessages from "../../messages/booksMessages";
 import errorMessages from "../../messages/errorMessages";
+import ReviewsSection from "../../components/Reviews/ReviewSection";
 
 const BookDetailPage = () => {
   const { id } = useParams();
@@ -73,6 +74,7 @@ const BookDetailPage = () => {
           </Box>
         </Box>
         <BookDescription description={book.longDescription} />
+        <ReviewsSection />
       </>
     );
   }

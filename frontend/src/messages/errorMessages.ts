@@ -11,6 +11,11 @@ const errorMessages: Message = {
     pl: "Nie udało się pobrać informacji o tej książce. Spróbuj ponownie później.",
     en: "Failed to fetch information about this book. Try again later.",
   },
+  fetchBookReviewsError: {
+    key: "books >> fetch_reviews >> error",
+    pl: "Nie udało się wczytać recenzji. Spróbuj ponownie później.",
+    en: "Failed to fetch reviews. Try again later.",
+  },
   deleteBookError: {
     key: "books >> delete >> error",
     pl: "Nie udało się usunąć książki. Spróbuj ponownie później.",

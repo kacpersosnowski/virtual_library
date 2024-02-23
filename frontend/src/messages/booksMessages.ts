@@ -36,6 +36,81 @@ const booksMessages: Message = {
     pl: "Opis",
     en: "Description",
   },
+  bookReviewsTitle: {
+    key: "books >> reviews >> title",
+    pl: "Recenzje",
+    en: "Reviews",
+  },
+  bookReviewsNoReviews: {
+    key: "books >> reviews >> no_reviews",
+    pl: "Ta książka nie ma jeszcze recenzji.",
+    en: "This book doesn't have any reviews yet.",
+  },
+  bookReviewsEditTooltip: {
+    key: "books >> reviews >> edit_tooltip",
+    pl: "Edytuj",
+    en: "Edit",
+  },
+  bookReviewsDeleteTooltip: {
+    key: "books >> reviews >> delete_tooltip",
+    pl: "Usuń",
+    en: "Delete",
+  },
+  bookReviewsAddFormLogin: {
+    key: "books >> reviews_form >> login",
+    pl: "Zaloguj się, aby dodać recenzję",
+    en: "Log in to add a review",
+  },
+  bookReviewsAddFormRating: {
+    key: "books >> reviews_form >> rating",
+    pl: "Ocena",
+    en: "Rating",
+  },
+  bookReviewsAddFormContent: {
+    key: "books >> reviews_form >> content",
+    pl: "Treść",
+    en: "Content",
+  },
+  bookReviewsAddFormSubmitButton: {
+    key: "books >> reviews_form >> submit_button",
+    pl: "Dodaj recenzję",
+    en: "Add review",
+  },
+  bookReviewsAddFormSuccess: {
+    key: "books >> reviews_form >> add_success",
+    pl: "Recenzja została dodana pomyślnie.",
+    en: "The review was added successfully.",
+  },
+  bookReviewsUpdateFormSaveButton: {
+    key: "books >> reviews_form >> save_button",
+    pl: "Zapisz",
+    en: "Save",
+  },
+  bookReviewsUpdateFormCancelButton: {
+    key: "books >> reviews_form >> cancel_button",
+    pl: "Anuluj",
+    en: "Cancel",
+  },
+  bookReviewsUpdateFormSuccess: {
+    key: "books >> reviews_form >> update_success",
+    pl: "Recenzja została zaktualizowana pomyślnie.",
+    en: "The review was updated successfully.",
+  },
+  bookReviewsDeleteFormDialogTitle: {
+    key: "books >> reviews_form >> delete_dialog_title",
+    pl: "Czy na pewno chcesz usunąć tę recenzję?",
+    en: "Are you sure you want to delete this review?",
+  },
+  bookReviewsDeleteFormDialogContent: {
+    key: "books >> reviews_form >> delete_dialog_content",
+    pl: "Operacja nie może zostać cofnięta.",
+    en: "The operation cannot be undone.",
+  },
+  bookReviewsDeleteFormSuccess: {
+    key: "books >> reviews_form >> delete_success",
+    pl: "Recenzja została usunięta pomyślnie.",
+    en: "The review was deleted successfully.",
+  },
   enterFullscreen: {
     key: "books >> read_book >> enter_full_screen",
     pl: "Pełny ekran (f)",
