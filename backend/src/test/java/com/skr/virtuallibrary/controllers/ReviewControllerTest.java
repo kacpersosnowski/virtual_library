@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skr.virtuallibrary.auth.JwtService;
 import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.ReviewDto;
+import com.skr.virtuallibrary.services.FindReviewService;
 import com.skr.virtuallibrary.services.ReviewService;
 import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -34,6 +34,9 @@ class ReviewControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
+    private FindReviewService findReviewService;
+
+    @MockBean
     private ReviewService reviewService;
 
     @MockBean
@@ -43,7 +46,7 @@ class ReviewControllerTest {
     void testFindReviewById() throws Exception {
         ReviewDto reviewDto = Instancio.create(ReviewDto.class);
 
-        when(reviewService.findReviewById(reviewDto.getId())).thenReturn(reviewDto);
+        when(findReviewService.findReviewById(reviewDto.getId())).thenReturn(reviewDto);
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/reviews/{id}", reviewDto.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -57,7 +60,7 @@ class ReviewControllerTest {
     void testFindAllReviews() throws Exception {
         List<ReviewDto> reviewDtoList = Instancio.ofList(ReviewDto.class).size(3).create();
 
-        when(reviewService.findAllReviews()).thenReturn(reviewDtoList);
+        when(findReviewService.findAllReviews()).thenReturn(reviewDtoList);
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/reviews")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -73,7 +76,7 @@ class ReviewControllerTest {
         List<ReviewDto> reviewDtoList = Instancio.ofList(ReviewDto.class).size(3).create();
         PagedResponse<ReviewDto> pagedResponse = new PagedResponse<>(3L, reviewDtoList);
 
-        when(reviewService.findReviewsByBookId("1", 1)).thenReturn(pagedResponse);
+        when(findReviewService.findReviewsByBookId("1", 1)).thenReturn(pagedResponse);
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/reviews/book/{id}", "1")
                         .param("page", "1")
                         .contentType(MediaType.APPLICATION_JSON))

@@ -2,6 +2,7 @@ package com.skr.virtuallibrary.controllers;
 
 import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.ReviewDto;
+import com.skr.virtuallibrary.services.FindReviewService;
 import com.skr.virtuallibrary.services.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,25 +24,27 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
+    private final FindReviewService findReviewService;
+
     @Operation(summary = "Find Review by id.")
     @GetMapping("/{id}")
     public ReviewDto findReviewById(@PathVariable String id) {
-        return reviewService.findReviewById(id);
+        return findReviewService.findReviewById(id);
     }
 
     @Operation(summary = "Find all Reviews.")
     @GetMapping
     public List<ReviewDto> findAllReviews() {
-        return reviewService.findAllReviews();
+        return findReviewService.findAllReviews();
     }
 
     @Operation(summary = "Find Reviews by book id and page number.")
     @GetMapping("/book/{id}")
     public PagedResponse<ReviewDto> findReviewsByBookId(@PathVariable String id, @PathParam("page") Integer page) {
         if (page == null) {
-            return reviewService.findReviewsByBookId(id);
+            return findReviewService.findReviewsByBookId(id);
         }
-        return reviewService.findReviewsByBookId(id, page);
+        return findReviewService.findReviewsByBookId(id, page);
     }
 
     @Operation(summary = "Post Review.")

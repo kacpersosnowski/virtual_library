@@ -2,7 +2,8 @@ package com.skr.virtuallibrary.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skr.virtuallibrary.auth.JwtService;
-import com.skr.virtuallibrary.dto.BookRating;
+import com.skr.virtuallibrary.dto.BookRatingDto;
+import com.skr.virtuallibrary.entities.BookRating;
 import com.skr.virtuallibrary.services.BookRatingService;
 import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
@@ -36,16 +37,16 @@ class BookRatingControllerTest {
 
     @Test
     void testGetBookRating() throws Exception {
-        BookRating bookRating = Instancio.create(BookRating.class);
+        BookRatingDto bookRatingDto = Instancio.create(BookRatingDto.class);
 
-        when(bookRatingService.getBookRating(bookRating.getBookId())).thenReturn(bookRating);
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/book-ratings/{id}", bookRating.getBookId())
+        when(bookRatingService.getBookRating(bookRatingDto.getBookId())).thenReturn(bookRatingDto);
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/book-ratings/{id}", bookRatingDto.getBookId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
         BookRating actualBookRating = objectMapper.readValue(result.getResponse().getContentAsString(), BookRating.class);
 
         Assertions.assertThat(result.getResponse().getStatus()).isEqualTo(200);
-        Assertions.assertThat(actualBookRating).usingRecursiveComparison().isEqualTo(bookRating);
+        Assertions.assertThat(actualBookRating).usingRecursiveComparison().isEqualTo(bookRatingDto);
     }
 
 }

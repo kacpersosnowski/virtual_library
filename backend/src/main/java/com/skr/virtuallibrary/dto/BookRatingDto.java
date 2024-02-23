@@ -1,16 +1,18 @@
 package com.skr.virtuallibrary.dto;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
+@Builder
 @Data
-@AllArgsConstructor
-public class BookRating {
+public class BookRatingDto {
+
+    private String id;
 
     private String bookId;
 
     private int rateCount;
 
-    private double rateMean;
+    private double rateAverage;
 
 }

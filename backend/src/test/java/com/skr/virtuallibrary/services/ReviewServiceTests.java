@@ -5,7 +5,6 @@ import com.skr.virtuallibrary.entities.Review;
 import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.exceptions.ReviewNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
-import com.skr.virtuallibrary.repositories.BookRepository;
 import com.skr.virtuallibrary.repositories.ReviewRepository;
 import com.skr.virtuallibrary.repositories.UserRepository;
 import com.skr.virtuallibrary.services.testData.ReviewTestDataBuilder;
@@ -17,7 +16,6 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,63 +40,19 @@ public class ReviewServiceTests {
     private UserRepository userRepository;
 
     @Mock
+    private BookRatingService bookRatingService;
+
+    @Mock
     private ModelMapper modelMapper;
 
     private Review exampleReview;
-
-    private ReviewDto exampleReviewDto;
 
     private User exampleUser;
 
     @BeforeEach
     final void setUp() {
         exampleReview = ReviewTestDataBuilder.reviewExample().review();
-        exampleReviewDto = ReviewTestDataBuilder.reviewDtoExample().reviewDto();
         exampleUser = UserTestDataBuilder.userExample().user();
-    }
-
-    @Test
-    void findReviewById_shouldReturnReviewDto() {
-        // given
-        String idToFind = "foo";
-
-        // when
-        when(reviewRepository.findById(idToFind)).thenReturn(Optional.ofNullable(exampleReview));
-        when(modelMapper.toReviewDto(exampleReview)).thenReturn(exampleReviewDto);
-
-        // then
-        assertEquals(exampleReviewDto, reviewService.findReviewById(idToFind));
-    }
-
-    @Test
-    void findReviewById_shouldThrowReviewNotFoundException() {
-        // given
-        String idToFind = "foo";
-
-        // when
-        when(reviewRepository.findById(idToFind)).thenReturn(Optional.empty());
-
-        // then
-        assertThrows(ReviewNotFoundException.class, () -> reviewService.findReviewById(idToFind));
-    }
-
-    @Test
-    void findAllReviews_shouldReturnListOfReviewDtos() {
-        // given
-        List<Review> reviewsExamples = ReviewTestDataBuilder.exampleReviewList();
-        List<ReviewDto> reviewDtosExamples = ReviewTestDataBuilder.exampleReviewDtoList();
-
-        // when
-        when(reviewRepository.findAll()).thenReturn(reviewsExamples);
-        for (int i = 0; i < reviewsExamples.size(); i++) {
-            when(modelMapper.toReviewDto(reviewsExamples.get(i)))
-                    .thenReturn(reviewDtosExamples.get(i));
-        }
-        List<ReviewDto> expected = reviewDtosExamples;
-        List<ReviewDto> actual = reviewService.findAllReviews();
-
-        // then
-        assertEquals(expected, actual);
     }
 
     @Test
@@ -117,6 +71,7 @@ public class ReviewServiceTests {
         ReviewDto actual = reviewService.addReview(reviewDto);
 
         // then
+        verify(bookRatingService).updateBookRating(review.getBookId());
         assertEquals(expected, actual);
     }
 
@@ -133,6 +88,7 @@ public class ReviewServiceTests {
 
         // then
         verify(reviewRepository).deleteById(idToDelete);
+        verify(bookRatingService).updateBookRating(exampleReview.getBookId());
     }
 
     @Test
@@ -178,6 +134,7 @@ public class ReviewServiceTests {
         ReviewDto actual = reviewService.updateReview(idToUpdate, newReviewDto);
 
         // then
+        verify(bookRatingService).updateBookRating(newReview.getBookId());
         assertEquals(expected, actual);
     }
 }
