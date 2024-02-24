@@ -4,9 +4,11 @@ import com.skr.virtuallibrary.dto.ReviewDto;
 import com.skr.virtuallibrary.entities.Review;
 import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.entities.enums.Authority;
+import com.skr.virtuallibrary.exceptions.BookNotFoundException;
 import com.skr.virtuallibrary.exceptions.ReviewNotFoundException;
 import com.skr.virtuallibrary.exceptions.UserNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
+import com.skr.virtuallibrary.repositories.BookRepository;
 import com.skr.virtuallibrary.repositories.ReviewRepository;
 import com.skr.virtuallibrary.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +32,15 @@ public class ReviewService {
 
     private final BookRatingService bookRatingService;
 
+    private final BookRepository bookRepository;
+
     private static final String ERROR_NOT_FOUND_MSG = "Not found review with id: ";
 
     public ReviewDto addReview(ReviewDto reviewDto) {
+        if (bookRepository.findById(reviewDto.getBookId()).isEmpty()) {
+            throw new BookNotFoundException("Book not found with id: " + reviewDto.getBookId());
+        }
+
         Review review = modelMapper.toReviewEntity(reviewDto);
 
         review.setAuthor(getUser());
