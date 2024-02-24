@@ -7,6 +7,7 @@ import com.skr.virtuallibrary.entities.Review;
 import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.entities.enums.Authority;
 import com.skr.virtuallibrary.exceptions.BookNotFoundException;
+import com.skr.virtuallibrary.exceptions.ReviewAlreadyExistsException;
 import com.skr.virtuallibrary.exceptions.ReviewNotFoundException;
 import com.skr.virtuallibrary.exceptions.UserNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
@@ -85,6 +86,13 @@ public class ReviewService {
         Review review = modelMapper.toReviewEntity(reviewDto);
         Book book = bookRepository.findById(reviewDto.getBookId())
                 .orElseThrow(() -> new BookNotFoundException(BOOK_NOT_FOUND_MSG + reviewDto.getBookId()));
+
+        boolean notHaveReviewOrAdmin = reviewRepository
+                .findAllByBookIdAndAuthorId(reviewDto.getBookId(), getUser().getId()).isEmpty()
+                || getUser().getAuthority().equals(Authority.ADMIN);
+        if (notHaveReviewOrAdmin) {
+            throw new ReviewAlreadyExistsException("You have already reviewed this book.");
+        }
 
         review.setBook(book);
         review.setAuthor(getUser());
