@@ -67,6 +67,10 @@ public class ReviewService {
     }
 
     public ReviewDto updateReview(String id, ReviewDto reviewDto) {
+        if (bookRepository.findById(reviewDto.getBookId()).isEmpty()) {
+            throw new BookNotFoundException("Book not found with id: " + reviewDto.getBookId());
+        }
+
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(ERROR_NOT_FOUND_MSG + id));
 
