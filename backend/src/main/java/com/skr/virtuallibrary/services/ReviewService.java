@@ -90,7 +90,7 @@ public class ReviewService {
         boolean notHaveReviewOrAdmin = reviewRepository
                 .findAllByBookIdAndAuthorId(reviewDto.getBookId(), getUser().getId()).isEmpty()
                 || getUser().getAuthority().equals(Authority.ADMIN);
-        if (notHaveReviewOrAdmin) {
+        if (!notHaveReviewOrAdmin) {
             throw new ReviewAlreadyExistsException("You have already reviewed this book.");
         }
 
