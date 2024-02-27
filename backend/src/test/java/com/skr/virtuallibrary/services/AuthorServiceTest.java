@@ -91,7 +91,7 @@ class AuthorServiceTest {
         PagedResponse<AuthorDto> actual = authorService.findAllAuthors();
 
         // then
-        assertEquals(expected, actual);
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
     @Test
