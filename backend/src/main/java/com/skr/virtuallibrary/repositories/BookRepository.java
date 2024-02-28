@@ -17,4 +17,6 @@ public interface BookRepository extends MongoRepository<Book, String> {
 
     Page<Book> findAllByGenreListContains(Genre genre, Pageable pageable);
 
+    int countByGenreListContains(Genre genre);
+
 }

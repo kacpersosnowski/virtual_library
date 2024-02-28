@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.Mockito.when;
 
@@ -137,6 +138,20 @@ class GenreControllerTest {
                 .andReturn();
 
         Assertions.assertThat(result.getResponse().getStatus()).isEqualTo(200);
+    }
+
+    @Test
+    void testGetGenreBookCount() throws Exception {
+        Map<String, Integer> genreBookCount = Instancio.ofMap(String.class, Integer.class).size(3).create();
+
+        when(genreService.getGenreBookCount()).thenReturn(genreBookCount);
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/genres/book-count")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        Map<String, Integer> actual = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {});
+
+        Assertions.assertThat(result.getResponse().getStatus()).isEqualTo(200);
+        Assertions.assertThat(actual).usingRecursiveComparison().isEqualTo(genreBookCount);
     }
 
 }

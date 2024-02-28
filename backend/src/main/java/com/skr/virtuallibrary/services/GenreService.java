@@ -6,6 +6,7 @@ import com.skr.virtuallibrary.entities.Genre;
 import com.skr.virtuallibrary.exceptions.GenreAlreadyExistsException;
 import com.skr.virtuallibrary.exceptions.GenreNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
+import com.skr.virtuallibrary.repositories.BookRepository;
 import com.skr.virtuallibrary.repositories.GenreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,11 +15,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class GenreService {
 
     private final GenreRepository genreRepository;
+
+    private final BookRepository bookRepository;
 
     private final ModelMapper modelMapper;
 
@@ -73,6 +79,19 @@ public class GenreService {
         return new PagedResponse<>(
                 genreRepository.findAllByNameLikeIgnoreCase(name).stream().map(modelMapper::toGenreDto).toList()
         );
+    }
+
+    public Map<String, Integer> getGenreBookCount() {
+        Map<String, Integer> genreBookCount = new HashMap<>();
+        List<Genre> genreList = genreRepository.findAll();
+
+        for (Genre genre : genreList) {
+            int bookCount = bookRepository.countByGenreListContains(genre);
+            genreBookCount.put(genre.getName(), bookCount);
+        }
+
+        return genreBookCount.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
 
     private GenreDto saveGenre(GenreDto genreDto) {

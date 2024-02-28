@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/genres")
@@ -60,6 +61,12 @@ public class GenreController {
     @Operation(summary = "Delete genre by id.")
     public void deleteGenre(@PathVariable String id) {
         genreService.deleteGenre(id);
+    }
+
+    @GetMapping("/book-count")
+    @Operation(summary = "Get all genres with book count.")
+    public Map<String, Integer> getGenreBookCount() {
+        return genreService.getGenreBookCount();
     }
 
 }
