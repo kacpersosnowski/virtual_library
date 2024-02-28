@@ -27,9 +27,7 @@ public class Book {
 
     private List<Author> authorList;
 
-    private String shortDescription;
-
-    private String longDescription;
+    private String description;
 
     private List<Genre> genreList;
 

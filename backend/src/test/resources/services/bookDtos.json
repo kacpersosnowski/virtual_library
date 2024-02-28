@@ -9,8 +9,7 @@
         "lastName": "Doe"
       }
     ],
-    "shortDescription": "This is an example of a short description",
-    "longDescription": "This is an example of a long description",
+    "description": "This is an example of a description",
     "tagList": [
       "example",
       "test"
@@ -34,8 +33,7 @@
         "lastName": "Doe"
       }
     ],
-    "shortDescription": "This is an example of a short description",
-    "longDescription": "This is an example of a long description",
+    "description": "This is an example of a description",
     "tagList": [
       "example",
       "test"
@@ -59,8 +57,7 @@
         "lastName": "Smith"
       }
     ],
-    "shortDescription": "This is an example of a short description",
-    "longDescription": "This is an example of a long description",
+    "description": "This is an example of a description",
     "tagList": [
       "example",
       "test"
@@ -84,8 +81,7 @@
         "lastName": "Smith"
       }
     ],
-    "shortDescription": "This is an example of a short description",
-    "longDescription": "This is an example of a long description",
+    "description": "This is an example of a description",
     "tagList": [
       "example",
       "test"
@@ -109,8 +105,7 @@
         "lastName": "Doe"
       }
     ],
-    "shortDescription": "This is an example of a short description",
-    "longDescription": "This is an example of a long description",
+    "description": "This is an example of a description",
     "tagList": [
       "example",
       "test"
@@ -134,8 +129,7 @@
         "lastName": "Doe"
       }
     ],
-    "shortDescription": "This is an example of a short description",
-    "longDescription": "This is an example of a long description",
+    "description": "This is an example of a description",
     "tagList": [
       "example",
       "test"
@@ -159,8 +153,7 @@
         "lastName": "Smith"
       }
     ],
-    "shortDescription": "This is an example of a short description",
-    "longDescription": "This is an example of a long description",
+    "description": "This is an example of a description",
     "tagList": [
       "example",
       "test"
