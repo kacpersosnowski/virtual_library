@@ -39,8 +39,7 @@ const BookForm = () => {
   if (book && bookContentFile && bookCoverFile) {
     initialValues = {
       title: book.title,
-      shortDescription: book.shortDescription,
-      longDescription: book.longDescription,
+      description: book.description,
       authors: book.authorList,
       genres: book.genreList,
       tags: book.tagList,

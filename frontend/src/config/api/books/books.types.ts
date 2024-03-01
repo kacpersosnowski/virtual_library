@@ -6,8 +6,7 @@ export type Book = {
   id: string;
   title: string;
   authorList: Author[];
-  shortDescription: string;
-  longDescription: string;
+  description: string;
   genreList: Genre[];
   tagList: string[];
   bookCoverId: string;
@@ -19,7 +18,6 @@ export type BookItemData = {
   title: string;
   authorList: string;
   genreList?: string;
-  shortDescription?: string;
   cover?: string;
 };
 
@@ -27,8 +25,7 @@ export type ReadBookDTO = {
   id: string;
   title: string;
   authors: string[];
-  shortDescription?: string;
-  longDescription: string;
+  description: string;
   genres: string[];
   tags: string[];
   cover: string;
@@ -37,8 +34,7 @@ export type ReadBookDTO = {
 
 export type CreateBookDTO = {
   title: string;
-  shortDescription: string;
-  longDescription: string;
+  description: string;
   authors: Author[];
   genres: Genre[];
   tags: string[];
