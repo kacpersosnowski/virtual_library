@@ -111,6 +111,21 @@ const booksMessages: Message = {
     pl: "Recenzja została usunięta pomyślnie.",
     en: "The review was deleted successfully.",
   },
+  booksListPopularHeader: {
+    key: "books_list >> popular >> header",
+    pl: "Popularne w ostatnim czasie",
+    en: "Recently popular",
+  },
+  booksListBestRatedHeader: {
+    key: "books_list >> best_rated >> header",
+    pl: "Najlepiej oceniane",
+    en: "Best rated",
+  },
+  booksListLoadMoreButtonText: {
+    key: "books_list >> load_more >> button_text",
+    pl: "Wczytaj więcej",
+    en: "Load more",
+  },
   enterFullscreen: {
     key: "books >> read_book >> enter_full_screen",
     pl: "Pełny ekran (f)",

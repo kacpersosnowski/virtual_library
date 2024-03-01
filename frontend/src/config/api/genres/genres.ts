@@ -1,8 +1,14 @@
 import axios from "axios";
-import { CreateGenreDTO, Genre, GenresApi } from "./genres.types";
+import {
+  CreateGenreDTO,
+  Genre,
+  GenreBookCount,
+  GenresApi,
+} from "./genres.types";
 import { PagedResponse } from "../common/common.types";
 
 const url = "/genres";
+const bookCountUrl = `${url}/book-count`;
 
 export const genresApi: GenresApi = {
   getAllGenres: async () => {
@@ -17,6 +23,10 @@ export const genresApi: GenresApi = {
   },
   getGenreDetails: async (id) => {
     const response = await axios.get<Genre>(`${url}/${id}`);
+    return response.data;
+  },
+  getBookCountsByGenre: async () => {
+    const response = await axios.get<GenreBookCount>(bookCountUrl);
     return response.data;
   },
   createGenre: async (genre: CreateGenreDTO) => {
