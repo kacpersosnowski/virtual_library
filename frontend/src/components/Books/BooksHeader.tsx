@@ -1,14 +1,15 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, SxProps, Theme, Typography } from "@mui/material";
 import React from "react";
 
 type Props = {
   text: string;
+  sx?: SxProps<Theme>;
 };
 
 const BooksHeader: React.FC<Props> = (props) => {
   return (
-    <Container maxWidth={"xl"}>
-      <Box sx={{ pt: "4rem" }}>
+    <Container maxWidth={"xl"} sx={{ position: "relative", zIndex: 5 }}>
+      <Box sx={{ pt: "4rem", ...props.sx }}>
         <Typography
           variant="h4"
           sx={{

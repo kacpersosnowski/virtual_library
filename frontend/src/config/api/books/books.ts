@@ -26,6 +26,12 @@ export const booksApi: BooksApi = {
       content: parseBookItemsForAdmin(response.data.content),
     };
   },
+  getAllBooksByGenre: async (genre: string) => {
+    const response = await axios.get<PagedResponse<Book>>(url, {
+      params: { genre },
+    });
+    return parseBookItems(response.data.content);
+  },
   getBookDetails: async (id: string) => {
     const response = await axios.get<Book>(`${url}/${id}`);
     return parseBookItemForDetails(response.data);
