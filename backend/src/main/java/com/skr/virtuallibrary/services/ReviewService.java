@@ -2,7 +2,6 @@ package com.skr.virtuallibrary.services;
 
 import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.ReviewDto;
-import com.skr.virtuallibrary.entities.Book;
 import com.skr.virtuallibrary.entities.Review;
 import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.entities.enums.Authority;
@@ -98,7 +97,6 @@ public class ReviewService {
             throw new ReviewAlreadyExistsException("You have already reviewed this book.");
         }
 
-        review.setBook(book);
         review.setAuthor(getUser());
 
         reviewDto = modelMapper.toReviewDto(reviewRepository.save(review));
