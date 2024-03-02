@@ -41,15 +41,10 @@ const adminMessages: Message = {
     pl: "Tytuł",
     en: "Title",
   },
-  addBookFormShortDescription: {
-    key: "admin_panel >> add_book_form >> short_description",
-    pl: "Krótki opis",
-    en: "Short description",
-  },
-  addBookFormLongDescription: {
-    key: "admin_panel >> add_book_form >> long_description",
-    pl: "Długi opis",
-    en: "Long description",
+  addBookFormDescription: {
+    key: "admin_panel >> add_book_form >> description",
+    pl: "Opis",
+    en: "Description",
   },
   addBookFormAuthors: {
     key: "admin_panel >> add_book_form >> authors",

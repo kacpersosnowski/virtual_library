@@ -87,8 +87,7 @@ const AddEditBookForm: React.FC<Props> = (props) => {
     props.initialValues ||
     ({
       title: "",
-      shortDescription: "",
-      longDescription: "",
+      description: "",
       authors: [],
       genres: [],
       tags: [],
@@ -100,10 +99,7 @@ const AddEditBookForm: React.FC<Props> = (props) => {
     initialValues,
     validationSchema: Yup.object({
       title: Yup.string().required(t(validationMessages.fieldRequired.key)),
-      shortDescription: Yup.string().required(
-        t(validationMessages.fieldRequired.key),
-      ),
-      longDescription: Yup.string().required(
+      description: Yup.string().required(
         t(validationMessages.fieldRequired.key),
       ),
       authors: arrayNotEmptyValidator({
@@ -174,15 +170,8 @@ const AddEditBookForm: React.FC<Props> = (props) => {
         formik={formik}
       />
       <Input
-        id="shortDescription"
-        label={t(adminMessages.addBookFormShortDescription.key)}
-        formik={formik}
-        multiline
-        maxLength={100}
-      />
-      <Input
-        id="longDescription"
-        label={t(adminMessages.addBookFormLongDescription.key)}
+        id="description"
+        label={t(adminMessages.addBookFormDescription.key)}
         multiline
         minRows={4}
         maxRows={10}
