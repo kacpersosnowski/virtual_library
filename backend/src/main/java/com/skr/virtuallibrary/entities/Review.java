@@ -25,6 +25,6 @@ public class Review {
 
     private User author;
 
-    private Book book;
+    private String bookId;
 
 }

@@ -38,6 +38,8 @@ public class ReviewService {
 
     private final UserRepository userRepository;
 
+    private final BookRatingService bookRatingService;
+
     private final BookRepository bookRepository;
 
     private static final String ERROR_NOT_FOUND_MSG = "Not found review with id: ";
@@ -83,9 +85,11 @@ public class ReviewService {
     }
 
     public ReviewDto addReview(ReviewDto reviewDto) {
+        if (bookRepository.findById(reviewDto.getBookId()).isEmpty()) {
+            throw new BookNotFoundException("Book not found with id: " + reviewDto.getBookId());
+        }
+
         Review review = modelMapper.toReviewEntity(reviewDto);
-        Book book = bookRepository.findById(reviewDto.getBookId())
-                .orElseThrow(() -> new BookNotFoundException(BOOK_NOT_FOUND_MSG + reviewDto.getBookId()));
 
         boolean notHaveReviewOrAdmin = reviewRepository
                 .findAllByBookIdAndAuthorId(reviewDto.getBookId(), getUser().getId()).isEmpty()
@@ -97,7 +101,9 @@ public class ReviewService {
         review.setBook(book);
         review.setAuthor(getUser());
 
-        return modelMapper.toReviewDto(reviewRepository.save(review));
+        reviewDto = modelMapper.toReviewDto(reviewRepository.save(review));
+        bookRatingService.updateBookRating(review.getBookId());
+        return reviewDto;
     }
 
     public void deleteReview(String id) {
@@ -113,20 +119,22 @@ public class ReviewService {
         }
 
         reviewRepository.deleteById(id);
+        bookRatingService.updateBookRating(review.get().getBookId());
     }
 
     public ReviewDto updateReview(String id, ReviewDto reviewDto) {
+        if (bookRepository.findById(reviewDto.getBookId()).isEmpty()) {
+            throw new BookNotFoundException("Book not found with id: " + reviewDto.getBookId());
+        }
+
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(ERROR_NOT_FOUND_MSG + id));
-        Book book = bookRepository.findById(reviewDto.getBookId())
-                .orElseThrow(() -> new BookNotFoundException(BOOK_NOT_FOUND_MSG + reviewDto.getBookId()));
-        review.setBook(book);
 
         if (reviewDto.getAuthor() != null && !reviewDto.getAuthor().getId().equals(review.getAuthor().getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You cannot change review's author");
         }
 
-        if (!reviewDto.getBookId().equals(review.getBook().getId())) {
+        if (!reviewDto.getBookId().equals(review.getBookId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You cannot change review's book");
         }
 
@@ -138,7 +146,9 @@ public class ReviewService {
         review.setContent(reviewDto.getContent());
         review.setRating(reviewDto.getRating());
 
-        return modelMapper.toReviewDto(reviewRepository.save(review));
+        reviewDto = modelMapper.toReviewDto(reviewRepository.save(review));
+        bookRatingService.updateBookRating(review.getBookId());
+        return reviewDto;
     }
 
     private User getUser() {

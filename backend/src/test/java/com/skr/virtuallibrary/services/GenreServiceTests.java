@@ -155,7 +155,7 @@ class GenreServiceTests {
         PagedResponse<GenreDto> actual = genreService.getAllGenres();
 
         // then
-        assertEquals(expected, actual);
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
     @Test

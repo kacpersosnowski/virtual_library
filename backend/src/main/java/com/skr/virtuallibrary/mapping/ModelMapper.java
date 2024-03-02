@@ -24,9 +24,12 @@ public interface ModelMapper {
 
     User toUserEntity(UserDto userDto);
 
+    BookRatingDto toBookRatingDto(BookRating bookRating);
+
+    BookRating toBookRatingEntity(BookRatingDto bookRatingDto);
+
     @Mapping(target = "created", source = "auditData.createdDate")
     @Mapping(target = "lastModified", source = "auditData.lastModifiedDate")
-    @Mapping(target = "bookId", source = "book.id")
     ReviewDto toReviewDto(Review review);
 
     @Mapping(target = "auditData.createdDate", source = "created")

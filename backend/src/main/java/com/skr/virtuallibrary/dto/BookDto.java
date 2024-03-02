@@ -21,11 +21,8 @@ public class BookDto {
     @NotEmpty(message = "Author name list is mandatory.")
     private List<AuthorDto> authorList;
 
-    @NotEmpty(message = "Short description is mandatory.")
-    private String shortDescription;
-
-    @NotEmpty(message = "Long description is mandatory.")
-    private String longDescription;
+    @NotEmpty(message = "Description is mandatory.")
+    private String description;
 
     @NotEmpty(message = "Genre list is mandatory.")
     private List<Genre> genreList;

@@ -73,7 +73,7 @@ const BookDetailPage = () => {
             </ActionButton>
           </Box>
         </Box>
-        <BookDescription description={book.longDescription} />
+        <BookDescription description={book.description} />
         <ReviewsSection />
       </>
     );

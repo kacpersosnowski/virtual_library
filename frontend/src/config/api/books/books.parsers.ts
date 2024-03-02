@@ -14,7 +14,6 @@ export const parseBookItems = (data: Book[]): BookItemData[] => {
       title:
         dataItem.title.slice(0, 60) + (dataItem.title.length > 60 ? "..." : ""),
       authorList: parseAuthorsString(dataItem.authorList),
-      shortDescription: dataItem.shortDescription,
       cover: `${BACKEND_BASE_URL}/files/cover/${dataItem.bookCoverId}`,
     };
   });
@@ -37,7 +36,7 @@ export const parseBookItemForDetails = (dataItem: Book): ReadBookDTO => {
     title:
       dataItem.title.slice(0, 60) + (dataItem.title.length > 60 ? "..." : ""),
     authors: parseAuthorsList(dataItem.authorList),
-    longDescription: dataItem.longDescription,
+    description: dataItem.description,
     genres: parseGenresList(dataItem.genreList),
     tags: dataItem.tagList,
     cover: `${BACKEND_BASE_URL}/files/cover/${dataItem.bookCoverId}`,
@@ -51,8 +50,7 @@ export const parseBookFormDataForCreate = (data: CreateBookDTO) => {
   formData.append("content", data.content, data.content.name);
   const book = {
     title: data.title,
-    shortDescription: data.shortDescription,
-    longDescription: data.longDescription,
+    description: data.description,
     authorList: data.authors,
     genreList: data.genres,
     tagList: data.tags,

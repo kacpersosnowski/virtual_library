@@ -88,17 +88,17 @@ class GenreControllerTest {
 
     @Test
     void testGetAllGenres() throws Exception {
-        List<GenreDto> genreDtoList = Instancio.ofList(GenreDto.class).size(3).create();
+        PagedResponse<GenreDto> genre = new PagedResponse<>(Instancio.ofList(GenreDto.class).size(3).create());
 
-        when(genreService.getAllGenres()).thenReturn(new PagedResponse<>(genreDtoList));
+        when(genreService.getAllGenres()).thenReturn(genre);
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/genres")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-        List<GenreDto> actualGenreDtoList = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+        PagedResponse<GenreDto> actual = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
         });
 
         Assertions.assertThat(result.getResponse().getStatus()).isEqualTo(200);
-        Assertions.assertThat(actualGenreDtoList).usingRecursiveComparison().isEqualTo(genreDtoList);
+        Assertions.assertThat(actual).usingRecursiveComparison().isEqualTo(genre);
     }
 
     @Test
