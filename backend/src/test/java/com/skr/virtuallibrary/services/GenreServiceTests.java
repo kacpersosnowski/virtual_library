@@ -5,8 +5,10 @@ import com.skr.virtuallibrary.dto.GenreDto;
 import com.skr.virtuallibrary.entities.Genre;
 import com.skr.virtuallibrary.exceptions.GenreNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
+import com.skr.virtuallibrary.repositories.BookRepository;
 import com.skr.virtuallibrary.repositories.GenreRepository;
 import com.skr.virtuallibrary.services.testData.GenreTestDataBuilder;
+import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,7 +19,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -34,6 +38,9 @@ class GenreServiceTests {
 
     @Mock
     private GenreRepository genreRepository;
+
+    @Mock
+    private BookRepository bookRepository;
 
     @Mock
     private ModelMapper modelMapper;
@@ -198,5 +205,25 @@ class GenreServiceTests {
 
         // then
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+    }
+
+    @Test
+    void getGenreBookCount_shouldReturnGenreBookCountMap() {
+        // given
+        List<Genre> genreList = Instancio.ofList(Genre.class).size(3).create();
+        Map<String, Integer> genreBookCount = new HashMap<>();
+        for (Genre genre : genreList) {
+            genreBookCount.put(genre.getName(), 1);
+        }
+
+        // when
+        when(genreRepository.findAll()).thenReturn(genreList);
+        for (Genre genre : genreList) {
+            when(bookRepository.countByGenreListContains(genre)).thenReturn(1);
+        }
+        Map<String, Integer> result = genreService.getGenreBookCount();
+
+        // then
+        assertThat(result).usingRecursiveComparison().isEqualTo(genreBookCount);
     }
 }
