@@ -1,5 +1,6 @@
 package com.skr.virtuallibrary.entities;
 
+import com.skr.virtuallibrary.entities.enums.Language;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,8 @@ public class Book {
     private List<Genre> genreList;
 
     private List<String> tagList;
+
+    private Language language;
 
     private String bookCoverId;
 
