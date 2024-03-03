@@ -9,8 +9,10 @@ import com.skr.virtuallibrary.entities.Genre;
 import com.skr.virtuallibrary.exceptions.BookNotFoundException;
 import com.skr.virtuallibrary.exceptions.GenreNotFoundException;
 import com.skr.virtuallibrary.exceptions.IllegalPageNumberException;
+import com.skr.virtuallibrary.exceptions.InternalException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.AuthorRepository;
+import com.skr.virtuallibrary.repositories.BookRatingRepository;
 import com.skr.virtuallibrary.repositories.BookRepository;
 import com.skr.virtuallibrary.repositories.GenreRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,8 @@ public class BookService {
     private final AuthorRepository authorRepository;
 
     private final GenreRepository genreRepository;
+
+    private final BookRatingRepository bookRatingRepository;
 
     private final ModelMapper modelMapper;
 
@@ -155,6 +159,22 @@ public class BookService {
                 books.getTotalElements(),
                 books.stream().map(modelMapper::toBookDto).toList()
         );
+    }
+
+    public List<BookDto> findMostPopularBooks() {
+        return bookRatingRepository.findTop10ByOrderByRateCountDesc().stream().map(bookRating -> {
+            Book book = bookRepository.findById(bookRating.getBookId())
+                    .orElseThrow(() -> new InternalException("Server wanted to provide you with a book that doesn't exist"));
+            return modelMapper.toBookDto(book);
+        }).toList();
+    }
+
+    public List<BookDto> findBestRatedBooks() {
+        return bookRatingRepository.findTop10ByOrderByRateAverageDesc().stream().map(bookRating -> {
+            Book book = bookRepository.findById(bookRating.getBookId())
+                    .orElseThrow(() -> new InternalException("Server wanted to provide you with a book that doesn't exist"));
+            return modelMapper.toBookDto(book);
+        }).toList();
     }
 
     private BookDto saveBook(BookDto bookDto) {

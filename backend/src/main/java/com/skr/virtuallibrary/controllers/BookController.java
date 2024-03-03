@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @RequestMapping(value = "/books")
 @Tag(name = "Books", description = "Books management APIs")
@@ -92,5 +93,17 @@ public class BookController {
         bookDto.setBookCoverId(bookCoverId);
         bookDto.setBookContentId(bookContentId);
         return bookService.updateBook(id, bookDto);
+    }
+
+    @Operation(summary = "Find 10 most popular books")
+    @GetMapping("/most-popular")
+    public List<BookDto> findMostPopularBooks() {
+        return bookService.findMostPopularBooks();
+    }
+
+    @Operation(summary = "Find 10 best rated books")
+    @GetMapping("/best-rated")
+    public List<BookDto> findMostRatedBooks() {
+        return bookService.findBestRatedBooks();
     }
 }
