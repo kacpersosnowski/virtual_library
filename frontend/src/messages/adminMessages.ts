@@ -61,6 +61,11 @@ const adminMessages: Message = {
     pl: "Tagi",
     en: "Tags",
   },
+  addBookFormLanguage: {
+    key: "admin_panel >> add_book_form >> language",
+    pl: "Język",
+    en: "Language",
+  },
   addBookFormCover: {
     key: "admin_panel >> add_book_form >> cover",
     pl: "Okładka:",

@@ -39,7 +39,7 @@ const BookInfosTiles: React.FC<Props> = (props) => {
       <BookInfosTile
         icon={<LanguageIcon color="primary" />}
         label={t(booksMessages.bookLanguage.key) + ":"}
-        infos="Polski"
+        infos={book.language}
       />
     </Grid>
   );

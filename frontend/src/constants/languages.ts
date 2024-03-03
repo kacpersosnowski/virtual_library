@@ -20,3 +20,5 @@ export const LANGUAGES = [
     backendCode: BACKEND_LANGUAGES_CODES.english,
   },
 ];
+
+export type Language = "ENG" | "PL";
