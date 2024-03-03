@@ -2,6 +2,7 @@ package com.skr.virtuallibrary.services.testData;
 
 import com.skr.virtuallibrary.dto.BookDto;
 import com.skr.virtuallibrary.entities.Book;
+import com.skr.virtuallibrary.entities.enums.Language;
 import com.skr.virtuallibrary.services.testData.records.BookDtoExample;
 import com.skr.virtuallibrary.services.testData.records.BookExample;
 
@@ -22,6 +23,7 @@ public class BookTestDataBuilder {
                 .description("exampleDescription")
                 .genreList(List.of(GenreTestDataBuilder.genreExample().genre()))
                 .tagList(List.of("exampleTag", "exampleTag2"))
+                .language(Language.PL)
                 .bookCoverId(null)
                 .bookContentId(null)
                 .build();
@@ -39,6 +41,7 @@ public class BookTestDataBuilder {
                 .description("exampleDescription")
                 .genreList(List.of(GenreTestDataBuilder.genreExample().genre()))
                 .tagList(List.of("exampleTag", "exampleTag2"))
+                .language(Language.PL)
                 .bookCoverId(null)
                 .bookContentId(null)
                 .build();
@@ -53,6 +56,7 @@ public class BookTestDataBuilder {
                 .description("exampleDescription")
                 .genreList(List.of(GenreTestDataBuilder.genreExample().genre()))
                 .tagList(List.of("exampleTag", "exampleTag2"))
+                .language(Language.PL)
                 .bookCoverId(null)
                 .bookContentId(null)
                 .build();
@@ -67,6 +71,7 @@ public class BookTestDataBuilder {
                 .description("exampleDescription")
                 .genreList(List.of(GenreTestDataBuilder.genreExample().genre()))
                 .tagList(List.of("exampleTag", "exampleTag2"))
+                .language(Language.PL)
                 .bookCoverId(null)
                 .bookContentId(null)
                 .build();

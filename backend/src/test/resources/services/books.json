@@ -20,6 +20,7 @@
         "name": "Science Fiction"
       }
     ],
+    "language": "PL",
     "bookCoverId": null,
     "bookContentId": null
   },
@@ -44,6 +45,7 @@
         "name": "Fantasy"
       }
     ],
+    "language": "PL",
     "bookCoverId": null,
     "bookContentId": null
   },
@@ -68,6 +70,7 @@
         "name": "Mystery"
       }
     ],
+    "language": "PL",
     "bookCoverId": null,
     "bookContentId": null
   },
@@ -92,6 +95,7 @@
         "name": "Romance"
       }
     ],
+    "language": "PL",
     "bookCoverId": null,
     "bookContentId": null
   },
@@ -116,6 +120,7 @@
         "name": "Science Fiction"
       }
     ],
+    "language": "PL",
     "bookCoverId": null,
     "bookContentId": null
   },
@@ -140,6 +145,7 @@
         "name": "Fantasy"
       }
     ],
+    "language": "PL",
     "bookCoverId": null,
     "bookContentId": null
   },
@@ -164,6 +170,7 @@
         "name": "Mystery"
       }
     ],
+    "language": "PL",
     "bookCoverId": null,
     "bookContentId": null
   }
