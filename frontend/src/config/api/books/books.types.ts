@@ -53,6 +53,8 @@ export type BooksApi = {
     queryData: PageSearchData,
   ) => Promise<PagedResponse<BookItemData>>;
   getAllBooksByGenre: (genre: string) => Promise<BookItemData[]>;
+  getMostPopularBooks: () => Promise<BookItemData[]>;
+  getBestRatedBooks: () => Promise<BookItemData[]>;
   getBookDetails: (id: string) => Promise<ReadBookDTO>;
   getRawBookDetails: (id: string) => Promise<Book>;
   getBookContent: (id: string) => Promise<Uint8Array>;
