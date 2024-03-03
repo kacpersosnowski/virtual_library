@@ -23,7 +23,7 @@ public class ReviewTestDataBuilder {
                 .content("exampleContent")
                 .rating(5)
                 .bookId(BookTestDataBuilder.bookExample().book().getId())
-                .author(UserTestDataBuilder.userExample().user())
+                .authorId(UserTestDataBuilder.userExample().user().getId())
                 .auditData(AuditData.builder()
                         .createdBy(UserTestDataBuilder.userExample().user().getId())
                         .createdDate(LocalDateTime.MIN)

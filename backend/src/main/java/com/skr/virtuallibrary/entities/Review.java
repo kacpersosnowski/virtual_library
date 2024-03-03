@@ -23,7 +23,7 @@ public class Review {
 
     private int rating;
 
-    private User author;
+    private String authorId;
 
     private String bookId;
 

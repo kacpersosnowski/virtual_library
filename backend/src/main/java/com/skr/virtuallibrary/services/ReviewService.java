@@ -43,7 +43,7 @@ public class ReviewService {
 
         Review review = modelMapper.toReviewEntity(reviewDto);
 
-        review.setAuthor(getUser());
+        review.setAuthorId(getUser().getId());
 
         reviewDto = modelMapper.toReviewDto(reviewRepository.save(review));
         bookRatingService.updateBookRating(review.getBookId());
@@ -57,7 +57,7 @@ public class ReviewService {
         }
 
         User user = getUser();
-        boolean isAdminOrAuthor = user.getAuthority().equals(Authority.ADMIN) || user.getId().equals(review.get().getAuthor().getId());
+        boolean isAdminOrAuthor = user.getAuthority().equals(Authority.ADMIN) || user.getId().equals(review.get().getAuthorId());
         if (!isAdminOrAuthor) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot delete this review.");
         }
@@ -74,7 +74,7 @@ public class ReviewService {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(ERROR_NOT_FOUND_MSG + id));
 
-        if (reviewDto.getAuthor() != null && !reviewDto.getAuthor().getId().equals(review.getAuthor().getId())) {
+        if (reviewDto.getAuthor() != null && !reviewDto.getAuthor().getId().equals(review.getAuthorId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You cannot change review's author");
         }
 
@@ -82,7 +82,7 @@ public class ReviewService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You cannot change review's book");
         }
 
-        if (!review.getAuthor().getId().equals(getUser().getId())) {
+        if (!review.getAuthorId().equals(getUser().getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot edit this review.");
         }
 
