@@ -45,7 +45,7 @@ public class ReviewService {
 
         review.setAuthorId(getUser().getId());
 
-        reviewDto = modelMapper.toReviewDto(reviewRepository.save(review));
+        reviewDto = modelMapper.toReviewDto(reviewRepository.save(review), getUser());
         bookRatingService.updateBookRating(review.getBookId());
         return reviewDto;
     }
@@ -90,7 +90,7 @@ public class ReviewService {
         review.setContent(reviewDto.getContent());
         review.setRating(reviewDto.getRating());
 
-        reviewDto = modelMapper.toReviewDto(reviewRepository.save(review));
+        reviewDto = modelMapper.toReviewDto(reviewRepository.save(review), getUser());
         bookRatingService.updateBookRating(review.getBookId());
         return reviewDto;
     }

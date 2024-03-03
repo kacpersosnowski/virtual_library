@@ -5,9 +5,11 @@ import com.skr.virtuallibrary.dto.ReviewDto;
 import com.skr.virtuallibrary.entities.Review;
 import com.skr.virtuallibrary.exceptions.BookNotFoundException;
 import com.skr.virtuallibrary.exceptions.ReviewNotFoundException;
+import com.skr.virtuallibrary.exceptions.UserNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.BookRepository;
 import com.skr.virtuallibrary.repositories.ReviewRepository;
+import com.skr.virtuallibrary.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,20 +31,25 @@ public class FindReviewService {
 
     private final BookRepository bookRepository;
 
+    private final UserRepository userRepository;
+
     private static final String ERROR_NOT_FOUND_MSG = "Not found review with id: ";
 
     public static final String BOOK_NOT_FOUND_MSG = "Not found book with id: ";
 
     public ReviewDto findReviewById(String id) {
-        return reviewRepository.findById(id).map(modelMapper::toReviewDto)
+        return reviewRepository.findById(id).map(review ->
+                        modelMapper.toReviewDto(review, userRepository.findById(review.getAuthorId())
+                                .orElseThrow(() -> new UserNotFoundException("Not found user with id: " + review.getAuthorId()))))
                 .orElseThrow(() -> new ReviewNotFoundException(ERROR_NOT_FOUND_MSG + id));
     }
 
     public List<ReviewDto> findAllReviews() {
         return reviewRepository.findAll()
                 .stream()
-                .map(modelMapper::toReviewDto)
-                .toList();
+                .map(review -> modelMapper.toReviewDto(review, userRepository.findById(review.getAuthorId())
+                        .orElseThrow(() -> new UserNotFoundException("Not found user with id: " + review.getAuthorId())))
+                ).toList();
     }
 
     public PagedResponse<ReviewDto> findReviewsByBookId(String id, Integer pageNr) {
@@ -59,7 +66,10 @@ public class FindReviewService {
 
         return new PagedResponse<>(
                 reviews.getTotalElements(),
-                reviews.stream().map(modelMapper::toReviewDto).toList()
+                reviews.stream()
+                        .map(review -> modelMapper.toReviewDto(review, userRepository.findById(review.getAuthorId())
+                                .orElseThrow(() -> new UserNotFoundException("Not found user with id: " + review.getAuthorId())))
+                        ).toList()
         );
     }
 
@@ -67,7 +77,10 @@ public class FindReviewService {
         if (bookRepository.findById(id).isEmpty()) {
             throw new BookNotFoundException(BOOK_NOT_FOUND_MSG + id);
         }
-        List<ReviewDto> reviews = reviewRepository.findAllByBookId(id).stream().map(modelMapper::toReviewDto).toList();
+        List<ReviewDto> reviews = reviewRepository.findAllByBookId(id).stream()
+                .map(review -> modelMapper.toReviewDto(review, userRepository.findById(review.getAuthorId())
+                        .orElseThrow(() -> new UserNotFoundException("Not found user with id: " + review.getAuthorId())))
+                ).toList();
         return new PagedResponse<>(reviews);
     }
 
