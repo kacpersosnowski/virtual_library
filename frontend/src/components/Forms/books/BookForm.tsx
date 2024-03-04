@@ -43,6 +43,7 @@ const BookForm = () => {
       authors: book.authorList,
       genres: book.genreList,
       tags: book.tagList,
+      language: book.language,
       cover: bookCoverFile,
       content: bookContentFile,
     };

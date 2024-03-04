@@ -14,6 +14,7 @@ import ActionButton from "../../UI/ActionButton";
 import validationMessages from "../../../messages/validationMessages";
 import errorMessages from "../../../messages/errorMessages";
 import AutocompleteInput from "../common/AutocompleteInput";
+import Select from "../common/Select";
 import authorsApi from "../../../config/api/authors/authors";
 import genresApi from "../../../config/api/genres/genres";
 import LoadingSpinner from "../../UI/LoadingSpinner";
@@ -28,6 +29,7 @@ import AddAuthorPopover from "../authors/AddAuthorPopover";
 import { Author } from "../../../config/api/authors/authors.types";
 import { Genre } from "../../../config/api/genres/genres.types";
 import AddGenrePopover from "../genres/AddGenrePopover";
+import { LANGUAGES } from "../../../constants/languages";
 
 type Props = {
   initialValues?: CreateBookDTO;
@@ -91,6 +93,7 @@ const AddEditBookForm: React.FC<Props> = (props) => {
       authors: [],
       genres: [],
       tags: [],
+      language: "PL",
       cover: null,
       content: null,
     } as CreateBookDTO);
@@ -111,6 +114,7 @@ const AddEditBookForm: React.FC<Props> = (props) => {
       tags: arrayNotEmptyValidator({
         required: t(validationMessages.fieldRequired.key),
       }),
+      language: Yup.string().required(t(validationMessages.fieldRequired.key)),
       cover: Yup.mixed().required(t(validationMessages.fieldRequired.key)),
       content: Yup.mixed().required(t(validationMessages.fieldRequired.key)),
     }),
@@ -140,6 +144,11 @@ const AddEditBookForm: React.FC<Props> = (props) => {
   if (isFetchingAuthorsLoading || isFetchingGenresLoading) {
     return <LoadingSpinner />;
   }
+
+  const languagesToChoose = LANGUAGES.map((language) => ({
+    label: language.label,
+    value: language.backendCode,
+  }));
 
   return (
     <Box
@@ -236,6 +245,12 @@ const AddEditBookForm: React.FC<Props> = (props) => {
         options={[]}
         isOptionEqualToValue={(option, value) => option === value}
         sx={{ mt: "1rem" }}
+      />
+      <Select
+        id="language"
+        label={t(adminMessages.addBookFormLanguage.key)}
+        formik={formik}
+        items={languagesToChoose}
       />
       <FilePicker
         id="cover"
