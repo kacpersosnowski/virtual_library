@@ -3,6 +3,7 @@ package com.skr.virtuallibrary.services;
 import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.dto.BookDto;
+import com.skr.virtuallibrary.dto.GenreDto;
 import com.skr.virtuallibrary.entities.Author;
 import com.skr.virtuallibrary.entities.Book;
 import com.skr.virtuallibrary.entities.Genre;
@@ -47,13 +48,13 @@ public class BookService {
     private static final String ERROR_NOT_FOUND_MSG = "Not found book with id: ";
 
     public BookDto findBookById(String id) {
-        return bookRepository.findById(id).map(modelMapper::toBookDto)
+        return bookRepository.findById(id).map(this::toBookDto)
                 .orElseThrow(() -> new BookNotFoundException(ERROR_NOT_FOUND_MSG + id));
     }
 
     public PagedResponse<BookDto> findAllBooks() {
         return new PagedResponse<>(
-                bookRepository.findAll().stream().map(modelMapper::toBookDto).toList()
+                bookRepository.findAll().stream().map(this::toBookDto).toList()
         );
     }
 
@@ -67,7 +68,7 @@ public class BookService {
 
         return new PagedResponse<>(
                 bookPage.getTotalElements(),
-                bookPage.stream().map(modelMapper::toBookDto).toList()
+                bookPage.stream().map(this::toBookDto).toList()
         );
     }
 
@@ -104,7 +105,7 @@ public class BookService {
             books.addAll(mongoTemplate.find(query, Book.class));
         }
         return new PagedResponse<>(
-                books.stream().map(modelMapper::toBookDto).distinct().toList()
+                books.stream().map(this::toBookDto).distinct().toList()
         );
     }
 
@@ -131,7 +132,7 @@ public class BookService {
 
         return new PagedResponse<>(
                 totalElements,
-                bookPage.stream().map(modelMapper::toBookDto).distinct().toList()
+                bookPage.stream().map(this::toBookDto).distinct().toList()
         );
     }
 
@@ -140,7 +141,7 @@ public class BookService {
                 .orElseThrow(() -> new GenreNotFoundException("Not found genre with name: " + genreName));
 
         return new PagedResponse<>(
-                bookRepository.findAllByGenreListContains(genre).stream().map(modelMapper::toBookDto).toList()
+                bookRepository.findAllByGenreListContains(genre).stream().map(this::toBookDto).toList()
         );
     }
 
@@ -157,7 +158,7 @@ public class BookService {
 
         return new PagedResponse<>(
                 books.getTotalElements(),
-                books.stream().map(modelMapper::toBookDto).toList()
+                books.stream().map(this::toBookDto).toList()
         );
     }
 
@@ -165,7 +166,7 @@ public class BookService {
         return bookRatingRepository.findTop10ByOrderByRateCountDesc().stream().map(bookRating -> {
             Book book = bookRepository.findById(bookRating.getBookId())
                     .orElseThrow(() -> new InternalException("Server wanted to provide you with a book that doesn't exist"));
-            return modelMapper.toBookDto(book);
+            return modelMapper.toBookDto(book); //FIXME: fix it after merge with main
         }).toList();
     }
 
@@ -173,20 +174,50 @@ public class BookService {
         return bookRatingRepository.findTop10ByOrderByRateAverageDesc().stream().map(bookRating -> {
             Book book = bookRepository.findById(bookRating.getBookId())
                     .orElseThrow(() -> new InternalException("Server wanted to provide you with a book that doesn't exist"));
-            return modelMapper.toBookDto(book);
+            return modelMapper.toBookDto(book); //FIXME: fix it after merge with main
         }).toList();
     }
 
     private BookDto saveBook(BookDto bookDto) {
-        List<Author> authorList = bookDto.getAuthorList().stream().map(this::findOrCreateAuthor).toList();
+        List<String> authorList = bookDto.getAuthorList().stream().map(this::findOrCreateAuthor).toList();
         Book book = modelMapper.toBookEntity(bookDto);
         book.setAuthorList(authorList);
-        return modelMapper.toBookDto(bookRepository.save(book));
+
+        List<String> genreList = bookDto.getGenreList().stream().map(this::findOrCreateGenre).toList();
+        book.setGenreList(genreList);
+
+        return modelMapper.toBookDto(bookRepository.save(book), bookDto.getAuthorList(), bookDto.getGenreList());
     }
 
-    private Author findOrCreateAuthor(AuthorDto authorDto) {
+    private String findOrCreateAuthor(AuthorDto authorDto) {
         Optional<Author> existingAuthor = authorRepository.findByFirstNameAndLastName(authorDto.getFirstName(), authorDto.getLastName());
-        return existingAuthor.orElseGet(() -> authorRepository.save(modelMapper.toAuthorEntity(authorDto)));
+
+        if (existingAuthor.isPresent()) {
+            return existingAuthor.get().getId();
+        }
+        return authorRepository.save(modelMapper.toAuthorEntity(authorDto)).getId();
     }
 
+    private String findOrCreateGenre(GenreDto genreDto) {
+        Optional<Genre> existingGenre = genreRepository.findByName(genreDto.getName());
+
+        if (existingGenre.isPresent()) {
+            return existingGenre.get().getId();
+        }
+        return genreRepository.save(modelMapper.toGenreEntity(genreDto)).getId();
+    }
+
+    private BookDto toBookDto(Book book) {
+        List<AuthorDto> authorDtoList = book.getAuthorList().stream()
+                .map(authorId -> authorRepository.findById(authorId)
+                        .map(modelMapper::toAuthorDto)
+                        .orElseThrow(() -> new InternalException("Server wanted to provide you with an author that doesn't exist")))
+                .toList();
+        List<GenreDto> genreDtoList = book.getGenreList().stream()
+                .map(genreId -> genreRepository.findById(genreId)
+                        .map(modelMapper::toGenreDto)
+                        .orElseThrow(() -> new InternalException("Server wanted to provide you with a genre that doesn't exist")))
+                .toList();
+        return modelMapper.toBookDto(book, authorDtoList, genreDtoList);
+    }
 }

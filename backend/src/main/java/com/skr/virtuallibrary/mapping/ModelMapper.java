@@ -5,10 +5,14 @@ import com.skr.virtuallibrary.entities.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper
 public interface ModelMapper {
 
-    BookDto toBookDto(Book book);
+    @Mapping(target = "authorList", source = "authorDtoList")
+    @Mapping(target = "genreList", source = "genreDtoList")
+    BookDto toBookDto(Book book, List<AuthorDto> authorDtoList, List<GenreDto> genreDtoList);
 
     Book toBookEntity(BookDto bookDto);
 
