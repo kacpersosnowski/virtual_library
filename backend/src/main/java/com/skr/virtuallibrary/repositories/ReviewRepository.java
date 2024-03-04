@@ -12,4 +12,6 @@ public interface ReviewRepository extends MongoRepository<Review, String> {
     Page<Review> findAllByBookId(String bookId, Pageable pageable);
 
     List<Review> findAllByBookId(String bookId);
+
+    List<Review> findAllByBookIdAndAuthorId(String bookId, String userId);
 }

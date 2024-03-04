@@ -1,3 +1,4 @@
+import { Language } from "../../../constants/languages";
 import { Author } from "../authors/authors.types";
 import { PageSearchData, PagedResponse } from "../common/common.types";
 import { Genre } from "../genres/genres.types";
@@ -9,6 +10,7 @@ export type Book = {
   description: string;
   genreList: Genre[];
   tagList: string[];
+  language: Language;
   bookCoverId: string;
   bookContentId: string;
 };
@@ -28,6 +30,7 @@ export type ReadBookDTO = {
   description: string;
   genres: string[];
   tags: string[];
+  language: string;
   cover: string;
   bookContentId: string;
 };
@@ -38,6 +41,7 @@ export type CreateBookDTO = {
   authors: Author[];
   genres: Genre[];
   tags: string[];
+  language: Language;
   cover: File;
   content: File;
 };
@@ -53,6 +57,8 @@ export type BooksApi = {
     queryData: PageSearchData,
   ) => Promise<PagedResponse<BookItemData>>;
   getAllBooksByGenre: (genre: string) => Promise<BookItemData[]>;
+  getMostPopularBooks: () => Promise<BookItemData[]>;
+  getBestRatedBooks: () => Promise<BookItemData[]>;
   getBookDetails: (id: string) => Promise<ReadBookDTO>;
   getRawBookDetails: (id: string) => Promise<Book>;
   getBookContent: (id: string) => Promise<Uint8Array>;

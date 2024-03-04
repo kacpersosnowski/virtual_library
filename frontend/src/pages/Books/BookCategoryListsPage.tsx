@@ -86,8 +86,8 @@ const BookCategoryListsPage = () => {
     try {
       setIsInitialLoading(true);
       const initialListsPromises = [
-        booksApi.getAllBooks().then((response) => response),
-        booksApi.getAllBooks().then((response) => response),
+        booksApi.getMostPopularBooks().then((response) => response),
+        booksApi.getBestRatedBooks().then((response) => response),
       ];
       if (initialGenresList.length > 0) {
         initialListsPromises.push(

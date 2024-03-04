@@ -1,4 +1,5 @@
 import { BACKEND_BASE_URL } from "../../../constants/api";
+import { LANGUAGES } from "../../../constants/languages";
 import {
   parseAllAuthorsString,
   parseAuthorsList,
@@ -39,6 +40,9 @@ export const parseBookItemForDetails = (dataItem: Book): ReadBookDTO => {
     description: dataItem.description,
     genres: parseGenresList(dataItem.genreList),
     tags: dataItem.tagList,
+    language: LANGUAGES.find(
+      (language) => language.backendCode === dataItem.language,
+    )?.label,
     cover: `${BACKEND_BASE_URL}/files/cover/${dataItem.bookCoverId}`,
     bookContentId: dataItem.bookContentId,
   };
@@ -54,6 +58,7 @@ export const parseBookFormDataForCreate = (data: CreateBookDTO) => {
     authorList: data.authors,
     genreList: data.genres,
     tagList: data.tags,
+    language: data.language,
   };
   formData.append(
     "book",

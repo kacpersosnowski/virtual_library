@@ -1,7 +1,9 @@
 package com.skr.virtuallibrary.dto;
 
 import com.skr.virtuallibrary.entities.Genre;
+import com.skr.virtuallibrary.entities.enums.Language;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.List;
@@ -29,6 +31,9 @@ public class BookDto {
 
     @NotEmpty(message = "Tag list is mandatory.")
     private List<String> tagList;
+
+    @NotNull(message = "Language is mandatory.")
+    private Language language;
 
     private String bookCoverId;
 
