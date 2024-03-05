@@ -5,18 +5,21 @@ import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.dto.BookDto;
 import com.skr.virtuallibrary.entities.Author;
 import com.skr.virtuallibrary.entities.Book;
+import com.skr.virtuallibrary.entities.Genre;
 import com.skr.virtuallibrary.exceptions.BookNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.AuthorRepository;
 import com.skr.virtuallibrary.repositories.BookRepository;
+import com.skr.virtuallibrary.repositories.GenreRepository;
+import com.skr.virtuallibrary.services.testData.AuthorTestDataBuilder;
 import com.skr.virtuallibrary.services.testData.BookTestDataBuilder;
+import com.skr.virtuallibrary.services.testData.GenreTestDataBuilder;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +42,9 @@ class BookServiceTests {
     private AuthorRepository authorRepository;
 
     @Mock
+    private GenreRepository genreRepository;
+
+    @Mock
     private ModelMapper modelMapper;
 
     private Book exampleBook;
@@ -58,7 +64,23 @@ class BookServiceTests {
 
         // when
         when(bookRepository.findById(idToFind)).thenReturn(Optional.ofNullable(exampleBook));
-        when(modelMapper.toBookDto(exampleBook)).thenReturn(exampleBookDto);
+        when(modelMapper.toBookDto(exampleBook, exampleBookDto.getAuthorList(), exampleBookDto.getGenreList()))
+                .thenReturn(exampleBookDto);
+        for (int i=0; i<exampleBook.getAuthorList().size(); i++) {
+            Author author = AuthorTestDataBuilder.authorExample().author();
+            when(authorRepository.findById(exampleBook.getAuthorList().get(i)))
+                    .thenReturn(Optional.ofNullable(author));
+            when(modelMapper.toAuthorDto(author))
+                    .thenReturn(AuthorTestDataBuilder.authorDtoExample().authorDto());
+        }
+        for(int i=0; i<exampleBook.getGenreList().size(); i++) {
+            Genre genre = GenreTestDataBuilder.genreExample().genre();
+            when(genreRepository.findById(exampleBook.getGenreList().get(i)))
+                    .thenReturn(Optional.ofNullable(genre));
+            when(modelMapper.toGenreDto(genre))
+                    .thenReturn(GenreTestDataBuilder.genreDtoExample().genreDto());
+        }
+
         BookDto expected = exampleBookDto;
         BookDto actual = bookService.findBookById(idToFind);
 
@@ -87,7 +109,7 @@ class BookServiceTests {
         // when
         when(bookRepository.findAll()).thenReturn(booksExamples);
         for (int i = 0; i < booksExamples.size(); i++) {
-            when(modelMapper.toBookDto(booksExamples.get(i)))
+            when(modelMapper.toBookDto(booksExamples.get(i), bookDtosExamples.get(i).getAuthorList(), bookDtosExamples.get(i).getGenreList()))
                     .thenReturn(bookDtosExamples.get(i));
         }
         PagedResponse<BookDto> expected = new PagedResponse<>(bookDtosExamples);
@@ -116,9 +138,11 @@ class BookServiceTests {
                     ));
         }
         when(bookRepository.save(bookToAdd)).thenReturn(bookToAdd);
-        when(modelMapper.toBookDto(bookToAdd)).thenReturn(bookDtoToAdd);
+        when(modelMapper.toBookDto(bookToAdd, bookDtoToAdd.getAuthorList(), bookDtoToAdd.getGenreList()))
+                .thenReturn(bookDtoToAdd);
         when(bookRepository.save(bookToAdd)).thenReturn(bookToAdd);
-        when(modelMapper.toBookDto(bookToAdd)).thenReturn(bookDtoToAdd);
+        when(modelMapper.toBookDto(bookToAdd, bookDtoToAdd.getAuthorList(), bookDtoToAdd.getGenreList()))
+                .thenReturn(bookDtoToAdd);
         BookDto expected = bookDtoToAdd;
         BookDto actual = bookService.addBook(bookDtoToAdd);
 
@@ -165,7 +189,8 @@ class BookServiceTests {
         when(bookRepository.findById(existingBookId)).thenReturn(Optional.ofNullable(exampleBook));
         when(modelMapper.toBookEntity(bookInProgress)).thenReturn(newBook);
         when(bookRepository.save(newBook)).thenReturn(newBook);
-        when(modelMapper.toBookDto(newBook)).thenReturn(bookInProgress);
+        when(modelMapper.toBookDto(newBook, inputBook.getAuthorList(), inputBook.getGenreList()))
+                .thenReturn(bookInProgress);
         BookDto expected = bookInProgress;
         BookDto actual = bookService.updateBook(existingBookId, inputBook);
 
