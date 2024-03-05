@@ -1,12 +1,11 @@
 package com.skr.virtuallibrary.services;
 
+import com.skr.virtuallibrary.dto.BookDto;
 import com.skr.virtuallibrary.dto.ReviewDto;
-import com.skr.virtuallibrary.entities.Book;
 import com.skr.virtuallibrary.entities.Review;
 import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.exceptions.ReviewNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
-import com.skr.virtuallibrary.repositories.BookRepository;
 import com.skr.virtuallibrary.repositories.ReviewRepository;
 import com.skr.virtuallibrary.repositories.UserRepository;
 import com.skr.virtuallibrary.services.testData.ReviewTestDataBuilder;
@@ -39,7 +38,7 @@ public class ReviewServiceTests {
     private ReviewRepository reviewRepository;
 
     @Mock
-    private BookRepository bookRepository;
+    private BookService bookService;
 
     @Mock
     private UserRepository userRepository;
@@ -68,7 +67,7 @@ public class ReviewServiceTests {
         Review review = ReviewTestDataBuilder.reviewExample().review();
 
         // when
-        when(bookRepository.findById(review.getBookId())).thenReturn(Optional.of(new Book()));
+        when(bookService.findBookById(review.getBookId())).thenReturn(new BookDto());
         when(modelMapper.toReviewEntity(reviewDto)).thenReturn(review);
         when(userRepository.findByEmail(USERNAME)).thenReturn(Optional.ofNullable(exampleUser));
         when(reviewRepository.save(review)).thenReturn(review);
@@ -126,9 +125,9 @@ public class ReviewServiceTests {
         newReview.setRating(3);
 
         // when
-        when(bookRepository.findById(oldReview.getBookId())).thenReturn(Optional.of(new Book()));
-        when(reviewRepository.findById(idToUpdate)).thenReturn(Optional.ofNullable(oldReview));
-        when(userRepository.findByEmail(USERNAME)).thenReturn(Optional.ofNullable(exampleUser));
+        when(bookService.findBookById(oldReview.getBookId())).thenReturn(new BookDto());
+        when(reviewRepository.findById(idToUpdate)).thenReturn(Optional.of(oldReview));
+        when(userRepository.findByEmail(USERNAME)).thenReturn(Optional.of(exampleUser));
 
         assert oldReview != null;
         oldReview.setTitle(newReviewDto.getTitle());

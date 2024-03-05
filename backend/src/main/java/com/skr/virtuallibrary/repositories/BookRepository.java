@@ -19,4 +19,8 @@ public interface BookRepository extends MongoRepository<Book, String> {
 
     int countByGenreListContains(Genre genre);
 
+    List<Book> findTop10ByOrderByRateAverageDesc();
+
+    List<Book> findTop10ByOrderByRateCountDesc();
+
 }
