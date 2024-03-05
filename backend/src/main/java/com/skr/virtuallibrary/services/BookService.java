@@ -10,6 +10,7 @@ import com.skr.virtuallibrary.entities.Genre;
 import com.skr.virtuallibrary.exceptions.BookNotFoundException;
 import com.skr.virtuallibrary.exceptions.GenreNotFoundException;
 import com.skr.virtuallibrary.exceptions.IllegalPageNumberException;
+import com.skr.virtuallibrary.exceptions.InternalException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.AuthorRepository;
 import com.skr.virtuallibrary.repositories.BookRepository;
@@ -159,11 +160,11 @@ public class BookService {
     }
 
     public List<BookDto> findMostPopularBooks() {
-        return bookRepository.findTop10ByOrderByRateCountDesc().stream().map(modelMapper::toBookDto).toList();
+        return bookRepository.findTop10ByOrderByRateCountDesc().stream().map(this::toBookDto).toList();
     }
 
     public List<BookDto> findBestRatedBooks() {
-        return bookRepository.findTop10ByOrderByRateAverageDesc().stream().map(modelMapper::toBookDto).toList();
+        return bookRepository.findTop10ByOrderByRateAverageDesc().stream().map(this::toBookDto).toList();
     }
 
     private BookDto saveBook(BookDto bookDto) {
