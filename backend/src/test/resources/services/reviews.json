@@ -10,13 +10,7 @@
     "title": "review title 1",
     "content": "review content 1",
     "rating": 5,
-    "author": {
-      "id": "1",
-      "email": "email@example.com",
-      "password": "password",
-      "authority": "USER",
-      "language": "ENG"
-    },
+    "authorId": "1",
     "bookId": "1"
   },
   {
@@ -30,13 +24,7 @@
     "title": "review title 2",
     "content": "review content 2",
     "rating": 4,
-    "author": {
-      "id": "2",
-      "email": "email2@example.com",
-      "password": "password",
-      "authority": "USER",
-      "language": "ENG"
-    },
+    "authorId": "2",
     "bookId": "2"
   },
   {
@@ -50,13 +38,7 @@
     "title": "review title 3",
     "content": "review content 3",
     "rating": 3,
-    "author": {
-      "id": "3",
-      "email": "email3@example.com",
-      "password": "password",
-      "authority": "USER",
-      "language": "ENG"
-    },
+    "authorId": "3",
     "bookId": "3"
   }
 ]
