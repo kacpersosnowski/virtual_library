@@ -39,4 +39,8 @@ public class BookDto {
 
     private String bookContentId;
 
+    private int rateCount;
+
+    private double rateAverage;
+
 }

@@ -1,11 +1,7 @@
 package com.skr.virtuallibrary.entities;
 
 import com.skr.virtuallibrary.entities.enums.Language;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @Document
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Book {
@@ -39,5 +35,9 @@ public class Book {
     private String bookCoverId;
 
     private String bookContentId;
+
+    private int rateCount = 0;
+
+    private double rateAverage = 0;
 
 }
