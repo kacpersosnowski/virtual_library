@@ -57,6 +57,7 @@ class FindReviewServiceTest {
 
         // when
         when(reviewRepository.findById(idToFind)).thenReturn(Optional.ofNullable(exampleReview));
+        when(userRepository.findById(exampleReview.getAuthorId())).thenReturn(Optional.ofNullable(exampleUser));
         when(modelMapper.toReviewDto(exampleReview, exampleUser)).thenReturn(exampleReviewDto);
 
         // then
