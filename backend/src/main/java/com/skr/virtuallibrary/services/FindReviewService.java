@@ -38,18 +38,12 @@ public class FindReviewService {
     public static final String BOOK_NOT_FOUND_MSG = "Not found book with id: ";
 
     public ReviewDto findReviewById(String id) {
-        return reviewRepository.findById(id).map(review ->
-                        modelMapper.toReviewDto(review, userRepository.findById(review.getAuthorId())
-                                .orElseThrow(() -> new UserNotFoundException("Not found user with id: " + review.getAuthorId()))))
+        return reviewRepository.findById(id).map(this::toReviewDto)
                 .orElseThrow(() -> new ReviewNotFoundException(ERROR_NOT_FOUND_MSG + id));
     }
 
     public List<ReviewDto> findAllReviews() {
-        return reviewRepository.findAll()
-                .stream()
-                .map(review -> modelMapper.toReviewDto(review, userRepository.findById(review.getAuthorId())
-                        .orElseThrow(() -> new UserNotFoundException("Not found user with id: " + review.getAuthorId())))
-                ).toList();
+        return reviewRepository.findAll().stream().map(this::toReviewDto).toList();
     }
 
     public PagedResponse<ReviewDto> findReviewsByBookId(String id, Integer pageNr) {
@@ -66,10 +60,7 @@ public class FindReviewService {
 
         return new PagedResponse<>(
                 reviews.getTotalElements(),
-                reviews.stream()
-                        .map(review -> modelMapper.toReviewDto(review, userRepository.findById(review.getAuthorId())
-                                .orElseThrow(() -> new UserNotFoundException("Not found user with id: " + review.getAuthorId())))
-                        ).toList()
+                reviews.stream().map(this::toReviewDto).toList()
         );
     }
 
@@ -77,11 +68,13 @@ public class FindReviewService {
         if (bookRepository.findById(id).isEmpty()) {
             throw new BookNotFoundException(BOOK_NOT_FOUND_MSG + id);
         }
-        List<ReviewDto> reviews = reviewRepository.findAllByBookId(id).stream()
-                .map(review -> modelMapper.toReviewDto(review, userRepository.findById(review.getAuthorId())
-                        .orElseThrow(() -> new UserNotFoundException("Not found user with id: " + review.getAuthorId())))
-                ).toList();
+        List<ReviewDto> reviews = reviewRepository.findAllByBookId(id).stream().map(this::toReviewDto).toList();
         return new PagedResponse<>(reviews);
+    }
+
+    private ReviewDto toReviewDto(Review review) {
+        return modelMapper.toReviewDto(review, userRepository.findById(review.getAuthorId())
+                .orElseThrow(() -> new UserNotFoundException("Not found user with id: " + review.getAuthorId())));
     }
 
 }
