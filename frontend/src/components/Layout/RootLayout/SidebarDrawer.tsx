@@ -10,13 +10,14 @@ import {
   Typography,
 } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
-import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import LogoutIcon from "@mui/icons-material/Logout";
+import PersonIcon from "@mui/icons-material/Person";
 
 import { AuthContext } from "../../../store/AuthContext/AuthContext";
 import Profile from "../../Profile/Profile";
@@ -25,6 +26,7 @@ import authMessages from "../../../messages/authMessages";
 import mainPageMessages from "../../../messages/mainPageMessages";
 import adminMessages from "../../../messages/adminMessages";
 import useIsAdmin from "../../../hooks/useIsAdmin";
+import profileMessages from "../../../messages/profileMessages";
 
 type Props = {
   isOpen: boolean;
@@ -107,6 +109,20 @@ const SidebarDrawer: React.FC<Props> = (props) => {
           )}
           {isAuthenticated && <Profile variant="drawer" sx={{ mb: 1 }} />}
           <Divider sx={{ mb: 2 }} />
+          {isAuthenticated && (
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={clickNavItemHandler.bind(this, "/profile")}
+              >
+                <ListItemIcon>
+                  <PersonIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={t(profileMessages.profileNavTitle.key)}
+                />
+              </ListItemButton>
+            </ListItem>
+          )}
           {isAdmin && (
             <ListItem disablePadding>
               <ListItemButton
