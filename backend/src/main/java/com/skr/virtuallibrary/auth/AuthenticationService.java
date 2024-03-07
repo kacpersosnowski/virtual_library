@@ -4,10 +4,6 @@ import com.skr.virtuallibrary.entities.UnregisteredUser;
 import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.entities.enums.Authority;
 import com.skr.virtuallibrary.exceptions.RegistrationExpiredException;
-import com.skr.virtuallibrary.exceptions.UserAlreadyExistsException;
-import com.skr.virtuallibrary.exceptions.UserNotFoundException;
-import com.skr.virtuallibrary.repositories.UnregisteredUserRepository;
-import com.skr.virtuallibrary.repositories.UserRepository;
 import com.skr.virtuallibrary.services.EmailService;
 import com.skr.virtuallibrary.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service

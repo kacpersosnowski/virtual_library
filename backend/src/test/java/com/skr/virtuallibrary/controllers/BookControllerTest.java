@@ -6,7 +6,6 @@ import com.skr.virtuallibrary.auth.JwtService;
 import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.AuthorDto;
 import com.skr.virtuallibrary.dto.BookDto;
-import com.skr.virtuallibrary.entities.Book;
 import com.skr.virtuallibrary.services.BookService;
 import com.skr.virtuallibrary.services.FileService;
 import org.assertj.core.api.Assertions;

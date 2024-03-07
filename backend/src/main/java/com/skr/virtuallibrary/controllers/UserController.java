@@ -2,6 +2,7 @@ package com.skr.virtuallibrary.controllers;
 
 import com.skr.virtuallibrary.dto.UserDto;
 import com.skr.virtuallibrary.entities.enums.Language;
+import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,6 +21,8 @@ public class UserController {
 
     private final UserService userService;
 
+    private final ModelMapper modelMapper;
+
     @PatchMapping("/language/{id}")
     @Operation(summary = "Change language of user with specified id.")
     public UserDto changeLanguage(@Parameter @PathVariable String id, @Valid @RequestBody Language language) {
@@ -29,6 +32,6 @@ public class UserController {
     @GetMapping("/me")
     @Operation(summary = "Get current user.")
     public UserDto getCurrentUser() {
-        return userService.getCurrentUser();
+        return modelMapper.toUserDto(userService.getCurrentUser());
     }
 }

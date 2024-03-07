@@ -1,6 +1,5 @@
 package com.skr.virtuallibrary.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skr.virtuallibrary.auth.JwtService;
 import com.skr.virtuallibrary.entities.enums.Language;
 import com.skr.virtuallibrary.services.EmailService;
@@ -39,7 +38,7 @@ class EmailControllerTest {
                         .param("token", "token"))
                 .andReturn();
 
-        verify(emailService).sendAuthenticationEmail(Language.ENG, "username", "token");
+        verify(emailService).sendAuthenticationEmail(Language.ENG, "name@domain.com", "token");
 
         Assertions.assertThat(result.getResponse().getStatus()).isEqualTo(200);
         Assertions.assertThat(result.getResponse().getContentAsString()).isEqualTo("Email sent successfully!");

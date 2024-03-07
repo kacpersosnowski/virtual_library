@@ -6,14 +6,10 @@ import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.entities.enums.Authority;
 import com.skr.virtuallibrary.exceptions.ReviewAlreadyExistsException;
 import com.skr.virtuallibrary.exceptions.ReviewNotFoundException;
-import com.skr.virtuallibrary.exceptions.UserNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.ReviewRepository;
-import com.skr.virtuallibrary.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -27,7 +23,7 @@ public class ReviewService {
 
     private final ModelMapper modelMapper;
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     private final BookRatingService bookRatingService;
 
@@ -39,17 +35,18 @@ public class ReviewService {
         bookService.findBookById(reviewDto.getBookId());
 
         Review review = modelMapper.toReviewEntity(reviewDto);
+        User currentUser = userService.getCurrentUser();
 
         boolean notHaveReviewOrAdmin = reviewRepository
-                .findAllByBookIdAndAuthorId(reviewDto.getBookId(), getUser().getId()).isEmpty()
-                || getUser().getAuthority().equals(Authority.ADMIN);
+                .findAllByBookIdAndAuthorId(reviewDto.getBookId(), currentUser.getId()).isEmpty()
+                || currentUser.getAuthority().equals(Authority.ADMIN);
         if (!notHaveReviewOrAdmin) {
             throw new ReviewAlreadyExistsException("You have already reviewed this book.");
         }
 
-        review.setAuthorId(getUser().getId());
+        review.setAuthorId(currentUser.getId());
 
-        reviewDto = modelMapper.toReviewDto(reviewRepository.save(review), getUser());
+        reviewDto = modelMapper.toReviewDto(reviewRepository.save(review), currentUser);
         bookRatingService.updateBookRating(review.getBookId());
         return reviewDto;
     }
@@ -60,7 +57,7 @@ public class ReviewService {
             throw new ReviewNotFoundException(ERROR_NOT_FOUND_MSG + id);
         }
 
-        User user = getUser();
+        User user = userService.getCurrentUser();
         boolean isAdminOrAuthor = user.getAuthority().equals(Authority.ADMIN) || user.getId().equals(review.get().getAuthorId());
         if (!isAdminOrAuthor) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot delete this review.");
@@ -84,7 +81,7 @@ public class ReviewService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You cannot change review's book");
         }
 
-        if (!review.getAuthorId().equals(getUser().getId())) {
+        if (!review.getAuthorId().equals(userService.getCurrentUser().getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot edit this review.");
         }
 
@@ -92,14 +89,9 @@ public class ReviewService {
         review.setContent(reviewDto.getContent());
         review.setRating(reviewDto.getRating());
 
-        reviewDto = modelMapper.toReviewDto(reviewRepository.save(review), getUser());
+        reviewDto = modelMapper.toReviewDto(reviewRepository.save(review), userService.getCurrentUser());
         bookRatingService.updateBookRating(review.getBookId());
         return reviewDto;
     }
 
-    private User getUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new UserNotFoundException("User could not be found with email: " + authentication.getName()));
-    }
 }

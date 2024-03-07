@@ -33,11 +33,9 @@ public class UserService {
         return modelMapper.toUserDto(userRepository.save(user));
     }
 
-    public UserDto getCurrentUser() {
+    public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByUsername(authentication.getName())
-                .orElseThrow(() -> new UserNotFoundException("User could not be found with username: " + authentication.getName()));
-        return modelMapper.toUserDto(user);
+        return findUserByUsername(authentication.getName());
     }
 
     public void addUser(User user) {

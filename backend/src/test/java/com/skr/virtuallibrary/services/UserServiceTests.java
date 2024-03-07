@@ -61,14 +61,13 @@ public class UserServiceTests {
 
     @Test
     @WithMockUser(username = USERNAME, password = PASSWORD)
-    void getCurrentUser_shouldReturnUserDto() {
+    void getCurrentUser_shouldReturnUser() {
         // given
 
         // when
-        when(userRepository.findByEmail(USERNAME)).thenReturn(Optional.ofNullable(exampleUser));
-        when(modelMapper.toUserDto(exampleUser)).thenReturn(exampleUserDto);
-        UserDto expected = exampleUserDto;
-        UserDto actual = userService.getCurrentUser();
+        when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.ofNullable(exampleUser));
+        User expected = exampleUser;
+        User actual = userService.getCurrentUser();
 
         // then
         assertEquals(expected, actual);
