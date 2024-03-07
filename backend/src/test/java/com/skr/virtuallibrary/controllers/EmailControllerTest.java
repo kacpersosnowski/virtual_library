@@ -39,7 +39,7 @@ class EmailControllerTest {
                         .param("token", "token"))
                 .andReturn();
 
-        verify(emailService).sendAuthenticationEmail(Language.ENG, "name@domain.com", "token");
+        verify(emailService).sendAuthenticationEmail(Language.ENG, "username", "token");
 
         Assertions.assertThat(result.getResponse().getStatus()).isEqualTo(200);
         Assertions.assertThat(result.getResponse().getContentAsString()).isEqualTo("Email sent successfully!");

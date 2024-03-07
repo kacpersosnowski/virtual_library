@@ -9,6 +9,7 @@ import com.skr.virtuallibrary.exceptions.UserNotFoundException;
 import com.skr.virtuallibrary.repositories.UnregisteredUserRepository;
 import com.skr.virtuallibrary.repositories.UserRepository;
 import com.skr.virtuallibrary.services.EmailService;
+import com.skr.virtuallibrary.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,97 +23,75 @@ import java.util.UUID;
 @Service
 public class AuthenticationService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    private final UnregisteredUserRepository unregisteredUserRepository;
+    private final JwtService jwtService;
 
     private final EmailService emailService;
 
     private final PasswordEncoder passwordEncoder;
 
-    private final JwtService jwtService;
-
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest registerRequest) {
-        if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
-            throw new UserAlreadyExistsException("User already exists with email: " + registerRequest.getEmail());
-        }
-
         final User user = User.builder()
+                .username(registerRequest.getUsername())
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .authority(Authority.USER)
                 .language(registerRequest.getLanguage())
                 .build();
-        userRepository.save(user);
+        userService.addUser(user);
         return jwtService.generateTokens(user);
     }
 
     public void createTempUserAndSendEmail(RegisterRequest registerRequest) {
-        if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()
-                || unregisteredUserRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
-            throw new UserAlreadyExistsException("User already exists with email: " + registerRequest.getEmail());
-        }
-
-        String usersTempToken;
-        do {
-            usersTempToken = generateRegistrationToken();
-        } while (unregisteredUserRepository.findByRegistrationToken(usersTempToken).isPresent());
-
         final UnregisteredUser temporaryUser = UnregisteredUser.builder()
+                .username(registerRequest.getUsername())
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .language(registerRequest.getLanguage())
-                .registrationToken(usersTempToken)
                 .expirationDate(LocalDate.now().plusDays(2L))
                 .build();
-        unregisteredUserRepository.save(temporaryUser);
-        emailService.sendAuthenticationEmail(registerRequest.getLanguage(), registerRequest.getEmail(), usersTempToken);
+        userService.addUnregisteredUser(temporaryUser);
+        emailService.sendAuthenticationEmail(temporaryUser.getLanguage(), temporaryUser.getEmail(), temporaryUser.getRegistrationToken());
     }
 
     public AuthenticationResponse finaliseRegistration(String registrationToken) {
-        UnregisteredUser tempUser = unregisteredUserRepository.findByRegistrationToken(registrationToken)
-                .orElseThrow(() -> new UserNotFoundException("User with given token doesn't exist: " + registrationToken));
+        UnregisteredUser tempUser = userService.findUnregisteredUserByToken(registrationToken);
 
         if (LocalDate.now().isAfter(tempUser.getExpirationDate())) {
-            unregisteredUserRepository.delete(tempUser);
+            userService.deleteUnregisteredUser(tempUser);
             throw new RegistrationExpiredException("Registration token expired.");
         }
 
         final User user = User.builder()
+                .username(tempUser.getUsername())
                 .email(tempUser.getEmail())
                 .password(tempUser.getPassword())
                 .authority(Authority.USER)
                 .language(tempUser.getLanguage())
                 .build();
-        userRepository.save(user);
-        unregisteredUserRepository.delete(tempUser);
+        userService.addUser(user);
+        userService.deleteUnregisteredUser(tempUser);
         return jwtService.generateTokens(user);
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getEmail(),
+                        authenticationRequest.getUsername(),
                         authenticationRequest.getPassword()
                 )
         );
-        User user = userRepository.findByEmail(authenticationRequest.getEmail())
-                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + authenticationRequest.getEmail()));
+        User user = userService.findUserByUsername(authenticationRequest.getUsername());
         return jwtService.generateTokens(user);
     }
 
     public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
-        String email = jwtService.extractEmail(refreshTokenRequest.getRefreshToken());
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
+        String username = jwtService.extractUsername(refreshTokenRequest.getRefreshToken());
+        User user = userService.findUserByUsername(username);
         return jwtService.generateTokens(user);
-    }
-
-    private String generateRegistrationToken() {
-        UUID randomUUID = UUID.randomUUID();
-        return randomUUID.toString().replace("-", "");
     }
 
 }

@@ -18,7 +18,7 @@ public class JwtService {
 
     private static final String SECRET_KEY = "yzObdPkgILxfV1B2ZF0ukLvS3qDODsuILfvpOam6aElLKZP4wHzC7qtCn4Sjm5c2MR1NUxYiLjgCDezhFJ6rt9qiCXcdO6jZoXWRqeOPxPAGsW1cYfgNm3MMm3gCmp9LwoO6qJ09vnAvinbrgGUvL0UHoNuzsOh5sc4qB6AH0erY5ZRjXQBG2nT90n1opZaxGl0qR3MKRehTAoW0HEs2Jbs32FcIenNBFIzpyjwnHJs6eH/Aq9uJ+yZqhyX8JjYVP9tJ37hf5X8gh+cQOKbNf3CBVaaA2bTk4Cygs8jpQ/6hT4Q5nSvE/sNp84ieAAkYLSS2akg5uEfH1q3nc6zLvAKEXrUe2Oyw8PksxsZdgAo=";
 
-    public String extractEmail(String jwtToken) {
+    public String extractUsername(String jwtToken) {
         return extractClaim(jwtToken, Claims::getSubject);
     }
 
@@ -47,7 +47,7 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String jwtToken, UserDetails userDetails) {
-        final String email = extractEmail(jwtToken);
+        final String email = extractUsername(jwtToken);
         return email.equals(userDetails.getUsername()) && !isTokenExpired(jwtToken);
     }
 
