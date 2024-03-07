@@ -50,6 +50,7 @@ const ReviewsList = () => {
     mutationFn: reviewsApi.deleteReview,
     onSuccess: () => {
       queryClient.invalidateQueries(["reviews"]);
+      queryClient.invalidateQueries(["books", id]);
       handleDeleteDialogClose();
       dispatch(
         snackbarActions.show(t(booksMessages.bookReviewsDeleteFormSuccess.key)),

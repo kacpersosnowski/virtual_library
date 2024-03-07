@@ -31,12 +31,15 @@ public interface ModelMapper {
 
     User toUserEntity(UserDto userDto);
 
-    @Mapping(target = "created", source = "auditData.createdDate")
-    @Mapping(target = "lastModified", source = "auditData.lastModifiedDate")
-    ReviewDto toReviewDto(Review review);
+    @Mapping(target = "created", source = "review.auditData.createdDate")
+    @Mapping(target = "lastModified", source = "review.auditData.lastModifiedDate")
+    @Mapping(target = "author", source = "user")
+    @Mapping(target = "id", source = "review.id")
+    ReviewDto toReviewDto(Review review, User user);
 
     @Mapping(target = "auditData.createdDate", source = "created")
     @Mapping(target = "auditData.lastModifiedDate", source = "lastModified")
+    @Mapping(target = "authorId", source = "author.id")
     Review toReviewEntity(ReviewDto reviewDto);
 
     @Named("authorListToAuthorIdList")

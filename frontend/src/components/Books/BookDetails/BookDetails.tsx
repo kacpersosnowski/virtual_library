@@ -1,5 +1,4 @@
-import { Box, Typography } from "@mui/material";
-import StarIcon from "@mui/icons-material/Star";
+import { Box, Rating, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
@@ -12,6 +11,7 @@ type Props = {
   id: string;
   title: string;
   author: string;
+  rating: number;
   zIndex: number;
 };
 
@@ -55,11 +55,7 @@ const BookDetails: React.FC<Props> = (props) => {
         {props.author}
       </Typography>
       <Box sx={{ textAlign: "center" }}>
-        <StarIcon />
-        <StarIcon />
-        <StarIcon />
-        <StarIcon />
-        <StarIcon />
+        <Rating value={props.rating} precision={0.1} size="large" readOnly />
       </Box>
       <Box sx={{ textAlign: "center" }}>
         <ActionButton onClick={() => navigate(`/book/${props.id}`)}>

@@ -86,8 +86,8 @@ const BookCategoryListsPage = () => {
     try {
       setIsInitialLoading(true);
       const initialListsPromises = [
-        booksApi.getAllBooks().then((response) => response),
-        booksApi.getAllBooks().then((response) => response),
+        booksApi.getMostPopularBooks().then((response) => response),
+        booksApi.getBestRatedBooks().then((response) => response),
       ];
       if (initialGenresList.length > 0) {
         initialListsPromises.push(
@@ -206,6 +206,9 @@ const BookCategoryListsPage = () => {
       {!isBookCountError &&
         !isInitialError &&
         !isMoreError &&
+        !isInitialLoading &&
+        !isBookCountLoading &&
+        !isMoreLoading &&
         remainingGenres.length > 0 && (
           <Box sx={{ textAlign: "center", mb: "2.5rem" }}>
             <ActionButton

@@ -1,5 +1,6 @@
 package com.skr.virtuallibrary.entities;
 
+import com.skr.virtuallibrary.dto.ReviewDto;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -23,7 +24,7 @@ public class Review {
 
     private int rating;
 
-    private User author;
+    private String authorId;
 
     private String bookId;
 

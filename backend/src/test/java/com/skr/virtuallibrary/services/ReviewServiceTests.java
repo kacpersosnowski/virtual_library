@@ -71,7 +71,8 @@ public class ReviewServiceTests {
         when(modelMapper.toReviewEntity(reviewDto)).thenReturn(review);
         when(userRepository.findByEmail(USERNAME)).thenReturn(Optional.ofNullable(exampleUser));
         when(reviewRepository.save(review)).thenReturn(review);
-        when(modelMapper.toReviewDto(review)).thenReturn(reviewDto);
+        when(userRepository.findById(review.getAuthorId())).thenReturn(Optional.ofNullable(exampleUser));
+        when(modelMapper.toReviewDto(review, exampleUser)).thenReturn(reviewDto);
         ReviewDto expected = reviewDto;
         ReviewDto actual = reviewService.addReview(reviewDto);
 
@@ -134,7 +135,8 @@ public class ReviewServiceTests {
         oldReview.setContent(newReviewDto.getContent());
         oldReview.setRating(newReviewDto.getRating());
         when(reviewRepository.save(oldReview)).thenReturn(newReview);
-        when(modelMapper.toReviewDto(newReview)).thenReturn(newReviewDto);
+        when(userRepository.findById(newReview.getAuthorId())).thenReturn(Optional.ofNullable(exampleUser));
+        when(modelMapper.toReviewDto(newReview, exampleUser)).thenReturn(newReviewDto);
 
         ReviewDto expected = newReviewDto;
         ReviewDto actual = reviewService.updateReview(idToUpdate, newReviewDto);

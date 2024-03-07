@@ -1,12 +1,17 @@
 import { Box, Rating, Typography } from "@mui/material";
 
 import COLORS from "../../../palette/colors";
+import { BookRating } from "../../../config/api/common/common.types";
 
 type Props = {
   title: string;
+  rating: BookRating;
 };
 
 const BookTitle: React.FC<Props> = (props) => {
+  const ratingValue = Math.round(props.rating.rateAverage * 10) / 10;
+  const ratingCount = props.rating.rateCount;
+
   return (
     <Box
       sx={{
@@ -26,9 +31,9 @@ const BookTitle: React.FC<Props> = (props) => {
           component="legend"
           sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
         >
-          4.3
+          {ratingValue} ({ratingCount})
         </Typography>
-        <Rating value={4.3} precision={0.1} size="large" readOnly />
+        <Rating value={ratingValue} precision={0.1} size="large" readOnly />
       </Box>
     </Box>
   );
