@@ -9,8 +9,6 @@ export type PageSearchData = {
 };
 
 export type BookRating = {
-  id: string;
-  bookId: string;
   rateCount: number;
   rateAverage: number;
 };

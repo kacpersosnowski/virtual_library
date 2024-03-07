@@ -15,6 +15,8 @@ export type Book = {
   genreList: Genre[];
   tagList: string[];
   language: Language;
+  rateAverage: number;
+  rateCount: number;
   bookCoverId: string;
   bookContentId: string;
 };
@@ -25,7 +27,7 @@ export type BookItemData = {
   authorList: string;
   genreList?: string;
   cover?: string;
-  rating?: BookRating;
+  rating: BookRating;
 };
 
 export type ReadBookDTO = {
@@ -38,7 +40,7 @@ export type ReadBookDTO = {
   language: string;
   cover: string;
   bookContentId: string;
-  rating?: BookRating;
+  rating: BookRating;
 };
 
 export type CreateBookDTO = {
@@ -70,7 +72,6 @@ export type BooksApi = {
   getBookContent: (id: string) => Promise<Uint8Array>;
   getBookContentFile: (id: string) => Promise<File>;
   getBookCoverFile: (id: string) => Promise<File>;
-  getBookRating: (bookId: string) => Promise<BookRating>;
   createBook: (book: CreateBookDTO) => Promise<Book>;
   updateBook: (data: UpdateBookData) => Promise<Book>;
   deleteBook: (id: string) => Promise<void>;

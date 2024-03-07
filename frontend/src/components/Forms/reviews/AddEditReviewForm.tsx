@@ -40,6 +40,7 @@ const AddEditReviewForm: React.FC<Props> = (props) => {
     onSuccess: () => {
       formik.handleReset(null);
       queryClient.invalidateQueries("reviews");
+      queryClient.invalidateQueries(["books", id]);
       dispatch(
         snackbarActions.show(t(booksMessages.bookReviewsAddFormSuccess.key)),
       );
@@ -54,6 +55,7 @@ const AddEditReviewForm: React.FC<Props> = (props) => {
     onSuccess: () => {
       props.onCancel();
       queryClient.invalidateQueries("reviews");
+      queryClient.invalidateQueries(["books", id]);
       dispatch(
         snackbarActions.show(t(booksMessages.bookReviewsUpdateFormSuccess.key)),
       );

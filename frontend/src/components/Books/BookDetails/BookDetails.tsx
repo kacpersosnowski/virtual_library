@@ -55,12 +55,7 @@ const BookDetails: React.FC<Props> = (props) => {
         {props.author}
       </Typography>
       <Box sx={{ textAlign: "center" }}>
-        <Rating
-          value={props.rating || 0}
-          precision={0.1}
-          size="large"
-          readOnly
-        />
+        <Rating value={props.rating} precision={0.1} size="large" readOnly />
       </Box>
       <Box sx={{ textAlign: "center" }}>
         <ActionButton onClick={() => navigate(`/book/${props.id}`)}>

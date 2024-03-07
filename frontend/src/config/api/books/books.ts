@@ -8,23 +8,18 @@ import {
   parseBookItemsForAdmin,
 } from "./books.parsers";
 import { BACKEND_BASE_URL } from "../../../constants/api";
-import { BookRating, PagedResponse } from "../common/common.types";
+import { PagedResponse } from "../common/common.types";
 
 const url = "/books";
 const mostPopularUrl = `${url}/most-popular`;
 const bestRatedUrl = `${url}/best-rated`;
 const coverUrl = "/files/cover";
 const pdfUrl = "/files/content";
-const ratingUrl = "/book-ratings";
 
 export const booksApi: BooksApi = {
   getAllBooks: async () => {
     const response = await axios.get<PagedResponse<Book>>(url);
     const books = parseBookItems(response.data.content);
-    for (const book of books) {
-      const rating = await booksApi.getBookRating(book.id);
-      book.rating = rating;
-    }
     return books;
   },
   getAllBooksForAdmin: async (params) => {
@@ -50,8 +45,7 @@ export const booksApi: BooksApi = {
   },
   getBookDetails: async (id: string) => {
     const response = await axios.get<Book>(`${url}/${id}`);
-    const rating = await booksApi.getBookRating(id);
-    return { ...parseBookItemForDetails(response.data), rating };
+    return parseBookItemForDetails(response.data);
   },
   getRawBookDetails: async (id: string) => {
     const response = await axios.get<Book>(`${url}/${id}`);
@@ -91,10 +85,6 @@ export const booksApi: BooksApi = {
     const fileName = fileNameResponse.data;
     const imageFile = new File([blob], fileName, { type: blob.type });
     return imageFile;
-  },
-  getBookRating: async (bookId: string) => {
-    const response = await axios.get<BookRating>(`${ratingUrl}/${bookId}`);
-    return response.data;
   },
   createBook: async (book: CreateBookDTO) => {
     const formData = parseBookFormDataForCreate(book);

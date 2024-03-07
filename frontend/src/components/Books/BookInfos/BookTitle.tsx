@@ -9,9 +9,7 @@ type Props = {
 };
 
 const BookTitle: React.FC<Props> = (props) => {
-  const ratingValue = props.rating
-    ? Math.round(props.rating.rateAverage * 10) / 10
-    : 0;
+  const ratingValue = Math.round(props.rating.rateAverage * 10) / 10;
   const ratingCount = props.rating.rateCount;
 
   return (
