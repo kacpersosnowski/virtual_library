@@ -1,6 +1,10 @@
 import { Language } from "../../../constants/languages";
 import { Author } from "../authors/authors.types";
-import { PageSearchData, PagedResponse } from "../common/common.types";
+import {
+  BookRating,
+  PageSearchData,
+  PagedResponse,
+} from "../common/common.types";
 import { Genre } from "../genres/genres.types";
 
 export type Book = {
@@ -11,6 +15,8 @@ export type Book = {
   genreList: Genre[];
   tagList: string[];
   language: Language;
+  rateAverage: number;
+  rateCount: number;
   bookCoverId: string;
   bookContentId: string;
 };
@@ -21,6 +27,7 @@ export type BookItemData = {
   authorList: string;
   genreList?: string;
   cover?: string;
+  rating: BookRating;
 };
 
 export type ReadBookDTO = {
@@ -33,6 +40,7 @@ export type ReadBookDTO = {
   language: string;
   cover: string;
   bookContentId: string;
+  rating: BookRating;
 };
 
 export type CreateBookDTO = {

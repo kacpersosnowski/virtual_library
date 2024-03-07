@@ -73,6 +73,7 @@ const BookItem: React.FC<Props> = (props) => {
         id={props.details.id}
         title={props.details.title}
         author={props.details.authorList}
+        rating={props.details.rating.rateAverage}
       />
     </Box>
   );

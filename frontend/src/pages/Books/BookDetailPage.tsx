@@ -51,7 +51,7 @@ const BookDetailPage = () => {
               flex: 1,
             }}
           >
-            <BookTitle title={book.title} />
+            <BookTitle title={book.title} rating={book.rating} />
             <BookInfosTiles book={book} />
             <Divider sx={{ margin: "1rem 0" }} />
 

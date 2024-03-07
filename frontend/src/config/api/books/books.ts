@@ -19,7 +19,8 @@ const pdfUrl = "/files/content";
 export const booksApi: BooksApi = {
   getAllBooks: async () => {
     const response = await axios.get<PagedResponse<Book>>(url);
-    return parseBookItems(response.data.content);
+    const books = parseBookItems(response.data.content);
+    return books;
   },
   getAllBooksForAdmin: async (params) => {
     const response = await axios.get<PagedResponse<Book>>(url, { params });

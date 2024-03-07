@@ -15,6 +15,10 @@ export const parseBookItems = (data: Book[]): BookItemData[] => {
       title:
         dataItem.title.slice(0, 60) + (dataItem.title.length > 60 ? "..." : ""),
       authorList: parseAuthorsString(dataItem.authorList),
+      rating: {
+        rateCount: dataItem.rateCount,
+        rateAverage: dataItem.rateAverage,
+      },
       cover: `${BACKEND_BASE_URL}/files/cover/${dataItem.bookCoverId}`,
     };
   });
@@ -27,6 +31,10 @@ export const parseBookItemsForAdmin = (data: Book[]): BookItemData[] => {
       title: dataItem.title,
       authorList: parseAllAuthorsString(dataItem.authorList),
       genreList: parseGenresString(dataItem.genreList),
+      rating: {
+        rateCount: dataItem.rateCount,
+        rateAverage: dataItem.rateAverage,
+      },
     };
   });
 };
@@ -43,6 +51,10 @@ export const parseBookItemForDetails = (dataItem: Book): ReadBookDTO => {
     language: LANGUAGES.find(
       (language) => language.backendCode === dataItem.language,
     )?.label,
+    rating: {
+      rateCount: dataItem.rateCount,
+      rateAverage: dataItem.rateAverage,
+    },
     cover: `${BACKEND_BASE_URL}/files/cover/${dataItem.bookCoverId}`,
     bookContentId: dataItem.bookContentId,
   };
