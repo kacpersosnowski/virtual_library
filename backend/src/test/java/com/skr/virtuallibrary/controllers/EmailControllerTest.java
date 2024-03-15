@@ -1,6 +1,5 @@
 package com.skr.virtuallibrary.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skr.virtuallibrary.auth.JwtService;
 import com.skr.virtuallibrary.entities.enums.Language;
 import com.skr.virtuallibrary.services.EmailService;

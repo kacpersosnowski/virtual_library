@@ -18,6 +18,9 @@ public class UserDto {
     private String id;
 
     @NotEmpty
+    private String username;
+
+    @NotEmpty
     private String email;
 
     @NotNull

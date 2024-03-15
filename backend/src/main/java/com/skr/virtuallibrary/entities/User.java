@@ -25,6 +25,8 @@ public class User implements UserDetails {
     @Id
     private String id;
 
+    private String username;
+
     private String email;
 
     private String password;
@@ -40,7 +42,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override

@@ -3,8 +3,9 @@ package com.skr.virtuallibrary.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skr.virtuallibrary.auth.JwtService;
 import com.skr.virtuallibrary.dto.UserDto;
+import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.entities.enums.Language;
-import com.skr.virtuallibrary.services.ReviewService;
+import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.services.UserService;
 import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
@@ -36,10 +37,10 @@ class UserControllerTest {
     private UserService userService;
 
     @MockBean
-    private ReviewService reviewService;
+    private JwtService jwtService;
 
     @MockBean
-    private JwtService jwtService;
+    private ModelMapper modelMapper;
 
     @Test
     void testChangeLanguage() throws Exception {
@@ -59,9 +60,11 @@ class UserControllerTest {
 
     @Test
     void testGetCurrentUser() throws Exception {
+        User user = Instancio.create(User.class);
         UserDto userDto = Instancio.create(UserDto.class);
 
-        when(userService.getCurrentUser()).thenReturn(userDto);
+        when(userService.getCurrentUser()).thenReturn(user);
+        when(modelMapper.toUserDto(user)).thenReturn(userDto);
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/users/me")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();

@@ -7,7 +7,6 @@ import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.exceptions.ReviewNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.ReviewRepository;
-import com.skr.virtuallibrary.repositories.UserRepository;
 import com.skr.virtuallibrary.services.testData.ReviewTestDataBuilder;
 import com.skr.virtuallibrary.services.testData.UserTestDataBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +40,7 @@ public class ReviewServiceTests {
     private BookService bookService;
 
     @Mock
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Mock
     private BookRatingService bookRatingService;
@@ -69,9 +68,8 @@ public class ReviewServiceTests {
         // when
         when(bookService.findBookById(review.getBookId())).thenReturn(new BookDto());
         when(modelMapper.toReviewEntity(reviewDto)).thenReturn(review);
-        when(userRepository.findByEmail(USERNAME)).thenReturn(Optional.ofNullable(exampleUser));
+        when(userService.getCurrentUser()).thenReturn(exampleUser);
         when(reviewRepository.save(review)).thenReturn(review);
-        when(userRepository.findById(review.getAuthorId())).thenReturn(Optional.ofNullable(exampleUser));
         when(modelMapper.toReviewDto(review, exampleUser)).thenReturn(reviewDto);
         ReviewDto expected = reviewDto;
         ReviewDto actual = reviewService.addReview(reviewDto);
@@ -89,7 +87,7 @@ public class ReviewServiceTests {
 
         // when
         when(reviewRepository.findById(idToDelete)).thenReturn(Optional.ofNullable(exampleReview));
-        when(userRepository.findByEmail("email@example.com")).thenReturn(Optional.ofNullable(exampleUser));
+        when(userService.getCurrentUser()).thenReturn(exampleUser);
         reviewService.deleteReview(idToDelete);
 
         // then
@@ -118,24 +116,17 @@ public class ReviewServiceTests {
 
         ReviewDto newReviewDto = ReviewTestDataBuilder.reviewDtoExample().reviewDto();
         newReviewDto.setTitle("newTitle");
-        newReviewDto.setContent("newContent");
-        newReviewDto.setRating(3);
+
         Review newReview = ReviewTestDataBuilder.reviewExample().review();
         newReview.setTitle("newTitle");
-        newReview.setContent("newContent");
-        newReview.setRating(3);
+
+        oldReview.setTitle(newReviewDto.getTitle());
 
         // when
         when(bookService.findBookById(oldReview.getBookId())).thenReturn(new BookDto());
         when(reviewRepository.findById(idToUpdate)).thenReturn(Optional.of(oldReview));
-        when(userRepository.findByEmail(USERNAME)).thenReturn(Optional.of(exampleUser));
-
-        assert oldReview != null;
-        oldReview.setTitle(newReviewDto.getTitle());
-        oldReview.setContent(newReviewDto.getContent());
-        oldReview.setRating(newReviewDto.getRating());
+        when(userService.getCurrentUser()).thenReturn(exampleUser);
         when(reviewRepository.save(oldReview)).thenReturn(newReview);
-        when(userRepository.findById(newReview.getAuthorId())).thenReturn(Optional.ofNullable(exampleUser));
         when(modelMapper.toReviewDto(newReview, exampleUser)).thenReturn(newReviewDto);
 
         ReviewDto expected = newReviewDto;

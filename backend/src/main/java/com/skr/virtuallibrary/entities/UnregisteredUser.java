@@ -20,6 +20,8 @@ public class UnregisteredUser {
     @Id
     private String id;
 
+    private String username;
+
     private String email;
 
     private String password;
