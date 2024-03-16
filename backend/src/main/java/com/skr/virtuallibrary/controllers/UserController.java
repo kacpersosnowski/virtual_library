@@ -36,12 +36,6 @@ public class UserController {
         return modelMapper.toUserDto(userService.getCurrentUser());
     }
 
-    @PatchMapping("/login/{id}")
-    @Operation(summary = "Change user's login.")
-    public UserDto changeLogin(@Parameter @PathVariable String id, @Valid @RequestBody String login) {
-        return userService.changeLogin(id, login);
-    }
-
     @PatchMapping("/password/{id}")
     @Operation(summary = "Change user's password.")
     public UserDto changePassword(@Parameter @PathVariable String id, @ValidPassword @RequestBody String newPassword) {
