@@ -15,8 +15,8 @@ public interface ModelMapper {
     @Mapping(target = "genreList", source = "genreDtoList")
     BookDto toBookDto(Book book, List<AuthorDto> authorDtoList, List<GenreDto> genreDtoList);
 
-    @Mapping(target = "authorList", source = "authorList", qualifiedByName = "authorListToAuthorIdList")
-    @Mapping(target = "genreList", source = "genreList", qualifiedByName = "genreListToGenreIdList")
+    @Mapping(target = "authorIdList", source = "authorList", qualifiedByName = "authorListToAuthorIdList")
+    @Mapping(target = "genreIdList", source = "genreList", qualifiedByName = "genreListToGenreIdList")
     Book toBookEntity(BookDto bookDto);
 
     AuthorDto toAuthorDto(Author author);

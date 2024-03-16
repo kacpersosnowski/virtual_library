@@ -170,10 +170,10 @@ public class BookService {
     private BookDto saveBook(BookDto bookDto) {
         List<String> authorList = bookDto.getAuthorList().stream().map(this::findOrCreateAuthor).toList();
         Book book = modelMapper.toBookEntity(bookDto);
-        book.setAuthorList(authorList);
+        book.setAuthorIdList(authorList);
 
         List<String> genreList = bookDto.getGenreList().stream().map(this::findOrCreateGenre).toList();
-        book.setGenreList(genreList);
+        book.setGenreIdList(genreList);
 
         return modelMapper.toBookDto(bookRepository.save(book), bookDto.getAuthorList(), bookDto.getGenreList());
     }
@@ -197,12 +197,12 @@ public class BookService {
     }
 
     private BookDto toBookDto(Book book) {
-        List<AuthorDto> authorDtoList = book.getAuthorList().stream()
+        List<AuthorDto> authorDtoList = book.getAuthorIdList().stream()
                 .map(authorId -> authorRepository.findById(authorId)
                         .map(modelMapper::toAuthorDto)
                         .orElseThrow(() -> new InternalException("Server wanted to provide you with an author that doesn't exist")))
                 .toList();
-        List<GenreDto> genreDtoList = book.getGenreList().stream()
+        List<GenreDto> genreDtoList = book.getGenreIdList().stream()
                 .map(genreId -> genreRepository.findById(genreId)
                         .map(modelMapper::toGenreDto)
                         .orElseThrow(() -> new InternalException("Server wanted to provide you with a genre that doesn't exist")))
