@@ -4,6 +4,7 @@ import com.skr.virtuallibrary.dto.UserDto;
 import com.skr.virtuallibrary.entities.UnregisteredUser;
 import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.entities.enums.Language;
+import com.skr.virtuallibrary.exceptions.UserAlreadyExistsException;
 import com.skr.virtuallibrary.exceptions.UserNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.UnregisteredUserRepository;
@@ -83,6 +84,18 @@ public class UserService {
         ) {
             throw new UserNotFoundException("User already exists with email: " + email);
         }
+    }
+
+    public UserDto changeLogin(String userId, String login) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User could not be found with id: " + userId));
+
+        if (userRepository.findByUsername(login).isPresent()) {
+            throw new UserAlreadyExistsException("User already exists with username: " + login);
+        }
+
+        user.setUsername(login);
+        return modelMapper.toUserDto(userRepository.save(user));
     }
 
     private String generateRegistrationToken() {
