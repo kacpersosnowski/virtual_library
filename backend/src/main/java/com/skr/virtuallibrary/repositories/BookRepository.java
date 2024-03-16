@@ -1,8 +1,6 @@
 package com.skr.virtuallibrary.repositories;
 
-import com.skr.virtuallibrary.entities.Author;
 import com.skr.virtuallibrary.entities.Book;
-import com.skr.virtuallibrary.entities.Genre;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -11,13 +9,13 @@ import java.util.List;
 
 public interface BookRepository extends MongoRepository<Book, String> {
 
-    List<Book> findAllByAuthorListContains(Author author);
+    List<Book> findAllByAuthorIdListContains(String authorId);
 
-    List<Book> findAllByGenreListContains(Genre genre);
+    List<Book> findAllByGenreIdListContains(String genreId);
 
-    Page<Book> findAllByGenreListContains(Genre genre, Pageable pageable);
+    Page<Book> findAllByGenreIdListContains(String genreId, Pageable pageable);
 
-    int countByGenreListContains(Genre genre);
+    int countByGenreIdListContains(String genreId);
 
     List<Book> findTop10ByOrderByRateAverageDesc();
 

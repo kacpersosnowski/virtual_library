@@ -64,8 +64,8 @@ class BookServiceTests {
                 .set(field(BookDto::getGenreList), Instancio.ofList(GenreDto.class).size(2).create())
                 .create();
         Book bookToFind = Instancio.of(Book.class)
-                .set(field(Book::getAuthorList), Instancio.ofList(String.class).size(2).create())
-                .set(field(Book::getGenreList), Instancio.ofList(String.class).size(2).create())
+                .set(field(Book::getAuthorIdList), Instancio.ofList(String.class).size(2).create())
+                .set(field(Book::getGenreIdList), Instancio.ofList(String.class).size(2).create())
                 .create();
 
         // when
@@ -77,7 +77,7 @@ class BookServiceTests {
                     .lastName(authorDto.getLastName())
                     .build();
             assert bookToFind != null;
-            String authorId = bookToFind.getAuthorList().get(bookToFindDto.getAuthorList().indexOf(authorDto));
+            String authorId = bookToFind.getAuthorIdList().get(bookToFindDto.getAuthorList().indexOf(authorDto));
 
             when(authorRepository.findById(authorId))
                     .thenReturn(Optional.ofNullable(tempAuthor));
@@ -90,7 +90,7 @@ class BookServiceTests {
                     .name(genreDto.getName())
                     .build();
             assert bookToFind != null;
-            String genreId = bookToFind.getGenreList().get(bookToFindDto.getGenreList().indexOf(genreDto));
+            String genreId = bookToFind.getGenreIdList().get(bookToFindDto.getGenreList().indexOf(genreDto));
 
             when(genreRepository.findById(genreId))
                     .thenReturn(Optional.ofNullable(tempGenre));
@@ -127,8 +127,8 @@ class BookServiceTests {
                 .set(field(BookDto::getGenreList), Instancio.ofList(GenreDto.class).size(3).create())
                 .create();
         List<Book> booksExamples = Instancio.ofList(Book.class).size(3)
-                .set(field(Book::getAuthorList), Instancio.ofList(String.class).size(3).create())
-                .set(field(Book::getGenreList), Instancio.ofList(String.class).size(3).create())
+                .set(field(Book::getAuthorIdList), Instancio.ofList(String.class).size(3).create())
+                .set(field(Book::getGenreIdList), Instancio.ofList(String.class).size(3).create())
                 .create();
 
         // when
@@ -141,7 +141,7 @@ class BookServiceTests {
                         .lastName(authorDto.getLastName())
                         .build();
                 String authorId = booksExamples.get(bookDtosExamples.indexOf(bookDto))
-                        .getAuthorList().get(bookDto.getAuthorList().indexOf(authorDto));
+                        .getAuthorIdList().get(bookDto.getAuthorList().indexOf(authorDto));
 
                 when(authorRepository.findById(authorId))
                         .thenReturn(Optional.ofNullable(tempAuthor));
@@ -155,7 +155,7 @@ class BookServiceTests {
                         .name(genreDto.getName())
                         .build();
                 String genreId = booksExamples.get(bookDtosExamples.indexOf(bookDto))
-                        .getGenreList().get(bookDto.getGenreList().indexOf(genreDto));
+                        .getGenreIdList().get(bookDto.getGenreList().indexOf(genreDto));
 
                 when(genreRepository.findById(genreId))
                         .thenReturn(Optional.ofNullable(tempGenre));
@@ -182,8 +182,8 @@ class BookServiceTests {
                 .set(field(BookDto::getGenreList), Instancio.ofList(GenreDto.class).size(2).create())
                 .create();
         Book bookToAdd = Instancio.of(Book.class)
-                .set(field(Book::getAuthorList), Instancio.ofList(String.class).size(2).create())
-                .set(field(Book::getGenreList), Instancio.ofList(String.class).size(2).create())
+                .set(field(Book::getAuthorIdList), Instancio.ofList(String.class).size(2).create())
+                .set(field(Book::getGenreIdList), Instancio.ofList(String.class).size(2).create())
                 .create();
 
         // when
@@ -266,8 +266,8 @@ class BookServiceTests {
                 .set(field(BookDto::getGenreList), Instancio.ofList(GenreDto.class).size(2).create())
                 .create();
         Book newBook = Instancio.of(Book.class)
-                .set(field(Book::getAuthorList), Instancio.ofList(String.class).size(2).create())
-                .set(field(Book::getGenreList), Instancio.ofList(String.class).size(2).create())
+                .set(field(Book::getAuthorIdList), Instancio.ofList(String.class).size(2).create())
+                .set(field(Book::getGenreIdList), Instancio.ofList(String.class).size(2).create())
                 .create();
 
         // when

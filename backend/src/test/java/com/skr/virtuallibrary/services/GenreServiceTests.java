@@ -195,7 +195,7 @@ class GenreServiceTests {
 
         // when
         when(genreRepository.findAllByNameLikeIgnoreCase(name, pageable))
-                .thenReturn(new PageImpl<Genre>(searchResults, pageable, searchResultsDto.size()));
+                .thenReturn(new PageImpl<>(searchResults, pageable, searchResultsDto.size()));
         for (int i = 0; i < searchResults.size(); i++) {
             when(modelMapper.toGenreDto(searchResults.get(i)))
                     .thenReturn(searchResultsDto.get(i));
@@ -219,7 +219,7 @@ class GenreServiceTests {
         // when
         when(genreRepository.findAll()).thenReturn(genreList);
         for (Genre genre : genreList) {
-            when(bookRepository.countByGenreListContains(genre)).thenReturn(1);
+            when(bookRepository.countByGenreIdListContains(genre.getId())).thenReturn(1);
         }
         Map<String, Integer> result = genreService.getGenreBookCount();
 
