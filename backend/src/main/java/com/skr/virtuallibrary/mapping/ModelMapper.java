@@ -4,12 +4,19 @@ import com.skr.virtuallibrary.dto.*;
 import com.skr.virtuallibrary.entities.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+
+import java.util.List;
 
 @Mapper
 public interface ModelMapper {
 
-    BookDto toBookDto(Book book);
+    @Mapping(target = "authorList", source = "authorDtoList")
+    @Mapping(target = "genreList", source = "genreDtoList")
+    BookDto toBookDto(Book book, List<AuthorDto> authorDtoList, List<GenreDto> genreDtoList);
 
+    @Mapping(target = "authorList", source = "authorList", qualifiedByName = "authorListToAuthorIdList")
+    @Mapping(target = "genreList", source = "genreList", qualifiedByName = "genreListToGenreIdList")
     Book toBookEntity(BookDto bookDto);
 
     AuthorDto toAuthorDto(Author author);
@@ -35,4 +42,13 @@ public interface ModelMapper {
     @Mapping(target = "authorId", source = "author.id")
     Review toReviewEntity(ReviewDto reviewDto);
 
+    @Named("authorListToAuthorIdList")
+    static List<String> authorListToAuthorIdList(List<AuthorDto> authorDtos) {
+        return authorDtos.stream().map(AuthorDto::getId).toList();
+    }
+
+    @Named("genreListToGenreIdList")
+    static List<String> genreListToGenreIdList(List<GenreDto> genreDtos) {
+        return genreDtos.stream().map(GenreDto::getId).toList();
+    }
 }

@@ -22,11 +22,11 @@ public class Book {
 
     private AuditData auditData;
 
-    private List<Author> authorList;
+    private List<String> authorIdList;
 
     private String description;
 
-    private List<Genre> genreList;
+    private List<String> genreIdList;
 
     private List<String> tagList;
 

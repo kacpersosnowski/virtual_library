@@ -3,11 +3,7 @@
     "id": "1",
     "title": "Example 1",
     "authorList": [
-      {
-        "id": "1",
-        "firstName": "John",
-        "lastName": "Doe"
-      }
+      "1"
     ],
     "description": "This is an example of a description",
     "tagList": [
@@ -15,10 +11,7 @@
       "test"
     ],
     "genreList": [
-      {
-        "id": "1",
-        "name": "Science Fiction"
-      }
+      "1"
     ],
     "language": "PL",
     "bookCoverId": null,
@@ -28,11 +21,7 @@
     "id": "2",
     "title": "Example 2",
     "authorList": [
-      {
-        "id": "2",
-        "firstName": "Jane",
-        "lastName": "Doe"
-      }
+      "2"
     ],
     "description": "This is an example of a description",
     "tagList": [
@@ -40,10 +29,7 @@
       "test"
     ],
     "genreList": [
-      {
-        "id": "2",
-        "name": "Fantasy"
-      }
+      "2"
     ],
     "language": "PL",
     "bookCoverId": null,
@@ -53,11 +39,7 @@
     "id": "3",
     "title": "Example 3",
     "authorList": [
-      {
-        "id": "3",
-        "firstName": "John",
-        "lastName": "Smith"
-      }
+      "3"
     ],
     "description": "This is an example of a description",
     "tagList": [
@@ -65,10 +47,7 @@
       "test"
     ],
     "genreList": [
-      {
-        "id": "3",
-        "name": "Mystery"
-      }
+      "3"
     ],
     "language": "PL",
     "bookCoverId": null,
@@ -78,11 +57,7 @@
     "id": "4",
     "title": "Example 4",
     "authorList": [
-      {
-        "id": "4",
-        "firstName": "Jane",
-        "lastName": "Smith"
-      }
+      "4"
     ],
     "description": "This is an example of a description",
     "tagList": [
@@ -90,10 +65,7 @@
       "test"
     ],
     "genreList": [
-      {
-        "id": "4",
-        "name": "Romance"
-      }
+      "4"
     ],
     "language": "PL",
     "bookCoverId": null,
@@ -103,11 +75,7 @@
     "id": "5",
     "title": "Example 5",
     "authorList": [
-      {
-        "id": "5",
-        "firstName": "John",
-        "lastName": "Doe"
-      }
+      "5"
     ],
     "description": "This is an example of a description",
     "tagList": [
@@ -115,10 +83,7 @@
       "test"
     ],
     "genreList": [
-      {
-        "id": "5",
-        "name": "Science Fiction"
-      }
+      "5"
     ],
     "language": "PL",
     "bookCoverId": null,
@@ -128,11 +93,7 @@
     "id": "6",
     "title": "Example 6",
     "authorList": [
-      {
-        "id": "6",
-        "firstName": "Jane",
-        "lastName": "Doe"
-      }
+      "6"
     ],
     "description": "This is an example of a description",
     "tagList": [
@@ -140,10 +101,7 @@
       "test"
     ],
     "genreList": [
-      {
-        "id": "6",
-        "name": "Fantasy"
-      }
+      "6"
     ],
     "language": "PL",
     "bookCoverId": null,
@@ -153,11 +111,7 @@
     "id": "7",
     "title": "Example 7",
     "authorList": [
-      {
-        "id": "7",
-        "firstName": "John",
-        "lastName": "Smith"
-      }
+      "7"
     ],
     "description": "This is an example of a description",
     "tagList": [
@@ -165,10 +119,7 @@
       "test"
     ],
     "genreList": [
-      {
-        "id": "7",
-        "name": "Mystery"
-      }
+      "7"
     ],
     "language": "PL",
     "bookCoverId": null,
