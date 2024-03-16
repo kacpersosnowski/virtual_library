@@ -4,6 +4,7 @@ import com.skr.virtuallibrary.dto.UserDto;
 import com.skr.virtuallibrary.entities.enums.Language;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.services.UserService;
+import com.skr.virtuallibrary.validation.ValidPassword;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,5 +40,11 @@ public class UserController {
     @Operation(summary = "Change user's login.")
     public UserDto changeLogin(@Parameter @PathVariable String id, @Valid @RequestBody String login) {
         return userService.changeLogin(id, login);
+    }
+
+    @PatchMapping("/password/{id}")
+    @Operation(summary = "Change user's password.")
+    public UserDto changePassword(@Parameter @PathVariable String id, @ValidPassword @RequestBody String password) {
+        return userService.changePassword(id, password);
     }
 }

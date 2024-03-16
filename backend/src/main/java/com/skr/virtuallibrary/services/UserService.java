@@ -12,6 +12,7 @@ import com.skr.virtuallibrary.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -24,11 +25,15 @@ public class UserService {
 
     private final UnregisteredUserRepository unregisteredUserRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     private final ModelMapper modelMapper;
+
+    public static final String USER_NOT_FOUND_MSG = "User could not be found with id: ";
 
     public UserDto changeLanguage(String userId, Language language) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User could not be found with id: " + userId));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MSG + userId));
 
         user.setLanguage(language);
         return modelMapper.toUserDto(userRepository.save(user));
@@ -88,13 +93,21 @@ public class UserService {
 
     public UserDto changeLogin(String userId, String login) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User could not be found with id: " + userId));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MSG + userId));
 
-        if (userRepository.findByUsername(login).isPresent()) {
+        if (userRepository.findByUsername(login).isPresent() || unregisteredUserRepository.findByUsername(login).isPresent()) {
             throw new UserAlreadyExistsException("User already exists with username: " + login);
         }
 
         user.setUsername(login);
+        return modelMapper.toUserDto(userRepository.save(user));
+    }
+
+    public UserDto changePassword(String userId, String password) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MSG + userId));
+
+        user.setPassword(passwordEncoder.encode(password));
         return modelMapper.toUserDto(userRepository.save(user));
     }
 
