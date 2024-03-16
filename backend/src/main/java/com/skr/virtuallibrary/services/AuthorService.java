@@ -58,7 +58,7 @@ public class AuthorService {
         Author author = authorRepository.findById(id)
                 .orElseThrow(() -> new AuthorNotFoundException(ERROR_NOT_FOUND_MSG + id));
 
-        if (!bookRepository.findAllByAuthorListContains(author).isEmpty()) {
+        if (!bookRepository.findAllByAuthorIdListContains(author.getId()).isEmpty()) {
             throw new AuthorAssignedToBookException();
         }
 

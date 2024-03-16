@@ -138,7 +138,7 @@ public class BookService {
                 .orElseThrow(() -> new GenreNotFoundException("Not found genre with name: " + genreName));
 
         return new PagedResponse<>(
-                bookRepository.findAllByGenreListContains(genre).stream().map(this::toBookDto).toList()
+                bookRepository.findAllByGenreIdListContains(genre.getId()).stream().map(this::toBookDto).toList()
         );
     }
 
@@ -151,7 +151,7 @@ public class BookService {
         Genre genre = genreRepository.findByNameIgnoreCase(genreName)
                 .orElseThrow(() -> new GenreNotFoundException("Not found genre with name: " + genreName));
 
-        Page<Book> books = bookRepository.findAllByGenreListContains(genre, pageable);
+        Page<Book> books = bookRepository.findAllByGenreIdListContains(genre.getId(), pageable);
 
         return new PagedResponse<>(
                 books.getTotalElements(),

@@ -86,7 +86,7 @@ public class GenreService {
         List<Genre> genreList = genreRepository.findAll();
 
         for (Genre genre : genreList) {
-            int bookCount = bookRepository.countByGenreListContains(genre);
+            int bookCount = bookRepository.countByGenreIdListContains(genre.getId());
             genreBookCount.put(genre.getName(), bookCount);
         }
 
