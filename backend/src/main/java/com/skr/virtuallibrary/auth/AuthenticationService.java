@@ -31,6 +31,8 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequest registerRequest) {
         final User user = User.builder()
                 .username(registerRequest.getUsername())
+                .firstName(registerRequest.getFirstName())
+                .lastName(registerRequest.getLastName())
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .authority(Authority.USER)
@@ -43,6 +45,8 @@ public class AuthenticationService {
     public void createTempUserAndSendEmail(RegisterRequest registerRequest) {
         final UnregisteredUser temporaryUser = UnregisteredUser.builder()
                 .username(registerRequest.getUsername())
+                .firstName(registerRequest.getFirstName())
+                .lastName(registerRequest.getLastName())
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .language(registerRequest.getLanguage())
@@ -62,6 +66,8 @@ public class AuthenticationService {
 
         final User user = User.builder()
                 .username(tempUser.getUsername())
+                .firstName(tempUser.getFirstName())
+                .lastName(tempUser.getLastName())
                 .email(tempUser.getEmail())
                 .password(tempUser.getPassword())
                 .authority(Authority.USER)

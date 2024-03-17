@@ -38,6 +38,7 @@ public class SecurityConfig {
                                 .requestMatchers("/email/**").hasAuthority(ADMIN_AUTHORITY)
                                 .requestMatchers(HttpMethod.POST, "/auth/quick-register").hasAuthority(ADMIN_AUTHORITY)
 
+                                .requestMatchers(HttpMethod.GET, "/users/me").authenticated()
                                 .requestMatchers(HttpMethod.POST, REVIEW_ENDPOINT).authenticated()
                                 .requestMatchers(HttpMethod.PUT, REVIEW_ENDPOINT).authenticated()
                                 .requestMatchers(HttpMethod.DELETE, REVIEW_ENDPOINT).authenticated()

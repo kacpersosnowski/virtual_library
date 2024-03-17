@@ -17,6 +17,9 @@ public class UserTestDataBuilder {
 
         User user = User.builder()
                 .id(userId)
+                .username("username")
+                .firstName("John")
+                .lastName("Doe")
                 .email("email@example.com")
                 .password("Password123!")
                 .authority(Authority.USER)
@@ -31,6 +34,9 @@ public class UserTestDataBuilder {
 
         UserDto userDto = UserDto.builder()
                 .id(userDtoId)
+                .username("username")
+                .firstName("John")
+                .lastName("Doe")
                 .email("email@example.com")
                 .authority(Authority.USER)
                 .language(Language.ENG)
