@@ -43,7 +43,7 @@ public class UserController {
     @PutMapping
     @Operation(summary = "Update user.")
     public UserDto updateUser(
-            @Valid @RequestPart("user")UpdateUserRequest request,
+            @Valid @RequestPart("user") UpdateUserRequest request,
             @RequestPart(required = false, name = "profilePicture") MultipartFile profilePicture
     ) {
         if (profilePicture != null) {
