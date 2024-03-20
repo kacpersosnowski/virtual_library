@@ -8,13 +8,17 @@ import ClearIcon from "@mui/icons-material/Clear";
 import ColoredAvatar from "../../Layout/common/ColoredAvatar";
 import profileMessages from "../../../messages/profileMessages";
 
-type Props = { id: string; formik: FormikProps<FormikValues> };
+type Props = {
+  id: string;
+  formik: FormikProps<FormikValues>;
+  username: string;
+};
 
 const ChangeAvatarForm: React.FC<Props> = (props) => {
   const [previewAvatar, setPreviewAvatar] = useState<string | null>(null);
   const { t } = useTranslation();
 
-  const { id, formik } = props;
+  const { id, formik, username } = props;
 
   const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
@@ -62,7 +66,7 @@ const ChangeAvatarForm: React.FC<Props> = (props) => {
         {!previewAvatar && (
           <ColoredAvatar
             sx={{ width: "12rem", height: "12rem", fontSize: "6rem" }}
-            baseName="SEBASTIAN"
+            baseName={username.toUpperCase()}
           />
         )}
         {previewAvatar && (

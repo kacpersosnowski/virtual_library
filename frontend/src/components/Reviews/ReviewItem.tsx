@@ -120,8 +120,8 @@ const ReviewItem: React.FC<Props> = (props) => {
             }}
           >
             <ColoredAvatar
-              baseName={props.review.author.email.toUpperCase()}
-              tooltipTitle={props.review.author.email}
+              baseName={props.review.author.username.toUpperCase()}
+              tooltipTitle={props.review.author.username}
             />
           </Box>
           {!isEditMode && (
@@ -140,7 +140,7 @@ const ReviewItem: React.FC<Props> = (props) => {
                   maxWidth: "100%",
                 }}
               >
-                {props.review.author.email.slice(0, 37)}
+                {props.review.author.username.slice(0, 37)}
               </Typography>
               <Box sx={{ display: "flex", gap: "0.5rem" }}>
                 <Rating value={props.review.rating} readOnly />

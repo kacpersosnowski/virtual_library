@@ -5,11 +5,17 @@ import Card from "../../components/UI/Card/Card";
 import ImageBackground from "../../components/Layout/ImageBackground/ImageBackground";
 import EditProfileForm from "../../components/Forms/profile/EditProfileForm";
 import profileMessages from "../../messages/profileMessages";
+import useFetchUserData from "../../hooks/useFetchUserData";
 
 import booksBg from "../../assets/books-bg3.jpg";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
+  const { user } = useFetchUserData();
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <ImageBackground image={booksBg} containerSx={{ alignItems: "flex-start" }}>
@@ -17,7 +23,7 @@ const ProfilePage = () => {
         <Typography variant="h3" sx={{ mb: "1rem" }}>
           {t(profileMessages.profileHeaderTitle.key)}
         </Typography>
-        <EditProfileForm />
+        <EditProfileForm user={user} />
       </Card>
     </ImageBackground>
   );

@@ -22,12 +22,14 @@ import LoadingSpinner from "../../UI/LoadingSpinner";
 
 const RegisterForm = () => {
   const { t, i18n } = useTranslation();
-  const { register, registerQueryData } = useContext(AuthContext);
+  const { register, registerQueryData, resetRegisterQueryData } =
+    useContext(AuthContext);
   const navigate = useNavigate();
 
   const formik = useFormikLanguage({
     initialValues: {
       newEmail: "",
+      username: "",
       password1: "",
       password2: "",
       acceptTerms: false,
@@ -37,6 +39,7 @@ const RegisterForm = () => {
         invalid: t(validationMessages.emailInvalid.key),
         required: t(validationMessages.fieldRequired.key),
       }),
+      username: Yup.string().required(t(validationMessages.fieldRequired.key)),
       password1: passwordTranslatableSchema(t),
       password2: Yup.string()
         .required(t(validationMessages.fieldRequired.key))
@@ -49,6 +52,7 @@ const RegisterForm = () => {
     onSubmit: (values) => {
       const credentials = {
         email: values.newEmail,
+        username: values.username,
         password: values.password1,
         language: i18n.language !== "en" ? i18n.language.toUpperCase() : "ENG",
       };
@@ -63,6 +67,7 @@ const RegisterForm = () => {
       navigate("/verification-email-sent", {
         state: { email: formik.values.newEmail },
       });
+      resetRegisterQueryData();
     }
   }, [isSuccess]);
 
@@ -80,6 +85,11 @@ const RegisterForm = () => {
         <Input
           id="newEmail"
           label={t(authMessages.emailLabel.key)}
+          formik={formik}
+        />
+        <Input
+          id="username"
+          label={t(authMessages.usernameLabel.key)}
           formik={formik}
         />
         <PasswordInput

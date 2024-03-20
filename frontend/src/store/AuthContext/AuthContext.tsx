@@ -2,7 +2,7 @@ import { PropsWithChildren, createContext, useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { AxiosError } from "axios";
 
-import { AuthContextType } from "./AuthContext.types";
+import { AuthContextType, AuthMutationData } from "./AuthContext.types";
 import { authApi } from "../../config/api/auth/auth";
 import {
   Credentials,
@@ -13,11 +13,23 @@ import RefreshTokenService from "./RefreshTokenService";
 
 export const AuthContext = createContext<AuthContextType>(null);
 
+const initialCredentialsData = {
+  error: null,
+  isLoading: false,
+  isSuccess: false,
+};
+
 export const AuthContextProvider: React.FC<PropsWithChildren> = ({
   children,
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(
     AccessTokenService.getToken() !== null,
+  );
+  const [loginData, setLoginData] = useState<AuthMutationData>(
+    initialCredentialsData,
+  );
+  const [registerData, setRegisterData] = useState<AuthMutationData>(
+    initialCredentialsData,
   );
   const {
     mutate: loginMutate,
@@ -69,6 +81,22 @@ export const AuthContextProvider: React.FC<PropsWithChildren> = ({
     };
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    setRegisterData({
+      isLoading: loginIsLoading,
+      isSuccess: loginIsSuccess,
+      error: loginError as AxiosError,
+    });
+  }, [loginIsLoading, loginIsSuccess, loginError]);
+
+  useEffect(() => {
+    setRegisterData({
+      isLoading: registerIsLoading,
+      isSuccess: registerIsSuccess,
+      error: registerError as AxiosError,
+    });
+  }, [registerIsLoading, registerIsSuccess, registerError]);
+
   // Wrapper for better ts typing
   const login = (credentials: Credentials) => {
     loginMutate(credentials);
@@ -84,6 +112,14 @@ export const AuthContextProvider: React.FC<PropsWithChildren> = ({
     setIsAuthenticated(false);
   };
 
+  const resetLoginQueryData = () => {
+    setLoginData(initialCredentialsData);
+  };
+
+  const resetRegisterQueryData = () => {
+    setRegisterData(initialCredentialsData);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -92,16 +128,10 @@ export const AuthContextProvider: React.FC<PropsWithChildren> = ({
         login,
         register,
         logout,
-        loginQueryData: {
-          isLoading: loginIsLoading,
-          isSuccess: loginIsSuccess,
-          error: loginError as AxiosError,
-        },
-        registerQueryData: {
-          isLoading: registerIsLoading,
-          isSuccess: registerIsSuccess,
-          error: registerError as AxiosError,
-        },
+        loginQueryData: loginData,
+        registerQueryData: registerData,
+        resetLoginQueryData,
+        resetRegisterQueryData,
       }}
     >
       {children}

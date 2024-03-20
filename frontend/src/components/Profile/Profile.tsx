@@ -54,15 +54,16 @@ const Profile: React.FC<Props> = (props) => {
       }}
     >
       <ColoredAvatar
-        baseName={user.email.toUpperCase()}
-        tooltipTitle={props.variant === "navbar" ? user.email : ""}
+        baseName={user.username.toUpperCase()}
+        tooltipTitle={props.variant === "navbar" ? user.username : ""}
         onClick={props.toggleDrawerHandler}
         sx={{ cursor: props.variant === "navbar" ? "pointer" : "default" }}
       />
       {props.variant === "drawer" && (
-        <Tooltip title={user.email.length > 25 ? user.email : ""} arrow>
+        <Tooltip title={user.username.length > 25 ? user.username : ""} arrow>
           <Typography>
-            {user.email.slice(0, 25) + (user.email.length > 25 ? "..." : "")}
+            {user.username.slice(0, 25) +
+              (user.username.length > 25 ? "..." : "")}
           </Typography>
         </Tooltip>
       )}

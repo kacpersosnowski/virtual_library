@@ -8,14 +8,21 @@ import Input from "../common/Input";
 import ActionButton from "../../UI/ActionButton";
 import ChangeAvatarForm from "./ChangeAvatarForm";
 import profileMessages from "../../../messages/profileMessages";
+import { UserData } from "../../../config/api/users/users.types";
 
-const EditProfileForm = () => {
+type Props = {
+  user: UserData;
+};
+
+const EditProfileForm: React.FC<Props> = (props) => {
   const { t } = useTranslation();
+
+  const { user } = props;
 
   const formik = useFormikLanguage({
     initialValues: {
       profilePicture: null as File,
-      username: "",
+      username: user.username,
       firstName: "",
       lastName: "",
     },
@@ -45,13 +52,18 @@ const EditProfileForm = () => {
           flexDirection: { xs: "column", md: "row" },
         }}
       >
-        <ChangeAvatarForm id="profilePicture" formik={formik} />
+        <ChangeAvatarForm
+          id="profilePicture"
+          formik={formik}
+          username={user.username}
+        />
         <Box>
           <Input
             id="username"
             label={t(profileMessages.profileFormUsername.key)}
             formik={formik}
             sx={{ width: { xs: "100%", md: "80%" } }}
+            disabled
           />
           <Input
             id="firstName"

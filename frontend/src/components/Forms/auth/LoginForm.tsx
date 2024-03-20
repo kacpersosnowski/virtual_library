@@ -9,7 +9,6 @@ import ActionButton from "../../UI/ActionButton";
 import PasswordInput from "./PasswordInput";
 import Input from "../common/Input";
 import authMessages from "../../../messages/authMessages";
-import emailValidator from "../../../config/validators/emailValidator";
 import validationMessages from "../../../messages/validationMessages";
 import useFormikLanguage from "../../../hooks/useFormikLanguage";
 import { AuthContext } from "../../../store/AuthContext/AuthContext";
@@ -22,17 +21,15 @@ import { snackbarActions } from "../../../store/redux/slices/snackbar-slice";
 const LoginForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { login, isAuthenticated, loginQueryData } = useContext(AuthContext);
+  const { login, isAuthenticated, loginQueryData, resetLoginQueryData } =
+    useContext(AuthContext);
   const location = useLocation();
   const dispatch = useDispatch();
 
   const formik = useFormikLanguage({
-    initialValues: { email: "", password: "" },
+    initialValues: { username: "", password: "" },
     validationSchema: Yup.object({
-      email: emailValidator({
-        invalid: t(validationMessages.emailInvalid.key),
-        required: t(validationMessages.fieldRequired.key),
-      }),
+      username: Yup.string().required(t(validationMessages.fieldRequired.key)),
       password: Yup.string().required(t(validationMessages.fieldRequired.key)),
     }),
     onSubmit: (values) => {
@@ -47,13 +44,19 @@ const LoginForm = () => {
     }
   }, []);
 
+  const { isLoading, error, isSuccess } = loginQueryData;
+
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/");
     }
   }, [isAuthenticated]);
 
-  const { isLoading, error } = loginQueryData;
+  useEffect(() => {
+    if (isSuccess) {
+      resetLoginQueryData();
+    }
+  }, [isSuccess]);
 
   const errorMessage =
     error?.response?.status === 403
@@ -67,8 +70,8 @@ const LoginForm = () => {
           {t(authMessages.loginHeader.key)}
         </Typography>
         <Input
-          id="email"
-          label={t(authMessages.emailLabel.key)}
+          id="username"
+          label={t(authMessages.usernameLabel.key)}
           formik={formik}
         />
         <PasswordInput

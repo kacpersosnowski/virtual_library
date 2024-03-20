@@ -14,6 +14,8 @@ export type AuthContextType = {
   register: (credentials: RegisterCredentials) => void;
   loginQueryData: AuthMutationData;
   registerQueryData: AuthMutationData;
+  resetLoginQueryData: () => void;
+  resetRegisterQueryData: () => void;
 };
 
 export type AuthMutationData = {
