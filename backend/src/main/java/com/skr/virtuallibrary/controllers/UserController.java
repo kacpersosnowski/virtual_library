@@ -1,8 +1,10 @@
 package com.skr.virtuallibrary.controllers;
 
+import com.skr.virtuallibrary.dto.UpdateUserRequest;
 import com.skr.virtuallibrary.dto.UserDto;
 import com.skr.virtuallibrary.entities.enums.Language;
 import com.skr.virtuallibrary.mapping.ModelMapper;
+import com.skr.virtuallibrary.services.FileService;
 import com.skr.virtuallibrary.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -20,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+
+    private final FileService fileService;
 
     private final ModelMapper modelMapper;
 
@@ -33,5 +38,18 @@ public class UserController {
     @Operation(summary = "Get current user.")
     public UserDto getCurrentUser() {
         return modelMapper.toUserDto(userService.getCurrentUser());
+    }
+
+    @PutMapping
+    @Operation(summary = "Update user.")
+    public UserDto updateUser(
+            @Valid @RequestPart("user") UpdateUserRequest request,
+            @RequestPart(required = false, name = "profilePicture") MultipartFile profilePicture
+    ) {
+        if (profilePicture != null) {
+            String profilePictureId = fileService.addFile(profilePicture, "image/png");
+            return userService.updateUser(request, profilePictureId);
+        }
+        return userService.updateUser(request, null);
     }
 }

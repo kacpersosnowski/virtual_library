@@ -6,6 +6,7 @@ import com.skr.virtuallibrary.dto.UserDto;
 import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.entities.enums.Language;
 import com.skr.virtuallibrary.mapping.ModelMapper;
+import com.skr.virtuallibrary.services.FileService;
 import com.skr.virtuallibrary.services.UserService;
 import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
@@ -38,6 +39,9 @@ class UserControllerTest {
 
     @MockBean
     private JwtService jwtService;
+
+    @MockBean
+    private FileService fileService;
 
     @MockBean
     private ModelMapper modelMapper;

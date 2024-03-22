@@ -22,9 +22,9 @@ public class FileController {
 
     private final FileService fileService;
 
-    @Operation(summary = "Get book cover by id")
-    @GetMapping("/cover/{id}")
-    public ResponseEntity<ByteArrayResource> getBookCover(@PathVariable String id) {
+    @Operation(summary = "Get image by id")
+    @GetMapping("/image/{id}")
+    public ResponseEntity<ByteArrayResource> getImage(@PathVariable String id) {
         return getFile(id, "image/png");
     }
 
@@ -34,9 +34,9 @@ public class FileController {
         return getFile(id, "application/pdf");
     }
 
-    @Operation(summary = "Get book cover file name by id")
-    @GetMapping("/cover/{id}/filename")
-    public String getBookCoverFilename(@PathVariable String id) {
+    @Operation(summary = "Get image file name by id")
+    @GetMapping("/image/{id}/filename")
+    public String getImageFilename(@PathVariable String id) {
         return fileService.getFilename(id);
     }
 

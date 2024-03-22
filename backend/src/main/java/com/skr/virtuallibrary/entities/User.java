@@ -39,6 +39,8 @@ public class User implements UserDetails {
 
     private Language language;
 
+    private String profilePictureId;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(authority.name()));

@@ -1,5 +1,6 @@
 package com.skr.virtuallibrary.services;
 
+import com.skr.virtuallibrary.dto.UpdateUserRequest;
 import com.skr.virtuallibrary.dto.UserDto;
 import com.skr.virtuallibrary.entities.UnregisteredUser;
 import com.skr.virtuallibrary.entities.User;
@@ -61,6 +62,18 @@ public class UserService {
     public UnregisteredUser findUnregisteredUserByToken(String token) {
         return unregisteredUserRepository.findByRegistrationToken(token)
                 .orElseThrow(() -> new UserNotFoundException("User could not be found with token: " + token));
+    }
+
+    public UserDto updateUser(UpdateUserRequest request, String profilePictureId) {
+        User user = getCurrentUser();
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+        user.setLanguage(request.getLanguage());
+        if (profilePictureId != null) {
+            user.setProfilePictureId(profilePictureId);
+        }
+        return modelMapper.toUserDto(userRepository.save(user));
     }
 
     public void deleteUnregisteredUser(UnregisteredUser unregisteredUser) {
