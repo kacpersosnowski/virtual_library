@@ -15,6 +15,12 @@ public class RegisterRequest {
     @NotEmpty
     private String username;
 
+    @NotEmpty
+    private String firstName;
+
+    @NotEmpty
+    private String lastName;
+
     @Email(message = "Email should be valid")
     private String email;
 
