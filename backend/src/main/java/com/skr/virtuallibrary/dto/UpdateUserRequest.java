@@ -20,6 +20,4 @@ public class UpdateUserRequest {
     @NotNull
     private Language language;
 
-    private String profilePictureId;
-
 }

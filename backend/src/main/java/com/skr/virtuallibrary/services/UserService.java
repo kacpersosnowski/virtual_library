@@ -64,14 +64,14 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User could not be found with token: " + token));
     }
 
-    public UserDto updateUser(UpdateUserRequest request) {
+    public UserDto updateUser(UpdateUserRequest request, String profilePictureId) {
         User user = getCurrentUser();
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setLanguage(request.getLanguage());
-        if (request.getProfilePictureId() != null) {
-            user.setProfilePictureId(request.getProfilePictureId());
+        if (profilePictureId != null) {
+            user.setProfilePictureId(profilePictureId);
         }
         return modelMapper.toUserDto(userRepository.save(user));
     }

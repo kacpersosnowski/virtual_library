@@ -48,8 +48,8 @@ public class UserController {
     ) {
         if (profilePicture != null) {
             String profilePictureId = fileService.addFile(profilePicture, "image/png");
-            request.setProfilePictureId(profilePictureId);
+            return userService.updateUser(request, profilePictureId);
         }
-        return userService.updateUser(request);
+        return userService.updateUser(request, null);
     }
 }
