@@ -1,4 +1,6 @@
 import { useTranslation } from "react-i18next";
+import { useMutation } from "react-query";
+import { useDispatch } from "react-redux";
 import { Box } from "@mui/material";
 import * as Yup from "yup";
 
@@ -9,28 +11,58 @@ import ActionButton from "../../UI/ActionButton";
 import ChangeAvatarForm from "./ChangeAvatarForm";
 import profileMessages from "../../../messages/profileMessages";
 import { UserData } from "../../../config/api/users/users.types";
+import { usersApi } from "../../../config/api/users/users";
+import LoadingSpinner from "../../UI/LoadingSpinner";
+import ErrorMessage from "../../UI/ErrorMessage";
+import errorMessages from "../../../messages/errorMessages";
+import { snackbarActions } from "../../../store/redux/slices/snackbar-slice";
+import { queryClient } from "../../../config/api";
 
 type Props = {
   user: UserData;
+  profilePictureFile: File;
 };
 
 const EditProfileForm: React.FC<Props> = (props) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const {
+    mutate: updateUser,
+    isLoading,
+    isError,
+  } = useMutation({
+    mutationFn: usersApi.updateUser,
+    onSuccess: () => {
+      dispatch(
+        snackbarActions.show(t(profileMessages.profileFormSuccessMesage.key)),
+      );
+      queryClient.invalidateQueries(["users", "profilePicture"]);
+      queryClient.invalidateQueries(["user"]);
+    },
+  });
 
-  const { user } = props;
+  const { user, profilePictureFile } = props;
 
   const formik = useFormikLanguage({
     initialValues: {
-      profilePicture: null as File,
+      profilePicture: profilePictureFile,
       username: user.username,
-      firstName: "",
-      lastName: "",
+      email: user.email,
+      firstName: user.firstName || "",
+      lastName: user.lastName || "",
     },
     validationSchema: Yup.object({
       username: Yup.string().required(t(validationMessages.fieldRequired.key)),
     }),
     onSubmit: (values) => {
-      console.log(values);
+      const userData = {
+        email: user.email,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        language: user.language,
+        profilePicture: values.profilePicture,
+      };
+      updateUser(userData);
     },
   });
 
@@ -41,6 +73,9 @@ const EditProfileForm: React.FC<Props> = (props) => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        width: { xs: "100%", md: "75%" },
+        ml: "auto",
+        mr: "auto",
       }}
       onSubmit={formik.handleSubmit}
     >
@@ -48,7 +83,6 @@ const EditProfileForm: React.FC<Props> = (props) => {
         sx={{
           display: "flex",
           justifyContent: "space-around",
-          alignItems: "center",
           flexDirection: { xs: "column", md: "row" },
         }}
       >
@@ -61,6 +95,13 @@ const EditProfileForm: React.FC<Props> = (props) => {
           <Input
             id="username"
             label={t(profileMessages.profileFormUsername.key)}
+            formik={formik}
+            sx={{ width: { xs: "100%", md: "80%" } }}
+            disabled
+          />
+          <Input
+            id="email"
+            label={t(profileMessages.profileFormEmail.key)}
             formik={formik}
             sx={{ width: { xs: "100%", md: "80%" } }}
             disabled
@@ -79,9 +120,15 @@ const EditProfileForm: React.FC<Props> = (props) => {
           />
         </Box>
       </Box>
-      <ActionButton type="submit" sx={{ mt: "1.5rem" }}>
-        {t(profileMessages.profileFormSubmitButton.key)}
-      </ActionButton>
+      {isLoading && <LoadingSpinner />}
+      {!isLoading && (
+        <ActionButton type="submit" sx={{ mt: "1.5rem" }}>
+          {t(profileMessages.profileFormSubmitButton.key)}
+        </ActionButton>
+      )}
+      {isError && (
+        <ErrorMessage message={t(errorMessages.somethingWentWrongError.key)} />
+      )}
     </Box>
   );
 };

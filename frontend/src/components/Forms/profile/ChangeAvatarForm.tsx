@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { FormikProps, FormikValues } from "formik";
 import { Badge, Box, Button, IconButton, Input, Tooltip } from "@mui/material";
 
@@ -20,10 +20,7 @@ const ChangeAvatarForm: React.FC<Props> = (props) => {
 
   const { id, formik, username } = props;
 
-  const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] || null;
-    formik.setFieldValue(id, file);
-
+  const readPreviewImage = (file: File) => {
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -33,6 +30,20 @@ const ChangeAvatarForm: React.FC<Props> = (props) => {
     } else {
       setPreviewAvatar(null);
     }
+  };
+
+  useEffect(() => {
+    const file = formik?.values[id];
+    if (file) {
+      readPreviewImage(file);
+    }
+  }, [id, formik?.values[id]]);
+
+  const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] || null;
+    formik.setFieldValue(id, file);
+
+    readPreviewImage(file);
   };
 
   const handleClearPreview = () => {
@@ -84,7 +95,7 @@ const ChangeAvatarForm: React.FC<Props> = (props) => {
       <Box>
         <Input
           type="file"
-          inputProps={{ accept: "image/*" }}
+          inputProps={{ accept: "image/png" }}
           style={{ display: "none" }}
           id={id}
           onChange={handleAvatarChange}

@@ -19,7 +19,7 @@ export const parseBookItems = (data: Book[]): BookItemData[] => {
         rateCount: dataItem.rateCount,
         rateAverage: dataItem.rateAverage,
       },
-      cover: `${BACKEND_BASE_URL}/files/cover/${dataItem.bookCoverId}`,
+      cover: `${BACKEND_BASE_URL}/files/image/${dataItem.bookCoverId}`,
     };
   });
 };
@@ -55,7 +55,7 @@ export const parseBookItemForDetails = (dataItem: Book): ReadBookDTO => {
       rateCount: dataItem.rateCount,
       rateAverage: dataItem.rateAverage,
     },
-    cover: `${BACKEND_BASE_URL}/files/cover/${dataItem.bookCoverId}`,
+    cover: `${BACKEND_BASE_URL}/files/image/${dataItem.bookCoverId}`,
     bookContentId: dataItem.bookContentId,
   };
 };

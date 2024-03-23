@@ -1,3 +1,4 @@
+import { useQuery } from "react-query";
 import { useTranslation } from "react-i18next";
 import { Typography } from "@mui/material";
 
@@ -6,12 +7,40 @@ import ImageBackground from "../../components/Layout/ImageBackground/ImageBackgr
 import EditProfileForm from "../../components/Forms/profile/EditProfileForm";
 import profileMessages from "../../messages/profileMessages";
 import useFetchUserData from "../../hooks/useFetchUserData";
+import LoadingSpinner from "../../components/UI/LoadingSpinner";
+import ErrorMessage from "../../components/UI/ErrorMessage";
+import errorMessages from "../../messages/errorMessages";
 
 import booksBg from "../../assets/books-bg3.jpg";
+import { usersApi } from "../../config/api/users/users";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
-  const { user } = useFetchUserData();
+  const {
+    user,
+    isLoading: isUserLoading,
+    error: isUserError,
+  } = useFetchUserData();
+  const {
+    data: profilePicture,
+    isLoading: isProfilePictureLoading,
+    isError: isProfilePictureError,
+  } = useQuery({
+    queryFn: usersApi.getUserProfilePicture,
+    queryKey: ["users", "profilePicture"],
+  });
+
+  let content = (
+    <EditProfileForm user={user} profilePictureFile={profilePicture} />
+  );
+
+  if (isUserError || isProfilePictureError) {
+    content = <ErrorMessage message={t(errorMessages.userDataError.key)} />;
+  }
+
+  if (isUserLoading || isProfilePictureLoading) {
+    content = <LoadingSpinner />;
+  }
 
   if (!user) {
     return null;
@@ -23,7 +52,7 @@ const ProfilePage = () => {
         <Typography variant="h3" sx={{ mb: "1rem" }}>
           {t(profileMessages.profileHeaderTitle.key)}
         </Typography>
-        <EditProfileForm user={user} />
+        {content}
       </Card>
     </ImageBackground>
   );

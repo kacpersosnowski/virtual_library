@@ -13,7 +13,7 @@ import { PagedResponse } from "../common/common.types";
 const url = "/books";
 const mostPopularUrl = `${url}/most-popular`;
 const bestRatedUrl = `${url}/best-rated`;
-const coverUrl = "/files/cover";
+const coverUrl = "/files/image";
 const pdfUrl = "/files/content";
 
 export const booksApi: BooksApi = {

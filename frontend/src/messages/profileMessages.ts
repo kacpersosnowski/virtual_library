@@ -16,6 +16,11 @@ const profileMessages: Message = {
     pl: "Nazwa użytkownika",
     en: "Username",
   },
+  profileFormEmail: {
+    key: "profile >> form >> Email",
+    pl: "Adres e-mail",
+    en: "E-mail",
+  },
   profileFormFirstName: {
     key: "profile >> form >> first_name",
     pl: "Imię",
@@ -40,6 +45,11 @@ const profileMessages: Message = {
     key: "profile >> form >> submit_button",
     pl: "Zapisz zmiany",
     en: "Save changes",
+  },
+  profileFormSuccessMesage: {
+    key: "profile >> form >> success_message",
+    pl: "Twój profil został zaktualizowany pomyślnie",
+    en: "Your profile was updated successfully",
   },
 };
 

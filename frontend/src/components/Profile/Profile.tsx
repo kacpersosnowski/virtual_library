@@ -8,6 +8,7 @@ import ErrorMessage from "../UI/ErrorMessage";
 import { LANGUAGES } from "../../constants/languages";
 import errorMessages from "../../messages/errorMessages";
 import ColoredAvatar from "../Layout/common/ColoredAvatar";
+import { getProfilePictureUrl } from "../../config/api/users/users.utils";
 
 type Props = {
   variant: "drawer" | "navbar";
@@ -41,6 +42,22 @@ const Profile: React.FC<Props> = (props) => {
     return null;
   }
 
+  const profilePicture = (
+    <Tooltip title={props.variant === "navbar" ? user.username : ""} arrow>
+      <Box
+        component="img"
+        src={getProfilePictureUrl(user.profilePictureId)}
+        alt={"profile"}
+        width="3rem"
+        height="3rem"
+        borderRadius="1.5rem"
+        style={{ objectFit: "fill" }}
+        onClick={props.toggleDrawerHandler}
+        sx={{ cursor: props.variant === "navbar" ? "pointer" : "default" }}
+      />
+    </Tooltip>
+  );
+
   return (
     <Box
       sx={{
@@ -53,12 +70,16 @@ const Profile: React.FC<Props> = (props) => {
         ...props.sx,
       }}
     >
-      <ColoredAvatar
-        baseName={user.username.toUpperCase()}
-        tooltipTitle={props.variant === "navbar" ? user.username : ""}
-        onClick={props.toggleDrawerHandler}
-        sx={{ cursor: props.variant === "navbar" ? "pointer" : "default" }}
-      />
+      {user.profilePictureId ? (
+        profilePicture
+      ) : (
+        <ColoredAvatar
+          baseName={user.username.toUpperCase()}
+          tooltipTitle={props.variant === "navbar" ? user.username : ""}
+          onClick={props.toggleDrawerHandler}
+          sx={{ cursor: props.variant === "navbar" ? "pointer" : "default" }}
+        />
+      )}
       {props.variant === "drawer" && (
         <Tooltip title={user.username.length > 25 ? user.username : ""} arrow>
           <Typography>
