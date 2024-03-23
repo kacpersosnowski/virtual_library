@@ -4,6 +4,7 @@ import commonMessages from "../../../messages/commonMessages";
 
 export type Props = {
   date: string;
+  transformFn?: (date: string) => string;
 };
 
 const FormattedDateParagraph: React.FC<Props> = (props) => {
@@ -36,7 +37,13 @@ const FormattedDateParagraph: React.FC<Props> = (props) => {
     return formattedDate;
   };
 
-  return <Typography>{formatDate(props.date)}</Typography>;
+  return (
+    <Typography sx={{ justifyContent: "left" }}>
+      {props.transformFn
+        ? props.transformFn(formatDate(props.date))
+        : formatDate(props.date)}
+    </Typography>
+  );
 };
 
 export default FormattedDateParagraph;
