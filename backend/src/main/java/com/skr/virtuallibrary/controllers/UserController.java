@@ -1,5 +1,6 @@
 package com.skr.virtuallibrary.controllers;
 
+import com.skr.virtuallibrary.controllers.requests.ResetPasswordRequest;
 import com.skr.virtuallibrary.dto.UpdateUserRequest;
 import com.skr.virtuallibrary.dto.UserDto;
 import com.skr.virtuallibrary.entities.enums.Language;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -51,5 +53,19 @@ public class UserController {
             return userService.updateUser(request, profilePictureId);
         }
         return userService.updateUser(request, null);
+    }
+
+    @PostMapping("/reset-password")
+    @Operation(summary = "Reset password.")
+    public ResponseEntity<Object> resetPassword(@RequestParam String email) {
+        userService.resetPassword(email);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/finalize-password-reset")
+    @Operation(summary = "Change password.")
+    public ResponseEntity<Object> changePassword(@RequestBody @Valid ResetPasswordRequest request) {
+        userService.finalizePasswordReset(request);
+        return ResponseEntity.ok().build();
     }
 }

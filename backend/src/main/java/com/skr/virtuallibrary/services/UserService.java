@@ -1,19 +1,24 @@
 package com.skr.virtuallibrary.services;
 
+import com.skr.virtuallibrary.controllers.requests.ResetPasswordRequest;
 import com.skr.virtuallibrary.dto.UpdateUserRequest;
 import com.skr.virtuallibrary.dto.UserDto;
+import com.skr.virtuallibrary.entities.PasswordReset;
 import com.skr.virtuallibrary.entities.UnregisteredUser;
 import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.entities.enums.Language;
 import com.skr.virtuallibrary.exceptions.UserNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
+import com.skr.virtuallibrary.repositories.ResetPasswordRepository;
 import com.skr.virtuallibrary.repositories.UnregisteredUserRepository;
 import com.skr.virtuallibrary.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -25,6 +30,12 @@ public class UserService {
     private final UnregisteredUserRepository unregisteredUserRepository;
 
     private final ModelMapper modelMapper;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final EmailService emailService;
+
+    private final ResetPasswordRepository resetPasswordRepository;
 
     public UserDto changeLanguage(String userId, Language language) {
         User user = userRepository.findById(userId)
@@ -47,7 +58,7 @@ public class UserService {
     public void addUnregisteredUser(UnregisteredUser unregisteredUser) {
         String usersTempToken;
         do {
-            usersTempToken = generateRegistrationToken();
+            usersTempToken = generateToken();
         } while (unregisteredUserRepository.findByRegistrationToken(usersTempToken).isPresent());
 
         unregisteredUser.setRegistrationToken(usersTempToken);
@@ -98,7 +109,41 @@ public class UserService {
         }
     }
 
-    private String generateRegistrationToken() {
+    public void resetPassword(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User could not be found with email: " + email));
+
+        String token = generateToken();
+        LocalDateTime expirationDate = LocalDateTime.now().plusHours(2);
+        PasswordReset passwordReset = PasswordReset.builder()
+                .email(user.getEmail())
+                .token(token)
+                .expirationDate(expirationDate)
+                .build();
+
+        resetPasswordRepository.save(passwordReset);
+        emailService.sendPasswordResetEmail(user.getLanguage(), user.getEmail(), token);
+    }
+
+    public void finalizePasswordReset(ResetPasswordRequest request) {
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new UserNotFoundException("User could not be found with username: " + request.getUsername()));
+        PasswordReset passwordReset = resetPasswordRepository.findByEmail(request.getUsername())
+                .orElseThrow(() -> new UserNotFoundException("This user didn't ask for password reset: " + request.getUsername()));
+
+        if (!passwordReset.getToken().equals(request.getToken())) {
+            throw new UserNotFoundException("Invalid token.");
+        }
+        if (passwordReset.getExpirationDate().isBefore(LocalDateTime.now())) {
+            throw new UserNotFoundException("Token expired.");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+        resetPasswordRepository.delete(passwordReset);
+    }
+
+    private String generateToken() {
         UUID randomUUID = UUID.randomUUID();
         return randomUUID.toString().replace("-", "");
     }
