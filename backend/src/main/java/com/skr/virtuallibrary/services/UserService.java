@@ -103,10 +103,8 @@ public class UserService {
         }
     }
 
-    public UserDto changePassword(String userId, String password) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MSG + userId));
-
+    public UserDto changePassword(String password) {
+        User user = getCurrentUser();
         user.setPassword(passwordEncoder.encode(password));
         return modelMapper.toUserDto(userRepository.save(user));
     }
