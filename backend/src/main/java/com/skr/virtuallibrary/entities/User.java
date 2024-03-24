@@ -27,6 +27,10 @@ public class User implements UserDetails {
 
     private String username;
 
+    private String firstName;
+
+    private String lastName;
+
     private String email;
 
     private String password;
@@ -34,6 +38,8 @@ public class User implements UserDetails {
     private Authority authority;
 
     private Language language;
+
+    private String profilePictureId;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

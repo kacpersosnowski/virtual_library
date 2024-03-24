@@ -35,7 +35,7 @@ class FileControllerTest {
         File file = Instancio.of(File.class).set(field(File::getFileType), "image/png").create();
 
         when(fileService.getFile("1", "image/png")).thenReturn(file);
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/files/cover/1"))
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/files/image/1"))
                 .andReturn();
 
         Assertions.assertThat(result.getResponse().getStatus()).isEqualTo(200);
@@ -57,7 +57,7 @@ class FileControllerTest {
         String filename = "cover.png";
 
         when(fileService.getFilename("1")).thenReturn(filename);
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/files/cover/1/filename"))
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/files/image/1/filename"))
                 .andReturn();
 
         Assertions.assertThat(result.getResponse().getStatus()).isEqualTo(200);

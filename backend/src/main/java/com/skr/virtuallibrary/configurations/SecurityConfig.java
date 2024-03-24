@@ -38,6 +38,9 @@ public class SecurityConfig {
                                 .requestMatchers("/email/**").hasAuthority(ADMIN_AUTHORITY)
                                 .requestMatchers(HttpMethod.POST, "/auth/quick-register").hasAuthority(ADMIN_AUTHORITY)
 
+                                .requestMatchers(HttpMethod.GET, "/users/me").authenticated()
+                                .requestMatchers(HttpMethod.PATCH, "/users/language/**").authenticated()
+                                .requestMatchers(HttpMethod.PUT, "/users").authenticated()
                                 .requestMatchers(HttpMethod.POST, REVIEW_ENDPOINT).authenticated()
                                 .requestMatchers(HttpMethod.PUT, REVIEW_ENDPOINT).authenticated()
                                 .requestMatchers(HttpMethod.DELETE, REVIEW_ENDPOINT).authenticated()
@@ -46,7 +49,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/books/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/authors/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/genres/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/files/cover/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/files/image/**").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
 
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
