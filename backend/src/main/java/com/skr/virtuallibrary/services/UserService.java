@@ -40,11 +40,11 @@ public class UserService {
     }
 
     public void addUser(User user) {
-        checkIfUserExists(user);
         userRepository.save(user);
     }
 
     public void addUnregisteredUser(UnregisteredUser unregisteredUser) {
+        checkIfUserExists(unregisteredUser);
         String usersTempToken;
         do {
             usersTempToken = generateRegistrationToken();
@@ -80,7 +80,7 @@ public class UserService {
         unregisteredUserRepository.delete(unregisteredUser);
     }
 
-    public void checkIfUserExists(User user) {
+    public void checkIfUserExists(UnregisteredUser user) {
         String username = user.getUsername();
         String email = user.getEmail();
         if (
