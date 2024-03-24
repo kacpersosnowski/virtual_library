@@ -103,6 +103,10 @@ const ReviewsList = () => {
     );
   }
 
+  if (!user) {
+    return null;
+  }
+
   return (
     <>
       {isDeletingError && (

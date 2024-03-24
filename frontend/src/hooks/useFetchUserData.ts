@@ -1,30 +1,28 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
+import { useState } from "react";
 
 import { usersApi } from "../config/api/users/users";
 import { UserData } from "../config/api/users/users.types";
+import { isAxiosError } from "axios";
 
 const useFetchUserData = () => {
   const [user, setUser] = useState<UserData>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    setIsLoading(true);
-    usersApi
-      .getUserData()
-      .then((user) => {
-        setUser(user);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        if (error.response.status !== 403) {
-          setError(error);
-        }
-        setIsLoading(false);
-      });
-  }, []);
+  const { isLoading } = useQuery({
+    queryFn: usersApi.getUserData,
+    queryKey: ["user"],
+    onSuccess: (data) => {
+      setUser(data);
+    },
+    onError: (error) => {
+      if (isAxiosError(error) && error.response.status !== 403) {
+        setError(error);
+      }
+    },
+  });
 
-  return { user, isLoading, error };
+  return { user, isLoading: isLoading, error };
 };
 
 export default useFetchUserData;

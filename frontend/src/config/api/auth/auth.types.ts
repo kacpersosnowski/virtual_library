@@ -1,9 +1,10 @@
 export type Credentials = {
-  email: string;
+  username: string;
   password: string;
 };
 
 export type RegisterCredentials = Credentials & {
+  email: string;
   language: string;
 };
 
