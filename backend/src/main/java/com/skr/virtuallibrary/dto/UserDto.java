@@ -20,10 +20,8 @@ public class UserDto {
     @NotEmpty
     private String username;
 
-    @NotEmpty
     private String firstName;
 
-    @NotEmpty
     private String lastName;
 
     @NotEmpty
