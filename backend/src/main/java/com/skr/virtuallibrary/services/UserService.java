@@ -7,6 +7,8 @@ import com.skr.virtuallibrary.entities.PasswordReset;
 import com.skr.virtuallibrary.entities.UnregisteredUser;
 import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.entities.enums.Language;
+import com.skr.virtuallibrary.exceptions.InvalidTokenException;
+import com.skr.virtuallibrary.exceptions.TokenExpiredException;
 import com.skr.virtuallibrary.exceptions.UserNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.ResetPasswordRepository;
@@ -116,7 +118,7 @@ public class UserService {
         String token = generateToken();
         LocalDateTime expirationDate = LocalDateTime.now().plusHours(2);
         PasswordReset passwordReset = PasswordReset.builder()
-                .email(user.getEmail())
+                .username(user.getUsername())
                 .token(token)
                 .expirationDate(expirationDate)
                 .build();
@@ -128,13 +130,14 @@ public class UserService {
     public void finalizePasswordReset(ResetPasswordRequest request) {
         User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new UserNotFoundException("User could not be found with username: " + request.getUsername()));
-        PasswordReset passwordReset = resetPasswordRepository.findByEmail(request.getUsername())
-                .orElseThrow(() -> new UserNotFoundException("This user didn't ask for password reset: " + request.getUsername()));
+        PasswordReset passwordReset = resetPasswordRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new TokenExpiredException("Token for password reset expired."));
 
         if (!passwordReset.getToken().equals(request.getToken())) {
-            throw new UserNotFoundException("Invalid token.");
+            throw new InvalidTokenException("Given token is invalid");
         }
         if (passwordReset.getExpirationDate().isBefore(LocalDateTime.now())) {
+            resetPasswordRepository.delete(passwordReset);
             throw new UserNotFoundException("Token expired.");
         }
 

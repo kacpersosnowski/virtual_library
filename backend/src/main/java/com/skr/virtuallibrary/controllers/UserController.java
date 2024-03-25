@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -57,14 +58,14 @@ public class UserController {
 
     @PostMapping("/reset-password")
     @Operation(summary = "Reset password.")
-    public ResponseEntity<Object> resetPassword(@RequestParam String email) {
+    public ResponseEntity<Object> resetPassword(@RequestBody @Email String email) {
         userService.resetPassword(email);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/finalize-password-reset")
     @Operation(summary = "Change password.")
-    public ResponseEntity<Object> changePassword(@RequestBody @Valid ResetPasswordRequest request) {
+    public ResponseEntity<Object> changePassword(@Valid @RequestBody ResetPasswordRequest request) {
         userService.finalizePasswordReset(request);
         return ResponseEntity.ok().build();
     }

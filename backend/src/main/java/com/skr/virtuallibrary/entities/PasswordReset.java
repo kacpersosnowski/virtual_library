@@ -1,6 +1,7 @@
 package com.skr.virtuallibrary.entities;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +12,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class PasswordReset {
 
-    private String email;
+    @Id
+    private String id;
+
+    private String username;
 
     private String token;
 
