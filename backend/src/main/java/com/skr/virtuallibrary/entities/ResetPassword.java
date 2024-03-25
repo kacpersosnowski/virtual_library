@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PasswordReset {
+public class ResetPassword {
 
     @Id
     private String id;

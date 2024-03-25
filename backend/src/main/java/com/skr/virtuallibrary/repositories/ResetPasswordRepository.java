@@ -1,12 +1,12 @@
 package com.skr.virtuallibrary.repositories;
 
-import com.skr.virtuallibrary.entities.PasswordReset;
+import com.skr.virtuallibrary.entities.ResetPassword;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
 
-public interface ResetPasswordRepository extends MongoRepository<PasswordReset, String> {
+public interface ResetPasswordRepository extends MongoRepository<ResetPassword, String> {
 
-    Optional<PasswordReset> findByUsername(String username);
+    Optional<ResetPassword> findByUsername(String username);
 
 }

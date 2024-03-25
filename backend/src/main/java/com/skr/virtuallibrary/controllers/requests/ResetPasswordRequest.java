@@ -2,13 +2,15 @@ package com.skr.virtuallibrary.controllers.requests;
 
 import com.skr.virtuallibrary.validation.ValidPassword;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ResetPasswordRequest {
 
     @NotEmpty
@@ -19,4 +21,5 @@ public class ResetPasswordRequest {
 
     @NotEmpty
     private String token;
+
 }
