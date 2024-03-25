@@ -1,12 +1,12 @@
 package com.skr.virtuallibrary.controllers;
 
+import com.skr.virtuallibrary.controllers.requests.ChangePasswordRequest;
 import com.skr.virtuallibrary.dto.UpdateUserRequest;
 import com.skr.virtuallibrary.dto.UserDto;
 import com.skr.virtuallibrary.entities.enums.Language;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.services.FileService;
 import com.skr.virtuallibrary.services.UserService;
-import com.skr.virtuallibrary.validation.ValidPassword;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -56,7 +56,7 @@ public class UserController {
 
     @PatchMapping("/password")
     @Operation(summary = "Change user's password.")
-    public UserDto changePassword(@ValidPassword @RequestBody String newPassword) {
-        return userService.changePassword(newPassword);
+    public UserDto changePassword(@Valid @RequestBody ChangePasswordRequest request) {
+        return userService.changePassword(request);
     }
 }

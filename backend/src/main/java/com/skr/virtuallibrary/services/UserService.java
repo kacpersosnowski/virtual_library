@@ -1,10 +1,12 @@
 package com.skr.virtuallibrary.services;
 
+import com.skr.virtuallibrary.controllers.requests.ChangePasswordRequest;
 import com.skr.virtuallibrary.dto.UpdateUserRequest;
 import com.skr.virtuallibrary.dto.UserDto;
 import com.skr.virtuallibrary.entities.UnregisteredUser;
 import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.entities.enums.Language;
+import com.skr.virtuallibrary.exceptions.PasswordIncorrectException;
 import com.skr.virtuallibrary.exceptions.UserNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.UnregisteredUserRepository;
@@ -25,9 +27,9 @@ public class UserService {
 
     private final UnregisteredUserRepository unregisteredUserRepository;
 
-    private final PasswordEncoder passwordEncoder;
-
     private final ModelMapper modelMapper;
+
+    public final PasswordEncoder passwordEncoder;
 
     public static final String USER_NOT_FOUND_MSG = "User could not be found with id: ";
 
@@ -103,9 +105,13 @@ public class UserService {
         }
     }
 
-    public UserDto changePassword(String password) {
+    public UserDto changePassword(ChangePasswordRequest request) {
         User user = getCurrentUser();
-        user.setPassword(passwordEncoder.encode(password));
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            throw new PasswordIncorrectException("Old password is incorrect");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         return modelMapper.toUserDto(userRepository.save(user));
     }
 
