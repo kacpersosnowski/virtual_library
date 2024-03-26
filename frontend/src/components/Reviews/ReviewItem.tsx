@@ -71,6 +71,7 @@ type Props = {
 };
 
 const ReviewItem: React.FC<Props> = (props) => {
+  const { t } = useTranslation();
   const [isEditMode, setIsEditMode] = useState(false);
 
   const editForm = (
@@ -85,6 +86,10 @@ const ReviewItem: React.FC<Props> = (props) => {
       onCancel={() => setIsEditMode(false)}
     />
   );
+
+  const updatedDate = (date: string) => {
+    return `${t(booksMessages.bookReviewsUpdated.key)} ${date}`;
+  };
 
   return (
     <Box
@@ -120,31 +125,47 @@ const ReviewItem: React.FC<Props> = (props) => {
             }}
           >
             <ColoredAvatar
-              baseName={props.review.author.email.toUpperCase()}
-              tooltipTitle={props.review.author.email}
+              baseName={props.review.author.username.toUpperCase()}
+              tooltipTitle={props.review.author.username}
             />
           </Box>
           {!isEditMode && (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-start",
-                maxWidth: { xs: "250px", sm: "500px" },
-              }}
-            >
-              <Typography
+            <Box sx={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+              <Box
                 sx={{
-                  overflowWrap: "break-word",
-                  textAlign: "left",
-                  maxWidth: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  maxWidth: { xs: "250px", sm: "500px" },
                 }}
               >
-                {props.review.author.email.slice(0, 37)}
-              </Typography>
-              <Box sx={{ display: "flex", gap: "0.5rem" }}>
-                <Rating value={props.review.rating} readOnly />
+                <Typography
+                  sx={{
+                    overflowWrap: "break-word",
+                    textAlign: "left",
+                    maxWidth: "100%",
+                  }}
+                >
+                  {props.review.author.username.slice(0, 37)}
+                </Typography>
+                <Box sx={{ display: "flex", gap: "0.5rem" }}>
+                  <Rating value={props.review.rating} readOnly />
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                }}
+              >
                 <FormattedDateParagraph date={props.review.created} />
+                {props.review.created !== props.review.lastModified && (
+                  <FormattedDateParagraph
+                    date={props.review.lastModified}
+                    transformFn={updatedDate}
+                  />
+                )}
               </Box>
             </Box>
           )}

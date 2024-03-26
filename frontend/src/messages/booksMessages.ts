@@ -111,6 +111,11 @@ const booksMessages: Message = {
     pl: "Recenzja została usunięta pomyślnie.",
     en: "The review was deleted successfully.",
   },
+  bookReviewsUpdated: {
+    key: "books >> reviews >> updated",
+    pl: "Edytowano",
+    en: "Edited",
+  },
   booksListPopularHeader: {
     key: "books_list >> popular >> header",
     pl: "Popularne w ostatnim czasie",

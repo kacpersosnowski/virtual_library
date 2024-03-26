@@ -3,7 +3,7 @@ package com.skr.virtuallibrary.auth;
 import com.skr.virtuallibrary.entities.UnregisteredUser;
 import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.entities.enums.Authority;
-import com.skr.virtuallibrary.exceptions.RegistrationExpiredException;
+import com.skr.virtuallibrary.exceptions.TokenExpiredException;
 import com.skr.virtuallibrary.services.EmailService;
 import com.skr.virtuallibrary.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +61,7 @@ public class AuthenticationService {
 
         if (LocalDate.now().isAfter(tempUser.getExpirationDate())) {
             userService.deleteUnregisteredUser(tempUser);
-            throw new RegistrationExpiredException("Registration token expired.");
+            throw new TokenExpiredException("Registration token expired.");
         }
 
         final User user = User.builder()

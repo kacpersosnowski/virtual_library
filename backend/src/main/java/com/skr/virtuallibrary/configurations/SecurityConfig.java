@@ -41,6 +41,9 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/users/me").authenticated()
                                 .requestMatchers(HttpMethod.PATCH, "/users/**").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/users").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/users/reset-password").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/users/finalize-password-reset").permitAll()
+
                                 .requestMatchers(HttpMethod.POST, REVIEW_ENDPOINT).authenticated()
                                 .requestMatchers(HttpMethod.PUT, REVIEW_ENDPOINT).authenticated()
                                 .requestMatchers(HttpMethod.DELETE, REVIEW_ENDPOINT).authenticated()

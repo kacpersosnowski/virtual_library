@@ -6,6 +6,11 @@ const authMessages: Message = {
     pl: "Dobrze, że jesteś",
     en: "It's good you're here",
   },
+  usernameLabel: {
+    key: "auth >> username >> label",
+    pl: "Nazwa użytkownika",
+    en: "Username",
+  },
   emailLabel: {
     key: "auth >> email >> label",
     pl: "Adres e-mail",

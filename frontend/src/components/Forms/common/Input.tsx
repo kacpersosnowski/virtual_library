@@ -20,6 +20,7 @@ type Props = {
   minRows?: number;
   maxRows?: number;
   maxLength?: number;
+  disabled?: boolean;
 };
 
 const Input: React.FC<Props> = (props) => {
@@ -35,6 +36,7 @@ const Input: React.FC<Props> = (props) => {
     minRows,
     maxRows,
     maxLength,
+    disabled,
   } = props;
   const { touched, errors } = formik;
 
@@ -62,6 +64,7 @@ const Input: React.FC<Props> = (props) => {
         multiline={multiline}
         minRows={minRows}
         maxRows={maxRows}
+        disabled={disabled}
         {...formik.getFieldProps(id)}
       />
       {errorMessage && (
