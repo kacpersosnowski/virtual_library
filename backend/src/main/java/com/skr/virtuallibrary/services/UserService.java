@@ -160,6 +160,12 @@ public class UserService {
         resetPasswordRepository.delete(resetPassword);
     }
 
+    public void deleteProfilePicture() {
+        User user = getCurrentUser();
+        user.setProfilePictureId(null);
+        userRepository.save(user);
+    }
+
     private String generateToken() {
         UUID randomUUID = UUID.randomUUID();
         return randomUUID.toString().replace("-", "");
