@@ -1,5 +1,6 @@
 package com.skr.virtuallibrary.controllers;
 
+import com.skr.virtuallibrary.controllers.requests.ChangePasswordRequest;
 import com.skr.virtuallibrary.controllers.requests.ResetPasswordRequest;
 import com.skr.virtuallibrary.dto.UpdateUserRequest;
 import com.skr.virtuallibrary.dto.UserDto;
@@ -56,6 +57,12 @@ public class UserController {
         return userService.updateUser(request, null);
     }
 
+    @PatchMapping("/password")
+    @Operation(summary = "Change user's password.")
+    public UserDto changePassword(@Valid @RequestBody ChangePasswordRequest request) {
+        return userService.changePassword(request);
+    }
+  
     @PostMapping("/reset-password")
     @Operation(summary = "Reset password.")
     public ResponseEntity<Object> resetPassword(@RequestBody @Email String email) {

@@ -1,5 +1,6 @@
 package com.skr.virtuallibrary.services;
 
+import com.skr.virtuallibrary.controllers.requests.ChangePasswordRequest;
 import com.skr.virtuallibrary.controllers.requests.ResetPasswordRequest;
 import com.skr.virtuallibrary.dto.UpdateUserRequest;
 import com.skr.virtuallibrary.dto.UserDto;
@@ -7,6 +8,7 @@ import com.skr.virtuallibrary.entities.ResetPassword;
 import com.skr.virtuallibrary.entities.UnregisteredUser;
 import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.entities.enums.Language;
+import com.skr.virtuallibrary.exceptions.PasswordIncorrectException;
 import com.skr.virtuallibrary.exceptions.InvalidTokenException;
 import com.skr.virtuallibrary.exceptions.TokenExpiredException;
 import com.skr.virtuallibrary.exceptions.UserNotFoundException;
@@ -33,6 +35,8 @@ public class UserService {
 
     private final ModelMapper modelMapper;
 
+    public static final String USER_NOT_FOUND_MSG = "User could not be found with id: ";
+  
     private final PasswordEncoder passwordEncoder;
 
     private final EmailService emailService;
@@ -41,7 +45,7 @@ public class UserService {
 
     public UserDto changeLanguage(String userId, Language language) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User could not be found with id: " + userId));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MSG + userId));
 
         user.setLanguage(language);
         return modelMapper.toUserDto(userRepository.save(user));
@@ -109,6 +113,16 @@ public class UserService {
         ) {
             throw new UserNotFoundException("User already exists with email: " + email);
         }
+    }
+
+    public UserDto changePassword(ChangePasswordRequest request) {
+        User user = getCurrentUser();
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            throw new PasswordIncorrectException("Old password is incorrect");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        return modelMapper.toUserDto(userRepository.save(user));
     }
 
     public void resetPassword(String email) {
