@@ -10,9 +10,10 @@ import useFetchUserData from "../../hooks/useFetchUserData";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
 import ErrorMessage from "../../components/UI/ErrorMessage";
 import errorMessages from "../../messages/errorMessages";
+import { usersApi } from "../../config/api/users/users";
+import ChangePasswordForm from "../../components/Forms/auth/ChangePasswordForm";
 
 import booksBg from "../../assets/books-bg3.jpg";
-import { usersApi } from "../../config/api/users/users";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
@@ -31,7 +32,10 @@ const ProfilePage = () => {
   });
 
   let content = (
-    <EditProfileForm user={user} profilePictureFile={profilePicture} />
+    <>
+      <EditProfileForm user={user} profilePictureFile={profilePicture} />
+      <ChangePasswordForm />
+    </>
   );
 
   if (isUserError || isProfilePictureError) {

@@ -82,7 +82,7 @@ export const AuthContextProvider: React.FC<PropsWithChildren> = ({
   }, [isAuthenticated]);
 
   useEffect(() => {
-    setRegisterData({
+    setLoginData({
       isLoading: loginIsLoading,
       isSuccess: loginIsSuccess,
       error: loginError as AxiosError,
