@@ -26,6 +26,16 @@ const authMessages: Message = {
     pl: "Powtórz hasło",
     en: "Repeat password",
   },
+  newPasswordLabel: {
+    key: "auth >> new_password >> label",
+    pl: "Nowe hasło",
+    en: "New password",
+  },
+  repeatNewPasswordLabel: {
+    key: "auth >> repeat_new_password >> label",
+    pl: "Powtórz nowe hasło",
+    en: "Repeat new password",
+  },
   loginButton: {
     key: "auth >> login >> button",
     pl: "Zaloguj się",
@@ -36,10 +46,15 @@ const authMessages: Message = {
     pl: "Wyloguj się",
     en: "Logout",
   },
-  resetPassword: {
-    key: "auth >> login >> reset_password",
-    pl: "Nie pamiętasz hasła? Zresetuj je tutaj.",
-    en: "Don't you remember the password? Reset it here.",
+  resetPasswordPrompt: {
+    key: "auth >> login >> reset_password_prompt",
+    pl: "Nie pamiętasz hasła?",
+    en: "Don't you remember the password?",
+  },
+  resetPasswordPromptLink: {
+    key: "auth >> login >> reset_password_prompt_link",
+    pl: "Zresetuj je tutaj.",
+    en: "Reset it here.",
   },
   registerPrompt: {
     key: "auth >> login >> register_prompt",
@@ -81,10 +96,30 @@ const authMessages: Message = {
     pl: "Zaloguj się tutaj.",
     en: "Login here.",
   },
+  resetPasswordHeader: {
+    key: "auth >> reset_password >> header",
+    pl: "Resetuj hasło",
+    en: "Reset password",
+  },
+  resetPasswordEmailPrompt: {
+    key: "auth >> reset_password >> email_prompt",
+    pl: "Wpisz adres e-mail podany podczas rejestracji:",
+    en: "Enter the e-mail address provided during registration:",
+  },
+  resetPasswordEmailSubmitButton: {
+    key: "auth >> reset_password >> email_submit_button",
+    pl: "Wyślij link resetujący",
+    en: "Send reset link",
+  },
   verificationEmailSent: {
     key: "verification_email_sent >> header",
     pl: "E-mail weryfikacyjny został do Ciebie wysłany.",
     en: "Verification e-mail has been sent to you.",
+  },
+  resetPasswordSubmitButton: {
+    key: "auth >> reset_password >> submit_button",
+    pl: "Resetuj hasło",
+    en: "Reset password",
   },
   checkEmailHeader: {
     key: "verification_email_sent >> check_email >> header",
@@ -110,6 +145,21 @@ const authMessages: Message = {
     key: "verification_email >> account_activated",
     pl: "Pomyślnie aktywowano konto. Teraz możesz się już zalogować.",
     en: "Account activated successfully! Now you can log in.",
+  },
+  passwordResetSuccess: {
+    key: "reset_password >> success",
+    pl: "Hasło zostało zresetowane pomyślnie.",
+    en: "The password was reset successfully.",
+  },
+  resetPasswordEmailSent: {
+    key: "reset_password_email_sent >> header",
+    pl: "E-mail resetujący hasło został do Ciebie wysłany.",
+    en: "Reset password e-mail has been sent to you.",
+  },
+  clickResetPasswordLink: {
+    key: "reset_password_email_sent >> activation_link >> prompt",
+    pl: "Kliknij w link, który tam znajdziesz i zresetuj hasło.",
+    en: "Click the link you will find there and reset your password.",
   },
 };
 

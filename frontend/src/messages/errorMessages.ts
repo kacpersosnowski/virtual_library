@@ -76,6 +76,16 @@ const errorMessages: Message = {
     pl: "stronę główną.",
     en: "the main page.",
   },
+  invalidUsername: {
+    key: "auth >> error >> invalid_username",
+    pl: "Niepoprawna nazwa użytkownika",
+    en: "Invalid username",
+  },
+  resetPasswordError: {
+    key: "auth >> error >> reset_password",
+    pl: "Coś poszło nie tak. Upewnij się, że link resetujący jest poprawny, bądź wygeneruj nowy.",
+    en: "Something went wrong. Make sure the reset link is correct or generate a new one.",
+  },
 };
 
 export default errorMessages;

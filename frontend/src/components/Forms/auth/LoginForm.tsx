@@ -95,7 +95,12 @@ const LoginForm = () => {
             alertStyle={{ width: "80%" }}
           />
         )}
-        <Typography paragraph>{t(authMessages.resetPassword.key)}</Typography>
+        <Typography paragraph>
+          {t(authMessages.resetPasswordPrompt.key)}{" "}
+          <Link to="/reset-password" className="primary-link">
+            {t(authMessages.resetPasswordPromptLink.key)}
+          </Link>
+        </Typography>
         <Typography paragraph>
           {t(authMessages.registerPrompt.key)}{" "}
           <Link to="/register" className="primary-link">

@@ -5,6 +5,9 @@ import RegisterPage from "./RegisterPage";
 import VerificationEmailSentPage from "./VerificationEmailSentPage";
 import FinalizeRegistrationPage from "./FinalizeRegistrationPage";
 import ForNotAuthenticatedRoute from "../../router/ForNotAuthenticatedRoute";
+import ResetPasswordEmailPage from "./ResetPasswordEmailPage";
+import ResetPasswordEmailSentPage from "./ResetPasswordEmailSentPage";
+import ResetPasswordPage from "./ResetPasswordPage";
 
 const routes: RouteObject[] = [
   {
@@ -30,6 +33,18 @@ const routes: RouteObject[] = [
   {
     path: "token/:token",
     element: <FinalizeRegistrationPage />,
+  },
+  {
+    path: "reset-password",
+    element: <ResetPasswordEmailPage />,
+  },
+  {
+    path: "reset-password-email-sent",
+    element: <ResetPasswordEmailSentPage />,
+  },
+  {
+    path: "reset-password/:token",
+    element: <ResetPasswordPage />,
   },
 ];
 
