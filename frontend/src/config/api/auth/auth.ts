@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   AuthApi,
+  ChangePasswordData,
   Credentials,
   LoginResponse,
   RegisterCredentials,
@@ -8,6 +9,7 @@ import {
 } from "./auth.types";
 import { customFetch } from "../../axios";
 import RefreshTokenService from "../../../store/AuthContext/RefreshTokenService";
+import { UserData } from "../users/users.types";
 
 const loginUrl = "/auth/login";
 const registerUrl = "/auth/register";
@@ -15,6 +17,7 @@ const finalizeRegistrationUrl = "/auth/finalize-registration";
 const refreshTokenUrl = "/auth/refresh-token";
 const resetPasswordUrl = "users/reset-password";
 const finalizeResetPasswordUrl = "users/finalize-password-reset";
+const changePasswordUrl = "/users/password";
 
 export const authApi: AuthApi = {
   login: async (credentials: Credentials) => {
@@ -46,5 +49,9 @@ export const authApi: AuthApi = {
   },
   finalizeResetPassword: async (data: ResetPasswordData) => {
     await axios.post(finalizeResetPasswordUrl, data);
+  },
+  changePassword: async (data: ChangePasswordData) => {
+    const response = await axios.patch<UserData>(changePasswordUrl, data);
+    return response.data;
   },
 };

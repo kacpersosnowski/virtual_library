@@ -1,3 +1,5 @@
+import { UserData } from "../users/users.types";
+
 export type Credentials = {
   username: string;
   password: string;
@@ -19,6 +21,11 @@ export type ResetPasswordData = {
   token: string;
 };
 
+export type ChangePasswordData = {
+  oldPassword: string;
+  newPassword: string;
+};
+
 export type AuthApi = {
   login: (credentials: Credentials) => Promise<LoginResponse>;
   register: (credentials: RegisterCredentials) => Promise<LoginResponse>;
@@ -26,4 +33,5 @@ export type AuthApi = {
   refreshToken: () => Promise<LoginResponse>;
   resetPassword: (email: string) => Promise<void>;
   finalizeResetPassword: (data: ResetPasswordData) => Promise<void>;
+  changePassword: (data: ChangePasswordData) => Promise<UserData>;
 };
