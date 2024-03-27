@@ -26,6 +26,16 @@ const authMessages: Message = {
     pl: "Powtórz hasło",
     en: "Repeat password",
   },
+  newPasswordLabel: {
+    key: "auth >> new_password >> label",
+    pl: "Nowe hasło",
+    en: "New password",
+  },
+  repeatNewPasswordLabel: {
+    key: "auth >> repeat_new_password >> label",
+    pl: "Powtórz nowe hasło",
+    en: "Repeat new password",
+  },
   loginButton: {
     key: "auth >> login >> button",
     pl: "Zaloguj się",
@@ -106,6 +116,11 @@ const authMessages: Message = {
     pl: "E-mail weryfikacyjny został do Ciebie wysłany.",
     en: "Verification e-mail has been sent to you.",
   },
+  resetPasswordSubmitButton: {
+    key: "auth >> reset_password >> submit_button",
+    pl: "Resetuj hasło",
+    en: "Reset password",
+  },
   checkEmailHeader: {
     key: "verification_email_sent >> check_email >> header",
     pl: "Sprawdź swojego maila:",
@@ -130,6 +145,11 @@ const authMessages: Message = {
     key: "verification_email >> account_activated",
     pl: "Pomyślnie aktywowano konto. Teraz możesz się już zalogować.",
     en: "Account activated successfully! Now you can log in.",
+  },
+  passwordResetSuccess: {
+    key: "reset_password >> success",
+    pl: "Hasło zostało zresetowane pomyślnie.",
+    en: "The password was reset successfully.",
   },
   resetPasswordEmailSent: {
     key: "reset_password_email_sent >> header",

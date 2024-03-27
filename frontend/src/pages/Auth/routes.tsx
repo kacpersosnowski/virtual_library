@@ -7,6 +7,7 @@ import FinalizeRegistrationPage from "./FinalizeRegistrationPage";
 import ForNotAuthenticatedRoute from "../../router/ForNotAuthenticatedRoute";
 import ResetPasswordEmailPage from "./ResetPasswordEmailPage";
 import ResetPasswordEmailSentPage from "./ResetPasswordEmailSentPage";
+import ResetPasswordPage from "./ResetPasswordPage";
 
 const routes: RouteObject[] = [
   {
@@ -40,6 +41,10 @@ const routes: RouteObject[] = [
   {
     path: "reset-password-email-sent",
     element: <ResetPasswordEmailSentPage />,
+  },
+  {
+    path: "reset-password/:token",
+    element: <ResetPasswordPage />,
   },
 ];
 
