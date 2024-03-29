@@ -26,6 +26,11 @@ const authMessages: Message = {
     pl: "Powtórz hasło",
     en: "Repeat password",
   },
+  oldPasswordLabel: {
+    key: "auth >> old_password >> label",
+    pl: "Stare hasło",
+    en: "Old password",
+  },
   newPasswordLabel: {
     key: "auth >> new_password >> label",
     pl: "Nowe hasło",
@@ -160,6 +165,21 @@ const authMessages: Message = {
     key: "reset_password_email_sent >> activation_link >> prompt",
     pl: "Kliknij w link, który tam znajdziesz i zresetuj hasło.",
     en: "Click the link you will find there and reset your password.",
+  },
+  changePasswordSuccess: {
+    key: "auth >> change_password >> success",
+    pl: "Hasło zostało zmienione pomyślnie.",
+    en: "The password was changed successfully.",
+  },
+  changePasswordHeader: {
+    key: "auth >> change_password >> header",
+    pl: "Zmień hasło",
+    en: "Change password",
+  },
+  changePasswordSubmitButton: {
+    key: "auth >> change_password >> submit_button",
+    pl: "Zmień hasło",
+    en: "Change password",
   },
 };
 

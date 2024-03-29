@@ -76,6 +76,11 @@ const errorMessages: Message = {
     pl: "stronę główną.",
     en: "the main page.",
   },
+  invalidOldPassword: {
+    key: "auth >> error >> invalid_old_password",
+    pl: "Niepoprawne poprzednie hasło",
+    en: "Invalid old password",
+  },
   invalidUsername: {
     key: "auth >> error >> invalid_username",
     pl: "Niepoprawna nazwa użytkownika",
