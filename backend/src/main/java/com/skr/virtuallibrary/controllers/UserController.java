@@ -76,4 +76,11 @@ public class UserController {
         userService.finalizePasswordReset(request);
         return ResponseEntity.ok().build();
     }
+
+    @PatchMapping("/profile-picture")
+    @Operation(summary = "Delete profile picture.")
+    public void deleteProfilePicture() {
+        userService.deleteProfilePicture();
+    }
+
 }

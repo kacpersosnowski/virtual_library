@@ -8,10 +8,8 @@ import lombok.Data;
 @Data
 public class UpdateUserRequest {
 
-    @NotEmpty
     private String firstName;
 
-    @NotEmpty
     private String lastName;
 
     @NotEmpty
