@@ -47,7 +47,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/users/finalize-password-reset").permitAll()
 
                                 .requestMatchers(HttpMethod.GET, BOOK_LIST_ENDPOINT).authenticated()
-                                .requestMatchers(HttpMethod.POST, "/book-list").authenticated()
+                                .requestMatchers(HttpMethod.POST, BOOK_LIST_ENDPOINT).authenticated()
                                 .requestMatchers(HttpMethod.PATCH, BOOK_LIST_ENDPOINT).authenticated()
                                 .requestMatchers(HttpMethod.DELETE, BOOK_LIST_ENDPOINT).authenticated()
 
