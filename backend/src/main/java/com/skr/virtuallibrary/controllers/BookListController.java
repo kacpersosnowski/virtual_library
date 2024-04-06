@@ -36,27 +36,27 @@ public class BookListController {
         return bookListService.createBookList(bookListDto);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/add/{listId}/{bookId}")
     @Operation(summary = "Add book to list.")
-    public BookListDto addBookToList(@PathVariable String id, @RequestBody String bookId) {
-        return bookListService.addBookToList(id, bookId);
+    public BookListDto addBookToList(@PathVariable String listId, @PathVariable String bookId) {
+        return bookListService.addBookToList(listId, bookId);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/remove/{listId}/{bookId}")
     @Operation(summary = "Remove book from list.")
-    public BookListDto removeBookFromList(@PathVariable String id, @RequestBody String bookId) {
-        return bookListService.removeBookFromList(id, bookId);
+    public BookListDto removeBookFromList(@PathVariable String listId, @PathVariable String bookId) {
+        return bookListService.removeBookFromList(listId, bookId);
     }
 
-    @PatchMapping("/{id}")
-    @Operation(summary = "Change book list name.")
-    public BookListDto changeBookListName(@PathVariable String id, @RequestBody String name) {
-        return bookListService.changeName(id, name);
+    @PatchMapping("/{listId}")
+    @Operation(summary = "Change name of a book list.")
+    public BookListDto changeBookListName(@PathVariable String listId, @RequestBody String newName) {
+        return bookListService.changeName(listId, newName);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{listId}")
     @Operation(summary = "Delete book list.")
-    public void deleteBookList(@PathVariable String id) {
-        bookListService.deleteBookList(id);
+    public void deleteBookList(@PathVariable String listId) {
+        bookListService.deleteBookList(listId);
     }
 }
