@@ -1,11 +1,13 @@
 package com.skr.virtuallibrary.services;
 
+import com.skr.virtuallibrary.dto.BookListDto;
 import com.skr.virtuallibrary.entities.BookList;
 import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.entities.enums.Language;
 import com.skr.virtuallibrary.exceptions.AccessForbiddenException;
 import com.skr.virtuallibrary.exceptions.BookListAlreadyExistsException;
 import com.skr.virtuallibrary.exceptions.BookListNotFoundException;
+import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.BookListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,47 +22,49 @@ public class BookListService {
 
     private final UserService userService;
 
+    private final ModelMapper modelMapper;
+
     private static final String BOOK_LIST_NOT_FOUND = "Book list not found wit id: ";
 
     private static final String ACCESS_DENIED = "You don't have access to this book list.";
 
-    public List<BookList> getBookLists() {
+    public List<BookListDto> getBookLists() {
         User user = userService.getCurrentUser();
         List<BookList> bookLists = bookListRepository.findAllByUserId(user.getId());
         if (bookLists.isEmpty() || bookListRepository.findAllByNameAndUserId(toReadListName(user), user.getId()).isEmpty()) {
             BookList toReadList = createToReadList(user);
             bookLists.add(toReadList);
         }
-        return bookLists;
+        return bookLists.stream().map(modelMapper::toBookListDto).toList();
     }
 
-    public BookList getBookList(String id) {
+    public BookListDto getBookList(String id) {
         User user = userService.getCurrentUser();
         BookList bookList = bookListRepository.findById(id)
                 .orElseThrow(() -> new BookListNotFoundException(BOOK_LIST_NOT_FOUND + id));
         if (!bookList.getUserId().equals(user.getId())) {
             throw new AccessForbiddenException(ACCESS_DENIED);
         }
-        return bookList;
+        return modelMapper.toBookListDto(bookList);
     }
 
-    public BookList createBookList(BookList bookList) {
+    public BookListDto createBookList(BookListDto bookListDto) {
         User user = userService.getCurrentUser();
-        if (!bookListRepository.findAllByNameAndUserId(bookList.getName(), user.getId()).isEmpty()) {
-            throw new BookListAlreadyExistsException(bookList.getName());
+        if (!bookListRepository.findAllByNameAndUserId(bookListDto.getName(), user.getId()).isEmpty()) {
+            throw new BookListAlreadyExistsException(bookListDto.getName());
         }
 
-        return bookListRepository.save(
+        return modelMapper.toBookListDto(bookListRepository.save(
                 BookList.builder()
                         .userId(user.getId())
-                        .name(bookList.getName())
+                        .name(bookListDto.getName())
                         .deletable(true)
-                        .bookIds(bookList.getBookIds())
+                        .bookIds(bookListDto.getBookIds())
                         .build()
-        );
+        ));
     }
 
-    public BookList addBookToList(String id, String bookId) {
+    public BookListDto addBookToList(String id, String bookId) {
         User user = userService.getCurrentUser();
         BookList bookList = bookListRepository.findById(id)
                 .orElseThrow(() -> new BookListNotFoundException(BOOK_LIST_NOT_FOUND + id));
@@ -68,14 +72,14 @@ public class BookListService {
             throw new AccessForbiddenException(ACCESS_DENIED);
         }
         if (bookList.getBookIds().contains(bookId)) {
-            return bookList;
+            return modelMapper.toBookListDto(bookList);
         }
 
         bookList.getBookIds().add(bookId);
-        return bookListRepository.save(bookList);
+        return modelMapper.toBookListDto(bookListRepository.save(bookList));
     }
 
-    public BookList removeBookFromList(String id, String bookId) {
+    public BookListDto removeBookFromList(String id, String bookId) {
         User user = userService.getCurrentUser();
         BookList bookList = bookListRepository.findById(id)
                 .orElseThrow(() -> new BookListNotFoundException(BOOK_LIST_NOT_FOUND + id));
@@ -83,10 +87,10 @@ public class BookListService {
             throw new AccessForbiddenException(ACCESS_DENIED);
         }
         bookList.getBookIds().remove(bookId);
-        return bookListRepository.save(bookList);
+        return modelMapper.toBookListDto(bookListRepository.save(bookList));
     }
 
-    public BookList changeName(String id, String name) {
+    public BookListDto changeName(String id, String name) {
         User user = userService.getCurrentUser();
         BookList bookList = bookListRepository.findById(id)
                 .orElseThrow(() -> new BookListNotFoundException(BOOK_LIST_NOT_FOUND + id));
@@ -98,7 +102,7 @@ public class BookListService {
         }
 
         bookList.setName(name);
-        return bookListRepository.save(bookList);
+        return modelMapper.toBookListDto(bookListRepository.save(bookList));
     }
 
     public void deleteBookList(String id) {

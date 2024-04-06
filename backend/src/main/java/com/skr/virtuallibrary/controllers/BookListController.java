@@ -1,6 +1,6 @@
 package com.skr.virtuallibrary.controllers;
 
-import com.skr.virtuallibrary.entities.BookList;
+import com.skr.virtuallibrary.dto.BookListDto;
 import com.skr.virtuallibrary.services.BookListService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,37 +20,37 @@ public class BookListController {
 
     @GetMapping
     @Operation(summary = "Get user's all book lists.")
-    public List<BookList> getUsersBookList() {
+    public List<BookListDto> getUsersBookList() {
         return bookListService.getBookLists();
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get user's book list by id.")
-    public BookList getBookList(@PathVariable String id) {
+    public BookListDto getBookList(@PathVariable String id) {
         return bookListService.getBookList(id);
     }
 
     @PostMapping
     @Operation(summary = "Create new book list.")
-    public BookList createBookList(@Valid @RequestBody BookList bookList) {
-        return bookListService.createBookList(bookList);
+    public BookListDto createBookList(@Valid @RequestBody BookListDto bookListDto) {
+        return bookListService.createBookList(bookListDto);
     }
 
     @PatchMapping("/{id}")
     @Operation(summary = "Add book to list.")
-    public BookList addBookToList(@PathVariable String id, @RequestBody String bookId) {
+    public BookListDto addBookToList(@PathVariable String id, @RequestBody String bookId) {
         return bookListService.addBookToList(id, bookId);
     }
 
     @PatchMapping("/{id}")
     @Operation(summary = "Remove book from list.")
-    public BookList removeBookFromList(@PathVariable String id, @RequestBody String bookId) {
+    public BookListDto removeBookFromList(@PathVariable String id, @RequestBody String bookId) {
         return bookListService.removeBookFromList(id, bookId);
     }
 
     @PatchMapping("/{id}")
     @Operation(summary = "Change book list name.")
-    public BookList changeBookListName(@PathVariable String id, @RequestBody String name) {
+    public BookListDto changeBookListName(@PathVariable String id, @RequestBody String name) {
         return bookListService.changeName(id, name);
     }
 

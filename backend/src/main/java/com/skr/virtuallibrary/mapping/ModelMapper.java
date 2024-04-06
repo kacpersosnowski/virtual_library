@@ -42,6 +42,17 @@ public interface ModelMapper {
     @Mapping(target = "authorId", source = "author.id")
     Review toReviewEntity(ReviewDto reviewDto);
 
+    @Mapping(target = "created", source = "bookList.auditData.createdDate")
+    @Mapping(target = "lastModified", source = "bookList.auditData.lastModifiedDate")
+    @Mapping(target = "id", source = "bookList.id")
+    @Mapping(target = "userId", source = "bookList.userId")
+    BookListDto toBookListDto(BookList bookList);
+
+    @Mapping(target = "auditData.createdDate", source = "created")
+    @Mapping(target = "auditData.lastModifiedDate", source = "lastModified")
+    @Mapping(target = "userId", source = "userId")
+    BookList toBookListEntity(BookListDto bookListDto);
+
     @Named("authorListToAuthorIdList")
     static List<String> authorListToAuthorIdList(List<AuthorDto> authorDtos) {
         return authorDtos.stream().map(AuthorDto::getId).toList();
