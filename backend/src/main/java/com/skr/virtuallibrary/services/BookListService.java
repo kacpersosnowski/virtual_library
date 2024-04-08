@@ -7,8 +7,10 @@ import com.skr.virtuallibrary.entities.enums.Language;
 import com.skr.virtuallibrary.exceptions.AccessForbiddenException;
 import com.skr.virtuallibrary.exceptions.BookListAlreadyExistsException;
 import com.skr.virtuallibrary.exceptions.BookListNotFoundException;
+import com.skr.virtuallibrary.exceptions.BookNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.BookListRepository;
+import com.skr.virtuallibrary.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ public class BookListService {
     private final BookListRepository bookListRepository;
 
     private final UserService userService;
+
+    private final BookRepository bookRepository;
 
     private final ModelMapper modelMapper;
 
@@ -53,6 +57,11 @@ public class BookListService {
         if (!bookListRepository.findAllByNameAndUserId(bookListDto.getName(), user.getId()).isEmpty()) {
             throw new BookListAlreadyExistsException(bookListDto.getName());
         }
+        for (String bookId : bookListDto.getBookIds()) {
+            if (bookRepository.findById(bookId).isEmpty()) {
+                throw new BookNotFoundException("Book not found with id: " + bookId);
+            }
+        }
 
         return modelMapper.toBookListDto(bookListRepository.save(
                 BookList.builder()
@@ -73,6 +82,9 @@ public class BookListService {
         }
         if (bookList.getBookIds().contains(bookId)) {
             return modelMapper.toBookListDto(bookList);
+        }
+        if (bookRepository.findById(bookId).isEmpty()) {
+            throw new BookNotFoundException("Book not found with id: " + bookId);
         }
 
         bookList.getBookIds().add(bookId);
