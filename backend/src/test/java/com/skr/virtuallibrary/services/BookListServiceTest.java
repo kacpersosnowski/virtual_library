@@ -43,6 +43,8 @@ class BookListServiceTest {
 
     public User exampleUser;
 
+    public BookList toReadBookList;
+
     @BeforeEach
     final void setUp() {
         exampleUser = User.builder()
@@ -52,6 +54,11 @@ class BookListServiceTest {
                 .language(Language.ENG)
                 .username(USERNAME)
                 .password(PASSWORD)
+                .build();
+        toReadBookList = BookList.builder()
+                .name("To Read")
+                .userId(exampleUser.getId())
+                .deletable(false)
                 .build();
     }
 
@@ -96,8 +103,8 @@ class BookListServiceTest {
 
         // when
         when(userService.getCurrentUser()).thenReturn(exampleUser);
-        when(bookListRepository.findAllByNameAndUserId("To Read", exampleUser.getId()).isEmpty())
-                .thenReturn(false);
+        when(bookListRepository.findAllByNameAndUserId("To Read", exampleUser.getId()))
+                .thenReturn(List.of(toReadBookList));
         when(bookListRepository.findAllByUserId(exampleUser.getId())).thenReturn(bookLists);
         for (int i = 0; i < bookLists.size(); i++) {
             when(modelMapper.toBookListDto(bookLists.get(i)))
