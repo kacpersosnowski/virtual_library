@@ -9,7 +9,7 @@ import com.skr.virtuallibrary.entities.UnregisteredUser;
 import com.skr.virtuallibrary.entities.User;
 import com.skr.virtuallibrary.entities.enums.Language;
 import com.skr.virtuallibrary.exceptions.PasswordIncorrectException;
-import com.skr.virtuallibrary.exceptions.InvalidTokenException;
+import com.skr.virtuallibrary.exceptions.ResetPasswordNotFoundException;
 import com.skr.virtuallibrary.exceptions.TokenExpiredException;
 import com.skr.virtuallibrary.exceptions.UserNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
@@ -36,7 +36,7 @@ public class UserService {
     private final ModelMapper modelMapper;
 
     public static final String USER_NOT_FOUND_MSG = "User could not be found with id: ";
-  
+
     private final PasswordEncoder passwordEncoder;
 
     private final EmailService emailService;
@@ -130,6 +130,9 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User could not be found with email: " + email));
 
         String token = generateToken();
+        while (resetPasswordRepository.findByToken(token).isPresent()) {
+            token = generateToken();
+        }
         LocalDateTime expirationDate = LocalDateTime.now().plusHours(2);
         ResetPassword resetPassword = ResetPassword.builder()
                 .username(user.getUsername())
@@ -142,17 +145,14 @@ public class UserService {
     }
 
     public void finalizePasswordReset(ResetPasswordRequest request) {
-        User user = userRepository.findByUsername(request.getUsername())
+        ResetPassword resetPassword = resetPasswordRepository.findByToken(request.getToken())
+                .orElseThrow(ResetPasswordNotFoundException::new);
+        User user = userRepository.findByUsername(resetPassword.getUsername())
                 .orElseThrow(() -> new UserNotFoundException("User could not be found with username: " + request.getUsername()));
-        ResetPassword resetPassword = resetPasswordRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new TokenExpiredException("Token for password reset expired."));
 
-        if (!resetPassword.getToken().equals(request.getToken())) {
-            throw new InvalidTokenException("Given token is invalid");
-        }
         if (resetPassword.getExpirationDate().isBefore(LocalDateTime.now())) {
             resetPasswordRepository.delete(resetPassword);
-            throw new UserNotFoundException("Token expired.");
+            throw new TokenExpiredException("Token expired.");
         }
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
