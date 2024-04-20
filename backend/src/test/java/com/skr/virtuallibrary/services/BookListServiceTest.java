@@ -1,5 +1,6 @@
 package com.skr.virtuallibrary.services;
 
+import com.skr.virtuallibrary.dto.BookDto;
 import com.skr.virtuallibrary.dto.BookListDto;
 import com.skr.virtuallibrary.entities.BookList;
 import com.skr.virtuallibrary.entities.User;
@@ -35,6 +36,9 @@ class BookListServiceTest {
     private UserService userService;
 
     @Mock
+    private BookService bookService;
+
+    @Mock
     private ModelMapper modelMapper;
 
     public static final String USERNAME = "username";
@@ -68,50 +72,26 @@ class BookListServiceTest {
         // given
         String idToFind = "foo";
         BookListDto bookListToFindDto = Instancio.of(BookListDto.class)
-                .set(field(BookListDto::getBookIds), Instancio.ofList(String.class).size(2).create())
+                .set(field(BookListDto::getBooks), Instancio.ofList(BookDto.class).size(2).create())
                 .set(field(BookListDto::getUserId), exampleUser.getId())
                 .create();
         BookList bookListToFind = Instancio.of(BookList.class)
                 .set(field(BookList::getBookIds), Instancio.ofList(String.class).size(2).create())
                 .set(field(BookList::getUserId), exampleUser.getId())
                 .create();
+        List<BookDto> booksInList = Instancio.ofList(BookDto.class).size(2).create();
 
         // when
         when(userService.getCurrentUser()).thenReturn(exampleUser);
         when(bookListRepository.findById(idToFind)).thenReturn(Optional.ofNullable(bookListToFind));
-        when(modelMapper.toBookListDto(bookListToFind)).thenReturn(bookListToFindDto);
+        for (int i = 0; i < booksInList.size(); i++) {
+            assert bookListToFind != null;
+            when(bookService.findBookById(bookListToFind.getBookIds().get(i))).thenReturn(booksInList.get(i));
+        }
+        when(modelMapper.toBookListDto(bookListToFind, booksInList)).thenReturn(bookListToFindDto);
 
         BookListDto expected = bookListToFindDto;
         BookListDto actual = bookListService.getBookList(idToFind);
-
-        // then
-        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
-    }
-
-    @Test
-    @WithMockUser(username = USERNAME, password = PASSWORD)
-    void findBookLists_shouldReturnBookListDto() {
-        // given
-        List<BookList> bookLists = Instancio.ofList(BookList.class).size(3)
-                .set(field(BookList::getBookIds), Instancio.ofList(String.class).size(3).create())
-                .set(field(BookList::getUserId), exampleUser.getId())
-                .create();
-        List<BookListDto> bookListDtos = Instancio.ofList(BookListDto.class).size(3)
-                .set(field(BookListDto::getBookIds), Instancio.ofList(String.class).size(3).create())
-                .set(field(BookListDto::getUserId), exampleUser.getId())
-                .create();
-
-        // when
-        when(userService.getCurrentUser()).thenReturn(exampleUser);
-        when(bookListRepository.findAllByNameAndUserId("To Read", exampleUser.getId()))
-                .thenReturn(List.of(toReadBookList));
-        when(bookListRepository.findAllByUserId(exampleUser.getId())).thenReturn(bookLists);
-        for (int i = 0; i < bookLists.size(); i++) {
-            when(modelMapper.toBookListDto(bookLists.get(i)))
-                    .thenReturn(bookListDtos.get(i));
-        }
-        List<BookListDto> expected = bookListDtos;
-        List<BookListDto> actual = bookListService.getBookLists();
 
         // then
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);

@@ -1,5 +1,6 @@
 package com.skr.virtuallibrary.services;
 
+import com.skr.virtuallibrary.dto.BookDto;
 import com.skr.virtuallibrary.dto.BookListDto;
 import com.skr.virtuallibrary.entities.BookList;
 import com.skr.virtuallibrary.entities.User;
@@ -26,6 +27,8 @@ public class BookListService {
 
     private final BookRepository bookRepository;
 
+    private final BookService bookService;
+
     private final ModelMapper modelMapper;
 
     private static final String BOOK_LIST_NOT_FOUND = "Book list not found wit id: ";
@@ -34,12 +37,12 @@ public class BookListService {
 
     public List<BookListDto> getBookLists() {
         User user = userService.getCurrentUser();
-        List<BookList> bookLists = bookListRepository.findAllByUserId(user.getId());
+        List<BookList> bookList = bookListRepository.findAllByUserId(user.getId());
         if (bookListRepository.findAllByNameAndUserId(toReadListName(user), user.getId()).isEmpty()) {
             BookList toReadList = createToReadList(user);
-            bookLists.add(toReadList);
+            bookList.add(toReadList);
         }
-        return bookLists.stream().map(modelMapper::toBookListDto).toList();
+        return bookList.stream().map(this::toBookListDto).toList();
     }
 
     public BookListDto getBookList(String id) {
@@ -49,26 +52,26 @@ public class BookListService {
         if (!bookList.getUserId().equals(user.getId())) {
             throw new AccessForbiddenException(ACCESS_DENIED);
         }
-        return modelMapper.toBookListDto(bookList);
+        return toBookListDto(bookList);
     }
 
     public BookListDto createBookList(BookListDto bookListDto) {
         User user = userService.getCurrentUser();
-        if (!bookListRepository.findAllByNameAndUserId(bookListDto.getName(), user.getId()).isEmpty()) {
+        if (bookListRepository.findAllByNameAndUserId(bookListDto.getName(), user.getId()).isPresent()) {
             throw new BookListAlreadyExistsException(bookListDto.getName());
         }
-        for (String bookId : bookListDto.getBookIds()) {
+        for (String bookId : bookListDto.getBooks().stream().map(BookDto::getId).toList()) {
             if (bookRepository.findById(bookId).isEmpty()) {
                 throw new BookNotFoundException("Book not found with id: " + bookId);
             }
         }
 
-        return modelMapper.toBookListDto(bookListRepository.save(
+        return toBookListDto(bookListRepository.save(
                 BookList.builder()
                         .userId(user.getId())
                         .name(bookListDto.getName())
                         .deletable(true)
-                        .bookIds(bookListDto.getBookIds())
+                        .bookIds(bookListDto.getBooks().stream().map(BookDto::getId).toList())
                         .build()
         ));
     }
@@ -81,14 +84,14 @@ public class BookListService {
             throw new AccessForbiddenException(ACCESS_DENIED);
         }
         if (bookList.getBookIds().contains(bookId)) {
-            return modelMapper.toBookListDto(bookList);
+            return toBookListDto(bookList);
         }
         if (bookRepository.findById(bookId).isEmpty()) {
             throw new BookNotFoundException("Book not found with id: " + bookId);
         }
 
         bookList.getBookIds().add(bookId);
-        return modelMapper.toBookListDto(bookListRepository.save(bookList));
+        return toBookListDto(bookListRepository.save(bookList));
     }
 
     public BookListDto removeBookFromList(String id, String bookId) {
@@ -99,7 +102,7 @@ public class BookListService {
             throw new AccessForbiddenException(ACCESS_DENIED);
         }
         bookList.getBookIds().remove(bookId);
-        return modelMapper.toBookListDto(bookListRepository.save(bookList));
+        return toBookListDto(bookListRepository.save(bookList));
     }
 
     public BookListDto changeName(String id, String name) {
@@ -109,12 +112,12 @@ public class BookListService {
         if (!bookList.getUserId().equals(user.getId())) {
             throw new AccessForbiddenException(ACCESS_DENIED);
         }
-        if (!bookListRepository.findAllByNameAndUserId(name, user.getId()).isEmpty()) {
+        if (bookListRepository.findAllByNameAndUserId(name, user.getId()).isPresent()) {
             throw new BookListAlreadyExistsException(bookList.getName());
         }
 
         bookList.setName(name);
-        return modelMapper.toBookListDto(bookListRepository.save(bookList));
+        return toBookListDto(bookListRepository.save(bookList));
     }
 
     public void deleteBookList(String id) {
@@ -143,5 +146,10 @@ public class BookListService {
 
     private String toReadListName(User user) {
         return user.getLanguage().equals(Language.PL) ? "Do przeczytania" : "To Read";
+    }
+
+    private BookListDto toBookListDto(BookList bookList) {
+        List<BookDto> books = bookList.getBookIds().stream().map(bookService::findBookById).toList();
+        return modelMapper.toBookListDto(bookList, books);
     }
 }

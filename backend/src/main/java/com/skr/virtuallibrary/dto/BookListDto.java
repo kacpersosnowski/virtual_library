@@ -24,7 +24,7 @@ public class BookListDto {
     private String name;
 
     @NotNull
-    private List<String> bookIds;
+    private List<BookDto> books;
 
     private LocalDateTime createdDate;
 

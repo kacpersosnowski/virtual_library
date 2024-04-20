@@ -3,9 +3,9 @@ package com.skr.virtuallibrary.controllers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skr.virtuallibrary.auth.JwtService;
+import com.skr.virtuallibrary.dto.BookDto;
 import com.skr.virtuallibrary.dto.BookListDto;
 import com.skr.virtuallibrary.services.BookListService;
-import com.skr.virtuallibrary.services.FileService;
 import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(BookListController.class)
-public class BookListControllerTest {
+class BookListControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -42,7 +42,7 @@ public class BookListControllerTest {
     @Test
     void testFindBookList() throws Exception {
         BookListDto bookListDto = Instancio.of(BookListDto.class)
-                .set(field(BookListDto::getBookIds), Instancio.ofList(String.class).size(2).create())
+                .set(field(BookListDto::getBooks), Instancio.ofList(BookDto.class).size(2).create())
                 .create();
 
         when(bookListService.getBookList(bookListDto.getId())).thenReturn(bookListDto);
@@ -59,7 +59,7 @@ public class BookListControllerTest {
     @Test
     void testFindBookLists() throws Exception {
         List<BookListDto> bookListDtos = Instancio.ofList(BookListDto.class).size(3)
-                .set(field(BookListDto::getBookIds), Instancio.ofList(String.class).size(2).create())
+                .set(field(BookListDto::getBooks), Instancio.ofList(BookDto.class).size(2).create())
                 .create();
 
         when(bookListService.getBookLists()).thenReturn(bookListDtos);
