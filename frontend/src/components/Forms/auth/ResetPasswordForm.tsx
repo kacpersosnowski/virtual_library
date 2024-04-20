@@ -8,7 +8,6 @@ import * as Yup from "yup";
 import useFormikLanguage from "../../../hooks/useFormikLanguage";
 import validationMessages from "../../../messages/validationMessages";
 import passwordTranslatableSchema from "../../../config/validators/passwordTranslatableSchema";
-import Input from "../common/Input";
 import authMessages from "../../../messages/authMessages";
 import ActionButton from "../../UI/ActionButton";
 import PasswordInput from "./PasswordInput";
@@ -17,7 +16,6 @@ import LoadingSpinner from "../../UI/LoadingSpinner";
 import ErrorMessage from "../../UI/ErrorMessage";
 import errorMessages from "../../../messages/errorMessages";
 import { snackbarActions } from "../../../store/redux/slices/snackbar-slice";
-import { isAxiosError } from "axios";
 
 const ResetPasswordForm = () => {
   const { t } = useTranslation();
@@ -34,15 +32,11 @@ const ResetPasswordForm = () => {
 
   const formik = useFormikLanguage({
     initialValues: {
-      resetPasswordUsername: "",
       newPassword: "",
       repeatNewPassword: "",
       token: "",
     },
     validationSchema: Yup.object({
-      resetPasswordUsername: Yup.string().required(
-        t(validationMessages.fieldRequired.key),
-      ),
       newPassword: passwordTranslatableSchema(t),
       repeatNewPassword: Yup.string()
         .required(t(validationMessages.fieldRequired.key))
@@ -53,31 +47,17 @@ const ResetPasswordForm = () => {
     }),
     onSubmit: (values) => {
       mutate({
-        username: values.resetPasswordUsername,
         newPassword: values.newPassword,
         token,
       });
     },
   });
 
-  let errorMessage = t(errorMessages.somethingWentWrongError.key);
-  if (error && isAxiosError(error)) {
-    errorMessage =
-      error.response.status === 404
-        ? t(errorMessages.invalidUsername.key)
-        : t(errorMessages.resetPasswordError.key);
-  }
-
   return (
     <Box component="form" onSubmit={formik.handleSubmit}>
       <Typography sx={{ mb: "2rem" }} variant="h3">
         {t(authMessages.resetPasswordHeader.key)}
       </Typography>
-      <Input
-        id="resetPasswordUsername"
-        label={t(authMessages.usernameLabel.key)}
-        formik={formik}
-      />
       <PasswordInput
         id="newPassword"
         label={t(authMessages.newPasswordLabel.key)}
@@ -99,7 +79,7 @@ const ResetPasswordForm = () => {
       )}
       {error && (
         <ErrorMessage
-          message={errorMessage}
+          message={t(errorMessages.resetPasswordError.key)}
           sx={{ mt: 0 }}
           alertStyle={{ width: "80%" }}
         />

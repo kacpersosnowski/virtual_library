@@ -13,9 +13,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ResetPasswordRequest {
 
-    @NotEmpty
-    private String username;
-
     @ValidPassword
     private String newPassword;
 

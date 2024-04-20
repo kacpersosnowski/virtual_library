@@ -16,7 +16,6 @@ export type LoginResponse = {
 };
 
 export type ResetPasswordData = {
-  username: string;
   newPassword: string;
   token: string;
 };
