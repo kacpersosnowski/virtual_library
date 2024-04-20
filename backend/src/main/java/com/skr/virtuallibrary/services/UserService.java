@@ -148,7 +148,7 @@ public class UserService {
         ResetPassword resetPassword = resetPasswordRepository.findByToken(request.getToken())
                 .orElseThrow(ResetPasswordNotFoundException::new);
         User user = userRepository.findByUsername(resetPassword.getUsername())
-                .orElseThrow(() -> new UserNotFoundException("User could not be found with username: " + request.getUsername()));
+                .orElseThrow(() -> new UserNotFoundException("User could not be found with username: " + resetPassword.getUsername()));
 
         if (resetPassword.getExpirationDate().isBefore(LocalDateTime.now())) {
             resetPasswordRepository.delete(resetPassword);
