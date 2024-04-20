@@ -31,7 +31,7 @@ public class BookListService {
     public List<BookListDto> getBookLists() {
         User user = userService.getCurrentUser();
         List<BookList> bookLists = bookListRepository.findAllByUserId(user.getId());
-        if (bookLists.isEmpty() || bookListRepository.findAllByNameAndUserId(toReadListName(user), user.getId()).isEmpty()) {
+        if (bookListRepository.findAllByNameAndUserId(toReadListName(user), user.getId()).isEmpty()) {
             BookList toReadList = createToReadList(user);
             bookLists.add(toReadList);
         }
