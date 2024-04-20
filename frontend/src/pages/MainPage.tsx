@@ -14,7 +14,7 @@ const MainPage = () => {
     isError,
   } = useQuery({
     queryKey: ["books"],
-    queryFn: booksApi.getAllBooks,
+    queryFn: booksApi.getMostPopularBooks,
   });
   const { t } = useTranslation();
   const navigate = useNavigate();

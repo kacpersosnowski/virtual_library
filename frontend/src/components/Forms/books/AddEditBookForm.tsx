@@ -122,6 +122,8 @@ const AddEditBookForm: React.FC<Props> = (props) => {
       if (!props.initialValues) {
         createBook(values);
       } else {
+        values.rateCount = initialValues.rateCount;
+        values.rateAverage = initialValues.rateAverage;
         updateBook({ id, book: values });
       }
     },

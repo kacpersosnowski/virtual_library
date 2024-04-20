@@ -50,6 +50,8 @@ export type CreateBookDTO = {
   genres: Genre[];
   tags: string[];
   language: Language;
+  rateAverage?: number;
+  rateCount?: number;
   cover: File;
   content: File;
 };
