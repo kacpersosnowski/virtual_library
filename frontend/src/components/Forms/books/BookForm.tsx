@@ -44,6 +44,8 @@ const BookForm = () => {
       genres: book.genreList,
       tags: book.tagList,
       language: book.language,
+      rateCount: book.rateCount,
+      rateAverage: book.rateAverage,
       cover: bookCoverFile,
       content: bookContentFile,
     };

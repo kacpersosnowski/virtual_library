@@ -71,6 +71,8 @@ export const parseBookFormDataForCreate = (data: CreateBookDTO) => {
     genreList: data.genres,
     tagList: data.tags,
     language: data.language,
+    rateAverage: data?.rateAverage || 0,
+    rateCount: data?.rateCount || 0,
   };
   formData.append(
     "book",
