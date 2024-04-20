@@ -5,6 +5,7 @@ import com.skr.virtuallibrary.controllers.requests.ResetPasswordRequest;
 import com.skr.virtuallibrary.dto.UpdateUserRequest;
 import com.skr.virtuallibrary.dto.UserDto;
 import com.skr.virtuallibrary.entities.enums.Language;
+import com.skr.virtuallibrary.exceptions.UserNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.services.FileService;
 import com.skr.virtuallibrary.services.UserService;
@@ -66,7 +67,11 @@ public class UserController {
     @PostMapping("/reset-password")
     @Operation(summary = "Reset password.")
     public ResponseEntity<Object> resetPassword(@RequestBody @Email String email) {
-        userService.resetPassword(email);
+        try {
+            userService.resetPassword(email);
+        } catch (UserNotFoundException e) {
+            // pass
+        }
         return ResponseEntity.ok().build();
     }
 
