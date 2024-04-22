@@ -70,7 +70,7 @@ public class BookListService {
                 BookList.builder()
                         .userId(user.getId())
                         .name(bookListDto.getName())
-                        .deletable(true)
+                        .editable(true)
                         .bookIds(bookListDto.getBooks().stream().map(BookDto::getId).toList())
                         .build()
         ));
@@ -109,7 +109,7 @@ public class BookListService {
         User user = userService.getCurrentUser();
         BookList bookList = bookListRepository.findById(id)
                 .orElseThrow(() -> new BookListNotFoundException(BOOK_LIST_NOT_FOUND + id));
-        if (!bookList.getUserId().equals(user.getId())) {
+        if (!bookList.getUserId().equals(user.getId()) || !bookList.isEditable()) {
             throw new AccessForbiddenException(ACCESS_DENIED);
         }
         if (bookListRepository.findAllByNameAndUserId(name, user.getId()).isPresent()) {
@@ -127,7 +127,7 @@ public class BookListService {
         if (!bookList.getUserId().equals(user.getId())) {
             throw new AccessForbiddenException(ACCESS_DENIED);
         }
-        if (!bookList.isDeletable()) {
+        if (!bookList.isEditable()) {
             throw new AccessForbiddenException("You can't delete this book list.");
         }
 
@@ -138,7 +138,7 @@ public class BookListService {
         BookList bookList = BookList.builder()
                 .userId(user.getId())
                 .name(toReadListName(user))
-                .deletable(false)
+                .editable(false)
                 .bookIds(List.of())
                 .build();
         return bookListRepository.save(bookList);

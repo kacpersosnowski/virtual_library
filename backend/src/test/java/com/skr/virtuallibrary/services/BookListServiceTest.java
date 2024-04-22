@@ -62,7 +62,7 @@ class BookListServiceTest {
         toReadBookList = BookList.builder()
                 .name("To Read")
                 .userId(exampleUser.getId())
-                .deletable(false)
+                .editable(false)
                 .build();
     }
 

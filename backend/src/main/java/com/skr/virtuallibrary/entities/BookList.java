@@ -23,6 +23,6 @@ public class BookList {
 
     private List<String> bookIds;
 
-    private boolean deletable;
+    private boolean editable;
 
 }
