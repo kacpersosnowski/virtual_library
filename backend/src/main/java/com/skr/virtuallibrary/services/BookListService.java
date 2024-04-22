@@ -38,10 +38,6 @@ public class BookListService {
     public List<BookListDto> getBookLists() {
         User user = userService.getCurrentUser();
         List<BookList> bookList = bookListRepository.findAllByUserId(user.getId());
-        if (bookListRepository.findAllByNameAndUserId(toReadListName(user), user.getId()).isEmpty()) {
-            BookList toReadList = createToReadList(user);
-            bookList.add(toReadList);
-        }
         return bookList.stream().map(this::toBookListDto).toList();
     }
 
@@ -134,14 +130,14 @@ public class BookListService {
         bookListRepository.deleteById(id);
     }
 
-    private BookList createToReadList(User user) {
+    public void createToReadList(User user) {
         BookList bookList = BookList.builder()
                 .userId(user.getId())
                 .name(toReadListName(user))
                 .editable(false)
                 .bookIds(List.of())
                 .build();
-        return bookListRepository.save(bookList);
+        bookListRepository.save(bookList);
     }
 
     private String toReadListName(User user) {
