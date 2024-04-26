@@ -26,6 +26,8 @@ public class SecurityConfig {
 
     private static final String REVIEW_ENDPOINT = "/reviews/**";
 
+    private static final String BOOK_LIST_ENDPOINT = "/book-list/**";
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,
                                            CorsConfigurationSource corsConfigurationSource) throws Exception {
@@ -43,6 +45,11 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.PUT, "/users").authenticated()
                                 .requestMatchers(HttpMethod.POST, "/users/reset-password").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/users/finalize-password-reset").permitAll()
+
+                                .requestMatchers(HttpMethod.GET, BOOK_LIST_ENDPOINT).authenticated()
+                                .requestMatchers(HttpMethod.POST, BOOK_LIST_ENDPOINT).authenticated()
+                                .requestMatchers(HttpMethod.PATCH, BOOK_LIST_ENDPOINT).authenticated()
+                                .requestMatchers(HttpMethod.DELETE, BOOK_LIST_ENDPOINT).authenticated()
 
                                 .requestMatchers(HttpMethod.POST, REVIEW_ENDPOINT).authenticated()
                                 .requestMatchers(HttpMethod.PUT, REVIEW_ENDPOINT).authenticated()

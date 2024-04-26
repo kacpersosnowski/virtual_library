@@ -42,6 +42,17 @@ public interface ModelMapper {
     @Mapping(target = "authorId", source = "author.id")
     Review toReviewEntity(ReviewDto reviewDto);
 
+    @Mapping(target = "createdDate", source = "bookList.auditData.createdDate")
+    @Mapping(target = "lastEditedDate", source = "bookList.auditData.lastModifiedDate")
+    @Mapping(target = "books", source = "listOfBooks")
+    BookListDto toBookListDto(BookList bookList, List<BookDto> listOfBooks);
+
+    @Mapping(target = "auditData.createdDate", source = "createdDate")
+    @Mapping(target = "auditData.lastModifiedDate", source = "lastEditedDate")
+    @Mapping(target = "bookIds", source = "books", qualifiedByName = "bookListToBookIdList")
+    @Mapping(target = "userId", source = "userId")
+    BookList toBookListEntity(BookListDto bookListDto);
+
     @Named("authorListToAuthorIdList")
     static List<String> authorListToAuthorIdList(List<AuthorDto> authorDtos) {
         return authorDtos.stream().map(AuthorDto::getId).toList();
@@ -50,5 +61,10 @@ public interface ModelMapper {
     @Named("genreListToGenreIdList")
     static List<String> genreListToGenreIdList(List<GenreDto> genreDtos) {
         return genreDtos.stream().map(GenreDto::getId).toList();
+    }
+
+    @Named("bookListToBookIdList")
+    static List<String> bookListToBookIdList(List<BookDto> bookDtos) {
+        return bookDtos.stream().map(BookDto::getId).toList();
     }
 }

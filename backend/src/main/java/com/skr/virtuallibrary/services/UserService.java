@@ -33,6 +33,8 @@ public class UserService {
 
     private final UnregisteredUserRepository unregisteredUserRepository;
 
+    private final BookListService bookListService;
+
     private final ModelMapper modelMapper;
 
     public static final String USER_NOT_FOUND_MSG = "User could not be found with id: ";
@@ -57,7 +59,8 @@ public class UserService {
     }
 
     public void addUser(User user) {
-        userRepository.save(user);
+        User newUser = userRepository.save(user);
+        bookListService.createToReadList(newUser);
     }
 
     public void addUnregisteredUser(UnregisteredUser unregisteredUser) {
