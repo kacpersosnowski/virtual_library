@@ -52,7 +52,7 @@ public class UserController {
             @RequestPart(required = false, name = "profilePicture") MultipartFile profilePicture
     ) {
         if (profilePicture != null) {
-            String profilePictureId = fileService.addFile(profilePicture, "image/png");
+            String profilePictureId = fileService.addFile(profilePicture, "image/*");
             return userService.updateUser(request, profilePictureId);
         }
         return userService.updateUser(request, null);

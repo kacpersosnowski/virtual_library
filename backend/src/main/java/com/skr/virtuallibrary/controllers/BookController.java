@@ -67,7 +67,7 @@ public class BookController {
             @RequestPart("cover") MultipartFile bookCover,
             @RequestPart("content") MultipartFile bookContent
     ) {
-        String bookCoverId = fileService.addFile(bookCover, "image/png");
+        String bookCoverId = fileService.addFile(bookCover, "image/*");
         String bookContentId = fileService.addFile(bookContent, "application/pdf");
         bookDto.setBookCoverId(bookCoverId);
         bookDto.setBookContentId(bookContentId);
@@ -88,7 +88,7 @@ public class BookController {
             @RequestPart("cover") MultipartFile bookCover,
             @RequestPart("content") MultipartFile bookContent
     ) {
-        String bookCoverId = fileService.addFile(bookCover, "image/png");
+        String bookCoverId = fileService.addFile(bookCover, "image/*");
         String bookContentId = fileService.addFile(bookContent, "application/pdf");
         bookDto.setBookCoverId(bookCoverId);
         bookDto.setBookContentId(bookContentId);
