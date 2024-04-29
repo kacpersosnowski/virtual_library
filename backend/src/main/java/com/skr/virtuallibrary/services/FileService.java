@@ -48,7 +48,7 @@ public class FileService {
             pdfFile.setFilename( gridFSFile.getFilename() );
 
             String contentType = gridFSFile.getMetadata().get("_contentType").toString();
-            if (!Objects.equals(contentType, expectedContentType)) {
+            if (!contentType.startsWith(expectedContentType)) {
                 throw new IncorrectContentTypeException("Incorrect content type: " + contentType);
             }
             pdfFile.setFileType( contentType );
