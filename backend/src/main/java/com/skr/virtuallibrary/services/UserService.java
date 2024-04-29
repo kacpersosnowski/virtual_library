@@ -4,6 +4,7 @@ import com.skr.virtuallibrary.controllers.requests.ChangePasswordRequest;
 import com.skr.virtuallibrary.controllers.requests.ResetPasswordRequest;
 import com.skr.virtuallibrary.dto.UpdateUserRequest;
 import com.skr.virtuallibrary.dto.UserDto;
+import com.skr.virtuallibrary.entities.BookList;
 import com.skr.virtuallibrary.entities.ResetPassword;
 import com.skr.virtuallibrary.entities.UnregisteredUser;
 import com.skr.virtuallibrary.entities.User;
@@ -13,6 +14,7 @@ import com.skr.virtuallibrary.exceptions.ResetPasswordNotFoundException;
 import com.skr.virtuallibrary.exceptions.TokenExpiredException;
 import com.skr.virtuallibrary.exceptions.UserNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
+import com.skr.virtuallibrary.repositories.BookListRepository;
 import com.skr.virtuallibrary.repositories.ResetPasswordRepository;
 import com.skr.virtuallibrary.repositories.UnregisteredUserRepository;
 import com.skr.virtuallibrary.repositories.UserRepository;
@@ -23,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -33,7 +36,7 @@ public class UserService {
 
     private final UnregisteredUserRepository unregisteredUserRepository;
 
-    private final BookListService bookListService;
+    private final BookListRepository bookListRepository;
 
     private final ModelMapper modelMapper;
 
@@ -60,7 +63,7 @@ public class UserService {
 
     public void addUser(User user) {
         User newUser = userRepository.save(user);
-        bookListService.createToReadList(newUser);
+        createToReadList(newUser);
     }
 
     public void addUnregisteredUser(UnregisteredUser unregisteredUser) {
@@ -174,4 +177,17 @@ public class UserService {
         return randomUUID.toString().replace("-", "");
     }
 
+    public void createToReadList(User user) {
+        BookList bookList = BookList.builder()
+                .userId(user.getId())
+                .name(toReadListName(user))
+                .editable(false)
+                .bookIds(List.of())
+                .build();
+        bookListRepository.save(bookList);
+    }
+
+    private String toReadListName(User user) {
+        return user.getLanguage().equals(Language.PL) ? "Do przeczytania" : "To Read";
+    }
 }
