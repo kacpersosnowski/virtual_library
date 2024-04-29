@@ -25,7 +25,7 @@ public class FileController {
     @Operation(summary = "Get image by id")
     @GetMapping("/image/{id}")
     public ResponseEntity<ByteArrayResource> getImage(@PathVariable String id) {
-        return getFile(id, "image/*");
+        return getFile(id, "image/");
     }
 
     @Operation(summary = "Get book content by id")
