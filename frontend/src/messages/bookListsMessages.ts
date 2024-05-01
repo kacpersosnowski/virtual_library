@@ -71,6 +71,11 @@ const bookListsMessages: Message = {
     pl: "Usuń",
     en: "Delete",
   },
+  manageBooksButton: {
+    key: "lists >> manage_books_button",
+    pl: "Zarządzaj książkami",
+    en: "Manage books",
+  },
 };
 
 export default bookListsMessages;

@@ -3,11 +3,15 @@ import { BookList, BookListDTO } from "./bookLists.types";
 
 export const parseBookLists = (data: BookList[]): BookListDTO[] => {
   return data.map((dataItem: BookList) => {
-    return {
-      id: dataItem.id,
-      userId: dataItem.userId,
-      name: dataItem.name,
-      books: parseBookItems(dataItem.books),
-    };
+    return parseBookList(dataItem);
   });
+};
+
+export const parseBookList = (data: BookList): BookListDTO => {
+  return {
+    id: data.id,
+    userId: data.userId,
+    name: data.name,
+    books: parseBookItems(data.books),
+  };
 };

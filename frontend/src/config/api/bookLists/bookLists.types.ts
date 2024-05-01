@@ -21,6 +21,7 @@ export type UpdateBookListNameData = {
 
 export type BookListsApi = {
   getAllBookLists: () => Promise<BookListDTO[]>;
+  getBookList: (id: string) => Promise<BookListDTO>;
   changeBookListName: (data: UpdateBookListNameData) => Promise<void>;
   deleteBookList: (id: string) => Promise<void>;
 };

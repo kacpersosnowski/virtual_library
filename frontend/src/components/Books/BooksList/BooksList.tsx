@@ -29,6 +29,8 @@ type Props = {
   footerOnClick?: () => void;
   sx?: SxProps<Theme>;
   headerSx?: SxProps<Theme>;
+  listSx?: SxProps<Theme>;
+  footerButtonSx?: SxProps<Theme>;
   headerComponent?: ReactNode;
 };
 
@@ -48,6 +50,8 @@ const BooksList: React.FC<Props> = (props) => {
     footerOnClick,
     sx,
     headerSx,
+    listSx,
+    footerButtonSx,
     headerComponent,
   } = props;
 
@@ -76,7 +80,7 @@ const BooksList: React.FC<Props> = (props) => {
       )}
       {!isLoading && !isError && (
         <Box sx={{ pt: "4rem" }}>
-          <Box sx={{ height: BOOK_HEIGHT + 25 + "px", mb: "3rem" }}>
+          <Box sx={{ height: BOOK_HEIGHT + 25 + "px", mb: "3rem", ...listSx }}>
             <ScrollMenu
               LeftArrow={LeftArrow}
               RightArrow={RightArrow}
@@ -107,7 +111,11 @@ const BooksList: React.FC<Props> = (props) => {
         </Box>
       )}
       {displayFooter && (
-        <BooksFooter text={footerText} footerOnClick={footerOnClick} />
+        <BooksFooter
+          text={footerText}
+          footerOnClick={footerOnClick}
+          sx={footerButtonSx}
+        />
       )}
     </Box>
   );
