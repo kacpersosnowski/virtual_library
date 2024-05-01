@@ -8,7 +8,7 @@ type Props = {
 
 const BooksHeader: React.FC<Props> = (props) => {
   return (
-    <Container maxWidth={"xl"} sx={{ position: "relative", zIndex: 5 }}>
+    <Container maxWidth={"xl"} sx={{ position: "relative", zIndex: 1 }}>
       <Box sx={{ pt: "4rem", ...props.sx }}>
         <Typography
           variant="h4"

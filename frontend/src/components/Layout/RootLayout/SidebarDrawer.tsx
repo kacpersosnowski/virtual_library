@@ -18,6 +18,7 @@ import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 
 import { AuthContext } from "../../../store/AuthContext/AuthContext";
 import Profile from "../../Profile/Profile";
@@ -27,6 +28,7 @@ import mainPageMessages from "../../../messages/mainPageMessages";
 import adminMessages from "../../../messages/adminMessages";
 import useIsAdmin from "../../../hooks/useIsAdmin";
 import profileMessages from "../../../messages/profileMessages";
+import bookListsMessages from "../../../messages/bookListsMessages";
 
 type Props = {
   isOpen: boolean;
@@ -110,18 +112,32 @@ const SidebarDrawer: React.FC<Props> = (props) => {
           {isAuthenticated && <Profile variant="drawer" sx={{ mb: 1 }} />}
           <Divider sx={{ mb: 2 }} />
           {isAuthenticated && (
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={clickNavItemHandler.bind(this, "/profile")}
-              >
-                <ListItemIcon>
-                  <PersonIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={t(profileMessages.profileNavTitle.key)}
-                />
-              </ListItemButton>
-            </ListItem>
+            <>
+              <ListItem disablePadding>
+                <ListItemButton
+                  onClick={clickNavItemHandler.bind(this, "/profile")}
+                >
+                  <ListItemIcon>
+                    <PersonIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={t(profileMessages.profileNavTitle.key)}
+                  />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton
+                  onClick={clickNavItemHandler.bind(this, "/book-lists")}
+                >
+                  <ListItemIcon>
+                    <LibraryBooksIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={t(bookListsMessages.listsNavTitle.key)}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </>
           )}
           {isAdmin && (
             <ListItem disablePadding>

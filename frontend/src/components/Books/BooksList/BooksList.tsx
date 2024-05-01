@@ -9,7 +9,7 @@ import Direction from "../../../enums/Direction";
 import { Box, SxProps, Theme } from "@mui/material";
 
 import classes from "./BooksList.module.css";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { BOOK_HEIGHT } from "../../../constants/common";
 import BooksHeader from "../BooksHeader";
 import BooksFooter from "../BooksFooter";
@@ -20,7 +20,7 @@ import errorMessages from "../../../messages/errorMessages";
 import { BookItemData } from "../../../config/api/books/books.types";
 
 type Props = {
-  headerText: string;
+  headerText?: string;
   books: BookItemData[];
   isLoading: boolean;
   isError: boolean;
@@ -29,6 +29,7 @@ type Props = {
   footerOnClick?: () => void;
   sx?: SxProps<Theme>;
   headerSx?: SxProps<Theme>;
+  headerComponent?: ReactNode;
 };
 
 const BooksList: React.FC<Props> = (props) => {
@@ -47,6 +48,7 @@ const BooksList: React.FC<Props> = (props) => {
     footerOnClick,
     sx,
     headerSx,
+    headerComponent,
   } = props;
 
   window.addEventListener(
@@ -63,7 +65,11 @@ const BooksList: React.FC<Props> = (props) => {
 
   return (
     <Box sx={sx}>
-      <BooksHeader text={headerText} sx={headerSx} />
+      {headerComponent ? (
+        headerComponent
+      ) : (
+        <BooksHeader text={headerText} sx={headerSx} />
+      )}
       {isLoading && <LoadingSpinner />}
       {isError && (
         <ErrorMessage message={t(errorMessages.fetchBookListError.key)} />

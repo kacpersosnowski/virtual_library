@@ -91,6 +91,11 @@ const errorMessages: Message = {
     pl: "Coś poszło nie tak. Upewnij się, że link resetujący jest poprawny, bądź wygeneruj nowy.",
     en: "Something went wrong. Make sure the reset link is correct or generate a new one.",
   },
+  fetchUserBookListsError: {
+    key: "user >> fetch_book_lists >> error",
+    pl: "Nie udało się wczytać Twoich list. Spróbuj ponownie później.",
+    en: "Failed to fetch your book lists. Try again later.",
+  },
 };
 
 export default errorMessages;
