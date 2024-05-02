@@ -18,6 +18,8 @@ import ErrorMessage from "../../UI/ErrorMessage";
 import { useTranslation } from "react-i18next";
 import errorMessages from "../../../messages/errorMessages";
 import { BookItemData } from "../../../config/api/books/books.types";
+import BookItemCompressed from "../BookItemCompressed";
+import COLORS from "../../../palette/colors";
 
 type Props = {
   headerText?: string;
@@ -98,11 +100,18 @@ const BooksList: React.FC<Props> = (props) => {
                 }
                 return (
                   <BookScrollCard key={book.id}>
-                    <BookItem
-                      details={book}
-                      priority={priority}
-                      animationDirection={animationDirection}
-                    />
+                    {animationDirection === Direction.Up ? (
+                      <BookItemCompressed
+                        book={book}
+                        containerSx={{ border: `2px solid ${COLORS.gray300}` }}
+                      />
+                    ) : (
+                      <BookItem
+                        details={book}
+                        priority={priority}
+                        animationDirection={animationDirection}
+                      />
+                    )}
                   </BookScrollCard>
                 );
               })}
