@@ -34,7 +34,7 @@ class FileControllerTest {
     void testGetBookCover() throws Exception {
         File file = Instancio.of(File.class).set(field(File::getFileType), "image/png").create();
 
-        when(fileService.getFile("1", "image/*")).thenReturn(file);
+        when(fileService.getFile("1", "image/")).thenReturn(file);
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/files/image/1"))
                 .andReturn();
 

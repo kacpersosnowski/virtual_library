@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -27,33 +26,40 @@ public class FileService {
     private final GridFsOperations gridFsOperations;
 
     public String addFile(MultipartFile upload, String expectedContentType) {
-        if (!Objects.equals(upload.getContentType(), expectedContentType)) {
-            throw new IncorrectContentTypeException("Incorrect content type: " + upload.getContentType());
-        }
-        try {
-            DBObject metadata = new BasicDBObject();
-            metadata.put("fileSize", upload.getSize());
-            Object fileID = gridFsTemplate.store(upload.getInputStream(), upload.getOriginalFilename(), upload.getContentType(), metadata);
-            return fileID.toString();
-        } catch (IOException ex) {
-            throw new InternalException("Error occurred while saving file", ex);
+        if (upload != null) {
+            final String contentType = upload.getContentType();
+            if (contentType == null) {
+                throw new IncorrectContentTypeException("Content type is null");
+            } else if (!contentType.startsWith(expectedContentType)) {
+                throw new IncorrectContentTypeException("Incorrect content type: " + upload.getContentType());
+            }
+            try {
+                DBObject metadata = new BasicDBObject();
+                metadata.put("fileSize", upload.getSize());
+                Object fileID = gridFsTemplate.store(upload.getInputStream(), upload.getOriginalFilename(), upload.getContentType(), metadata);
+                return fileID.toString();
+            } catch (IOException ex) {
+                throw new InternalException("Error occurred while saving file", ex);
+            }
+        } else {
+            throw new InternalException("Uploaded file is null");
         }
     }
 
     public File getFile(String id, String expectedContentType) {
-        GridFSFile gridFSFile = gridFsTemplate.findOne( new Query(Criteria.where("_id").is(id)) );
+        GridFSFile gridFSFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(id)));
         File pdfFile = new File();
 
         if (gridFSFile != null && gridFSFile.getMetadata() != null) {
-            pdfFile.setFilename( gridFSFile.getFilename() );
+            pdfFile.setFilename(gridFSFile.getFilename());
 
             String contentType = gridFSFile.getMetadata().get("_contentType").toString();
             if (!contentType.startsWith(expectedContentType)) {
                 throw new IncorrectContentTypeException("Incorrect content type: " + contentType);
             }
-            pdfFile.setFileType( contentType );
+            pdfFile.setFileType(contentType);
 
-            pdfFile.setFileSize( gridFSFile.getMetadata().get("fileSize").toString() );
+            pdfFile.setFileSize(gridFSFile.getMetadata().get("fileSize").toString());
         } else {
             throw new InternalException("Cannot read metadata from file with id: " + id);
         }
@@ -67,7 +73,7 @@ public class FileService {
     }
 
     public String getFilename(String id) {
-        GridFSFile gridFSFile = gridFsTemplate.findOne( new Query(Criteria.where("_id").is(id)) );
+        GridFSFile gridFSFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(id)));
         if (gridFSFile != null) {
             return gridFSFile.getFilename();
         } else {
