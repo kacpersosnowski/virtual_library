@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Checkbox,
+  Divider,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -33,6 +34,7 @@ import { queryClient } from "../../config/api";
 import AlertDialog from "../Layout/common/AlertDialog";
 import bookListsMessages from "../../messages/bookListsMessages";
 import { BookItemData } from "../../config/api/books/books.types";
+import AddBookToListForm from "../Forms/bookLists/AddBookToListForm";
 
 type Props = {
   bookList: BookListDTO;
@@ -299,6 +301,20 @@ const UserBookListView: React.FC<Props> = (props) => {
             {t(bookListsMessages.deleteBooksFromListDeleteButtonText.key)}
           </Button>
         }
+      />
+      <Divider sx={{ borderBottomWidth: 2, my: "2rem" }} />
+      <Typography variant="h4" sx={{ mb: "2rem" }}>
+        {t(bookListsMessages.addBooksToListButton.key)}
+      </Typography>
+      <AddBookToListForm
+        list={props.bookList}
+        containerSx={{
+          justifyContent: { xs: "center", md: "space-between" },
+          alignItems: "center",
+          columnGap: 2,
+          my: "1rem",
+          px: "4rem",
+        }}
       />
     </Box>
   );

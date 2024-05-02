@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, SxProps, Theme, Typography } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import { useNavigate } from "react-router-dom";
 import { motion, useAnimate } from "framer-motion";
@@ -9,7 +9,9 @@ import COLORS from "../../palette/colors";
 
 type Props = {
   book: BookItemData;
+  animate?: boolean;
   onClick?: () => void;
+  containerSx?: SxProps<Theme>;
 };
 
 const BookItemCompressed: React.FC<Props> = (props) => {
@@ -17,11 +19,15 @@ const BookItemCompressed: React.FC<Props> = (props) => {
   const [scope, animate] = useAnimate();
 
   const mouseEnterHandler = () => {
-    animate("img.cover", { scale: 1.05 }, { duration: 0.4 });
+    if (props.animate === true || props.animate === undefined) {
+      animate("img.cover", { scale: 1.05 }, { duration: 0.4 });
+    }
   };
 
   const mouseOverHandler = () => {
-    animate("img.cover", { scale: 1 });
+    if (props.animate === true || props.animate === undefined) {
+      animate("img.cover", { scale: 1 });
+    }
   };
 
   return (
@@ -36,6 +42,7 @@ const BookItemCompressed: React.FC<Props> = (props) => {
         flexDirection: "column",
         overflow: "hidden",
         cursor: "pointer",
+        ...props.containerSx,
       }}
       ref={scope}
       onMouseEnter={mouseEnterHandler}
@@ -62,11 +69,16 @@ const BookItemCompressed: React.FC<Props> = (props) => {
           flexDirection: "column",
         }}
       >
-        <Box>{props.book.title}</Box>
+        <Box>
+          {props.book.title.slice(0, 26) +
+            (props.book.title.length > 25 ? "..." : "")}
+        </Box>
         <Box sx={{ color: COLORS.gray300 }}>{props.book.authorList}</Box>
         <Box sx={{ display: "flex" }}>
           <StarIcon />
-          <Typography>{props.book.rating.rateAverage}</Typography>
+          <Typography>
+            {Math.round(props.book.rating.rateAverage * 10) / 10}
+          </Typography>
         </Box>
       </Box>
     </Box>

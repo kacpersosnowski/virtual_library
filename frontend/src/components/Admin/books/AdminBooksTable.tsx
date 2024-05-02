@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useMutation, useQuery } from "react-query";
@@ -67,6 +67,10 @@ const AdminBooksTable = () => {
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [searchText]);
 
   const handleDeleteDialogOpen = (book: BookItemData) => {
     setBookToDelete(book);

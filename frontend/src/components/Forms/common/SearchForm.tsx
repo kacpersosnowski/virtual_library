@@ -9,6 +9,7 @@ type Props = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   containerSx?: SxProps<Theme>;
   inputSx?: SxProps<Theme>;
+  placeholder?: string;
 };
 
 const SearchForm: React.FC<Props> = (props) => {
@@ -28,7 +29,7 @@ const SearchForm: React.FC<Props> = (props) => {
       <TextField
         color="info"
         id={props.id}
-        label={t(mainPageMessages.searchPlaceholder.key)}
+        label={props.placeholder || t(mainPageMessages.searchPlaceholder.key)}
         variant="standard"
         sx={{ width: { xs: "12.5rem" }, ...props.inputSx }}
         value={props.value || ""}

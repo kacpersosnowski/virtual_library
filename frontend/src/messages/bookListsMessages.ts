@@ -116,6 +116,26 @@ const bookListsMessages: Message = {
     pl: "W tej liście nie masz żadnej książki",
     en: "You don't have any book in this list",
   },
+  addBooksToListButton: {
+    key: "lists >> add_books_to_list >> button_text",
+    pl: "Dodaj nowe książki do listy",
+    en: "Add new books to the list",
+  },
+  addBooksToListSuccessMessage: {
+    key: "lists >> add_books_to_list >> success_message",
+    pl: "Książki zostały pomyślnie dodane do listy.",
+    en: "The books were added to the list successfully.",
+  },
+  addChosenBooksToListButton: {
+    key: "lists >> add_chosen_books_to_list >> button_text",
+    pl: "Dodaj wybrane książki do listy",
+    en: "Add chosen books to the list",
+  },
+  searchBooksPlaceholder: {
+    key: "lists >> search_books >> placeholder_text",
+    pl: "Szukaj książki po tytule i autorze",
+    en: "Search for a book by title and author",
+  },
 };
 
 export default bookListsMessages;

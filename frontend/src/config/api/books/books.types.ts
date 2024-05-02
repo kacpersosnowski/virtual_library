@@ -63,6 +63,9 @@ export type UpdateBookData = {
 
 export type BooksApi = {
   getAllBooks: () => Promise<BookItemData[]>;
+  getAllBooksWithParams: (
+    queryData: PageSearchData,
+  ) => Promise<PagedResponse<BookItemData>>;
   getAllBooksForAdmin: (
     queryData: PageSearchData,
   ) => Promise<PagedResponse<BookItemData>>;

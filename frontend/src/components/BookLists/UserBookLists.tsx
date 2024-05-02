@@ -69,6 +69,7 @@ const UserBookLists: React.FC<Props> = (props) => {
                 fontSize: "1rem",
                 py: "10px",
                 mt: "1.2rem",
+                mb: "2.5rem",
               }}
             >
               {t(bookListsMessages.manageBooksButton.key)}
