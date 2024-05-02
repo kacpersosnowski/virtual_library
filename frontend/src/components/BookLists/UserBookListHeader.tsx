@@ -32,6 +32,7 @@ import { queryClient } from "../../config/api";
 type Props = {
   text: string;
   listId: string;
+  deleteCallback?: () => void;
   sx?: SxProps<Theme>;
 };
 
@@ -68,6 +69,9 @@ const UserBookListHeader: React.FC<Props> = (props) => {
       dispatch(
         snackbarActions.show(t(bookListsMessages.deleteListSuccessMessage.key)),
       );
+      if (props?.deleteCallback) {
+        props.deleteCallback();
+      }
     },
     onError: () => {
       handleDeleteDialogClose();

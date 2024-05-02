@@ -9,6 +9,7 @@ import COLORS from "../../palette/colors";
 
 type Props = {
   book: BookItemData;
+  onClick?: () => void;
 };
 
 const BookItemCompressed: React.FC<Props> = (props) => {
@@ -39,7 +40,7 @@ const BookItemCompressed: React.FC<Props> = (props) => {
       ref={scope}
       onMouseEnter={mouseEnterHandler}
       onMouseLeave={mouseOverHandler}
-      onClick={() => navigate(`/book/${props.book.id}`)}
+      onClick={props.onClick || (() => navigate(`/book/${props.book.id}`))}
     >
       <Box
         component={motion.img}

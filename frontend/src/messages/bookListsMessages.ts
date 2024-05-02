@@ -76,6 +76,46 @@ const bookListsMessages: Message = {
     pl: "Zarządzaj książkami",
     en: "Manage books",
   },
+  removeBooksFromListSuccessMessage: {
+    key: "lists >> remove_books >> success_message",
+    pl: "Książki zostały pomyślnie usunięte z listy.",
+    en: "The books were removed successfully from the list.",
+  },
+  removeChosenBooksButton: {
+    key: "lists >> remove_chosen_books >> button_text",
+    pl: "Usuń wybrane",
+    en: "Remove chosen books",
+  },
+  deleteModeLabel: {
+    key: "lists >> delete_mode_label",
+    pl: "Tryb usuwania",
+    en: "Delete mode",
+  },
+  deleteBooksFromListDialogTitle: {
+    key: "lists >> delete_books_dialog >> title",
+    pl: "Czy na pewno chcesz usunąć te książki ({{num}}) z listy {{listName}}?",
+    en: "Are you sure you want to delete these books ({{num}}) from the list {{listName}}?",
+  },
+  deleteBooksFromListCancelButtonText: {
+    key: "lists >> delete_books_dialog >> cancel_button",
+    pl: "Anuluj",
+    en: "Cancel",
+  },
+  deleteBooksFromListDeleteButtonText: {
+    key: "lists >> delete_books_dialog >> delete_button",
+    pl: "Usuń",
+    en: "Delete",
+  },
+  backToListsButton: {
+    key: "lists >> back_to_lists >> button_text",
+    pl: "Wróć do list",
+    en: "Back to lists",
+  },
+  noBooksInListMessage: {
+    key: "lists >> no_books_in_list",
+    pl: "W tej liście nie masz żadnej książki",
+    en: "You don't have any book in this list",
+  },
 };
 
 export default bookListsMessages;

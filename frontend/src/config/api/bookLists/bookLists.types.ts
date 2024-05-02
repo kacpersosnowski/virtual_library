@@ -19,9 +19,21 @@ export type UpdateBookListNameData = {
   newName: string;
 };
 
+export type RemoveBookFromListData = {
+  listId: string;
+  bookId: string;
+};
+
+export type RemoveBooksFromListData = {
+  listId: string;
+  bookIdList: string[];
+};
+
 export type BookListsApi = {
   getAllBookLists: () => Promise<BookListDTO[]>;
   getBookList: (id: string) => Promise<BookListDTO>;
   changeBookListName: (data: UpdateBookListNameData) => Promise<void>;
+  removeBookFromList: (data: RemoveBookFromListData) => Promise<void>;
+  removeBooksFromList: (data: RemoveBooksFromListData) => Promise<void>;
   deleteBookList: (id: string) => Promise<void>;
 };

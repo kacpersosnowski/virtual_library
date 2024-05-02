@@ -18,6 +18,16 @@ export const bookListsApi: BookListsApi = {
       headers: { "Content-Type": "text/plain" },
     });
   },
+  removeBookFromList: async (data) => {
+    await axios.patch(`${url}/remove/${data.listId}/${data.bookId}`, {
+      headers: { "Content-Type": "text/plain" },
+    });
+  },
+  removeBooksFromList: async (data) => {
+    for (const bookId of data.bookIdList) {
+      await bookListsApi.removeBookFromList({ bookId, listId: data.listId });
+    }
+  },
   deleteBookList: async (id) => {
     await axios.delete(`${url}/${id}`);
   },
