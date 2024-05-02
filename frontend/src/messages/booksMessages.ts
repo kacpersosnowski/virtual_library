@@ -31,6 +31,11 @@ const booksMessages: Message = {
     pl: "Czytaj",
     en: "Read",
   },
+  saveBookOnList: {
+    key: "books >> book_details >> save_on_list",
+    pl: "Zapisz",
+    en: "Save",
+  },
   bookDescription: {
     key: "books >> book_details >> description",
     pl: "Opis",

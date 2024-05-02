@@ -2,7 +2,9 @@ import { Box, Divider } from "@mui/material";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import BookIcon from "@mui/icons-material/Book";
+import SaveIcon from "@mui/icons-material/Save";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 
 import booksBg from "../../assets/books-bg3.jpg";
 import ImageBackground from "../../components/Layout/ImageBackground/ImageBackground";
@@ -17,8 +19,10 @@ import BookDescription from "../../components/Books/BookInfos/BookDescription";
 import booksMessages from "../../messages/booksMessages";
 import errorMessages from "../../messages/errorMessages";
 import ReviewsSection from "../../components/Reviews/ReviewSection";
+import SaveBookOnListModal from "../../components/BookLists/SaveBookOnListModal";
 
 const BookDetailPage = () => {
+  const [saveModalOpen, setSaveModalOpen] = useState(false);
   const { id } = useParams();
   const {
     data: book,
@@ -55,22 +59,48 @@ const BookDetailPage = () => {
             <BookInfosTiles book={book} />
             <Divider sx={{ margin: "1rem 0" }} />
 
-            <ActionButton
-              sx={{ mt: "1rem" }}
-              scaleOnHover={1.04}
-              onClick={() => navigate(`/book/read/${book.id}`)}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
+            <Box sx={{ display: "flex", columnGap: 2 }}>
+              <ActionButton
+                sx={{ mt: "1rem", flex: 1 }}
+                scaleOnHover={1.04}
+                onClick={() => navigate(`/book/read/${book.id}`)}
               >
-                <BookIcon sx={{ mr: "0.5rem", color: "#0d402f" }} />
-                {t(booksMessages.readBook.key)}
-              </Box>
-            </ActionButton>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <BookIcon sx={{ mr: "0.5rem", color: "#0d402f" }} />
+                  {t(booksMessages.readBook.key)}
+                </Box>
+              </ActionButton>
+              <ActionButton
+                sx={{ mt: "1rem" }}
+                variant="outlined"
+                color="primary"
+                onClick={() => setSaveModalOpen(true)}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <SaveIcon sx={{ mr: "0.5rem" }} />
+                  {t(booksMessages.saveBookOnList.key)}
+                </Box>
+              </ActionButton>
+              <SaveBookOnListModal
+                bookId={id}
+                open={saveModalOpen}
+                handleClose={() => {
+                  setSaveModalOpen(false);
+                }}
+              />
+            </Box>
           </Box>
         </Box>
         <BookDescription description={book.description} />

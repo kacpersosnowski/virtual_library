@@ -32,6 +32,7 @@ import { queryClient } from "../../config/api";
 type Props = {
   text: string;
   listId: string;
+  isEditable?: boolean;
   deleteCallback?: () => void;
   sx?: SxProps<Theme>;
 };
@@ -159,23 +160,24 @@ const UserBookListHeader: React.FC<Props> = (props) => {
         }}
       >
         {editMode ? editNameForm : nameText}
-        {!editMode && !isDeletingListError && (
-          <Box>
-            <Tooltip title={t(bookListsMessages.editName.key)} arrow>
-              <IconButton onClick={() => setEditMode(true)}>
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title={t(bookListsMessages.deleteList.key)} arrow>
-              <IconButton
-                color="error"
-                onClick={() => setIsDeleteDialogOpen(true)}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        )}
+        {!editMode &&
+          (props.isEditable === undefined || props.isEditable === true) && (
+            <Box>
+              <Tooltip title={t(bookListsMessages.editName.key)} arrow>
+                <IconButton onClick={() => setEditMode(true)}>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={t(bookListsMessages.deleteList.key)} arrow>
+                <IconButton
+                  color="error"
+                  onClick={() => setIsDeleteDialogOpen(true)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          )}
         {isDeletingListLoading && <LoadingSpinner />}
       </Box>
       {(isChangingNameError || isDeletingListError) && (

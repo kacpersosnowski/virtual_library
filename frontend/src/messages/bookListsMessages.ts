@@ -161,6 +161,26 @@ const bookListsMessages: Message = {
     pl: "Utwórz listę",
     en: "Create list",
   },
+  listNameAlreadyExistsErrorMessage: {
+    key: "lists >> name_already_exists >> error_message",
+    pl: "Lista z tą nazwą już istnieje.",
+    en: "The list with this name already exists.",
+  },
+  addBookToListFromModalSuccessMessage: {
+    key: "lists >> add_book_to_list_modal >> success_message",
+    pl: "Książka została pomyślnie dodana do listy {{listName}}.",
+    en: "The book was added to the list {{listName}} successfully.",
+  },
+  removeBookFromListFromModalSuccessMessage: {
+    key: "lists >> remove_book_from_list_modal >> success_message",
+    pl: "Książka została pomyślnie usunięta z listy {{listName}}.",
+    en: "The book was removed from the list {{listName}} successfully.",
+  },
+  saveBookToTheListPrompt: {
+    key: "lists >> save_book_to_list >> prompt",
+    pl: "Zapisz książkę na liście...",
+    en: "Save the book on the list...",
+  },
 };
 
 export default bookListsMessages;

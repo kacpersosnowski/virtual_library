@@ -17,6 +17,8 @@ import { queryClient } from "../../../config/api";
 import { snackbarActions } from "../../../store/redux/slices/snackbar-slice";
 import LoadingSpinner from "../../UI/LoadingSpinner";
 import ErrorMessage from "../../UI/ErrorMessage";
+import errorMessages from "../../../messages/errorMessages";
+import { isAxiosError } from "axios";
 
 const AddBookListForm = () => {
   const [books, setBooks] = useState<string[]>([]);
@@ -28,6 +30,7 @@ const AddBookListForm = () => {
     mutate: createBookList,
     isLoading,
     isError,
+    error,
   } = useMutation({
     mutationFn: bookListsApi.addBookList,
     onSuccess: (values) => {
@@ -54,6 +57,15 @@ const AddBookListForm = () => {
       createBookList({ name: values.name, books: bookIds });
     },
   });
+
+  let errorMessage = null;
+  if (isError) {
+    if (isAxiosError(error) && error.response.status === 409) {
+      errorMessage = t(bookListsMessages.listNameAlreadyExistsErrorMessage.key);
+    } else {
+      errorMessage = t(errorMessages.somethingWentWrongError.key);
+    }
+  }
 
   return (
     <Box
@@ -90,11 +102,7 @@ const AddBookListForm = () => {
           {t(bookListsMessages.createListSubmitButton.key)}
         </ActionButton>
       )}
-      {isError && (
-        <ErrorMessage
-          message={t(validationMessages.somethingWentWrongError.key)}
-        />
-      )}
+      {isError && <ErrorMessage message={errorMessage} />}
     </Box>
   );
 };

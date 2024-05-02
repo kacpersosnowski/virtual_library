@@ -159,6 +159,10 @@ const UserBookListView: React.FC<Props> = (props) => {
         listId={props.bookList.id}
         text={props.bookList.name}
         deleteCallback={() => navigate("/book-lists")}
+        isEditable={
+          props.bookList.name !== "Do przeczytania" &&
+          props.bookList.name !== "To read"
+        }
       />
       <Box sx={{ display: "flex", my: "1rem", px: "4rem" }}>
         <ActionButton onClick={() => navigate("/book-lists")}>

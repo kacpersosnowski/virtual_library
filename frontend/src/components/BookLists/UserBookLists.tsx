@@ -33,6 +33,7 @@ const UserBookLists: React.FC<Props> = (props) => {
                   text={bookList.name}
                   listId={bookList.id}
                   sx={{ pt: 0 }}
+                  isEditable={index !== 0}
                 />
               }
               listSx={{ mb: 0 }}
@@ -54,6 +55,7 @@ const UserBookLists: React.FC<Props> = (props) => {
               text={bookList.name}
               listId={bookList.id}
               sx={{ pt: 0 }}
+              isEditable={index !== 0}
             />
             <Box>
               <Typography variant="h5" sx={{ mt: "1rem" }}>

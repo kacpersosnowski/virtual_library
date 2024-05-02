@@ -7,7 +7,15 @@ const url = "/book-list";
 export const bookListsApi: BookListsApi = {
   getAllBookLists: async () => {
     const response = await axios.get<BookList[]>(url);
-    return parseBookLists(response.data);
+    const bookLists = parseBookLists(response.data);
+    const toReadindex = bookLists.findIndex(
+      (list) => list.name === "Do przeczytania" || list.name === "To read",
+    );
+    if (toReadindex !== -1) {
+      const [object] = bookLists.splice(toReadindex, 1);
+      bookLists.unshift(object);
+    }
+    return bookLists;
   },
   getBookList: async (id) => {
     const response = await axios.get<BookList>(`${url}/${id}`);
@@ -19,9 +27,13 @@ export const bookListsApi: BookListsApi = {
     });
   },
   addBookToList: async (data) => {
-    await axios.patch(`${url}/add/${data.listId}/${data.bookId}`, {
-      headers: { "Content-Type": "text/plain" },
-    });
+    const response = await axios.patch<BookList>(
+      `${url}/add/${data.listId}/${data.bookId}`,
+      {
+        headers: { "Content-Type": "text/plain" },
+      },
+    );
+    return response.data;
   },
   addBooksToList: async (data) => {
     for (const bookId of data.bookIdList) {
@@ -29,9 +41,13 @@ export const bookListsApi: BookListsApi = {
     }
   },
   removeBookFromList: async (data) => {
-    await axios.patch(`${url}/remove/${data.listId}/${data.bookId}`, {
-      headers: { "Content-Type": "text/plain" },
-    });
+    const response = await axios.patch<BookList>(
+      `${url}/remove/${data.listId}/${data.bookId}`,
+      {
+        headers: { "Content-Type": "text/plain" },
+      },
+    );
+    return response.data;
   },
   removeBooksFromList: async (data) => {
     for (const bookId of data.bookIdList) {
