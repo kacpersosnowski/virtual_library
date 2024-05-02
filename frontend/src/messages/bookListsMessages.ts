@@ -136,6 +136,31 @@ const bookListsMessages: Message = {
     pl: "Szukaj książki po tytule i autorze",
     en: "Search for a book by title and author",
   },
+  addListButton: {
+    key: "lists >> add_list >> button_text",
+    pl: "Dodaj listę",
+    en: "Add list",
+  },
+  addNewListHeader: {
+    key: "lists >> add_new_list >> header_text",
+    pl: "Dodaj nową listę",
+    en: "Add new list",
+  },
+  addNewListSuccessMessage: {
+    key: "lists >> add_new_list >> success_message",
+    pl: "Lista została utworzona pomyślnie.",
+    en: "The list was created successfully.",
+  },
+  addChosenBooksToListPrompt: {
+    key: "lists >> add_chosen_books >> prompt",
+    pl: "Dodaj wybrane książki do listy",
+    en: "Add chosen books to the list",
+  },
+  createListSubmitButton: {
+    key: "lists >> create_list >> submit_button",
+    pl: "Utwórz listę",
+    en: "Create list",
+  },
 };
 
 export default bookListsMessages;

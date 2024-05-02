@@ -30,6 +30,8 @@ import bookListsMessages from "../../../messages/bookListsMessages";
 type Props = {
   list: BookListDTO;
   containerSx?: SxProps<Theme>;
+  addComponent?: React.ReactNode;
+  setBooksToAdd?: (idList: string[]) => void;
 };
 
 const AddBookToListForm: React.FC<Props> = (props) => {
@@ -74,6 +76,9 @@ const AddBookToListForm: React.FC<Props> = (props) => {
 
   const resetState = () => {
     setBooksToAdd([]);
+    if (props.setBooksToAdd) {
+      props.setBooksToAdd([]);
+    }
     setAddCheckboxes({});
   };
 
@@ -116,12 +121,18 @@ const AddBookToListForm: React.FC<Props> = (props) => {
     });
     if (event.target.checked) {
       setBooksToAdd([...booksToAdd, bookId]);
+      if (props.setBooksToAdd) {
+        props.setBooksToAdd([...booksToAdd, bookId]);
+      }
     } else {
       const bookIdIndex = booksToAdd.indexOf(bookId);
       if (bookIdIndex > -1) {
         const newBooksToAdd = [...booksToAdd];
         newBooksToAdd.splice(bookIdIndex, 1);
         setBooksToAdd(newBooksToAdd);
+        if (props.setBooksToAdd) {
+          props.setBooksToAdd(newBooksToAdd);
+        }
       }
     }
   };
@@ -138,6 +149,9 @@ const AddBookToListForm: React.FC<Props> = (props) => {
         const newBooksToAdd = [...booksToAdd];
         newBooksToAdd.splice(bookIdIndex, 1);
         setBooksToAdd(newBooksToAdd);
+        if (props.setBooksToAdd) {
+          props.setBooksToAdd(newBooksToAdd);
+        }
       }
     } else {
       setAddCheckboxes({
@@ -145,6 +159,9 @@ const AddBookToListForm: React.FC<Props> = (props) => {
         [bookId]: true,
       });
       setBooksToAdd([...booksToAdd, bookId]);
+      if (props.setBooksToAdd) {
+        props.setBooksToAdd([...booksToAdd, bookId]);
+      }
     }
   };
 
@@ -236,18 +253,21 @@ const AddBookToListForm: React.FC<Props> = (props) => {
         }}
       >
         {isAddingLoading && <LoadingSpinner />}
-        {!isAddingLoading && (
-          <ActionButton
-            onClick={() => {
-              addBooks({
-                bookIdList: booksToAdd,
-                listId: props.list.id,
-              });
-            }}
-          >
-            {t(bookListsMessages.addChosenBooksToListButton.key)}
-          </ActionButton>
-        )}
+        {!isAddingLoading &&
+          (props.addComponent ? (
+            props.addComponent
+          ) : (
+            <ActionButton
+              onClick={() => {
+                addBooks({
+                  bookIdList: booksToAdd,
+                  listId: props.list.id,
+                });
+              }}
+            >
+              {t(bookListsMessages.addChosenBooksToListButton.key)}
+            </ActionButton>
+          ))}
         <SearchForm
           id="add-books-to-list-search"
           inputSx={{ width: { xs: "12.5rem", md: "18rem" } }}

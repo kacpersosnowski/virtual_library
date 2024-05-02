@@ -29,6 +29,11 @@ export type AddRemoveBooksFromListData = {
   bookIdList: string[];
 };
 
+export type CreateBookListDTO = {
+  name: string;
+  books: { id: string }[];
+};
+
 export type BookListsApi = {
   getAllBookLists: () => Promise<BookListDTO[]>;
   getBookList: (id: string) => Promise<BookListDTO>;
@@ -37,5 +42,6 @@ export type BookListsApi = {
   addBooksToList: (data: AddRemoveBooksFromListData) => Promise<void>;
   removeBookFromList: (data: AddRemoveBookFromListData) => Promise<void>;
   removeBooksFromList: (data: AddRemoveBooksFromListData) => Promise<void>;
+  addBookList: (data: CreateBookListDTO) => Promise<BookList>;
   deleteBookList: (id: string) => Promise<void>;
 };

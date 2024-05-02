@@ -38,6 +38,10 @@ export const bookListsApi: BookListsApi = {
       await bookListsApi.removeBookFromList({ bookId, listId: data.listId });
     }
   },
+  addBookList: async (data) => {
+    const response = await axios.post<BookList>(url, data);
+    return response.data;
+  },
   deleteBookList: async (id) => {
     await axios.delete(`${url}/${id}`);
   },
