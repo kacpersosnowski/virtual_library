@@ -4,6 +4,7 @@ import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.GenreDto;
 import com.skr.virtuallibrary.entities.Genre;
 import com.skr.virtuallibrary.exceptions.GenreAlreadyExistsException;
+import com.skr.virtuallibrary.exceptions.GenreAssignedToBookException;
 import com.skr.virtuallibrary.exceptions.GenreNotFoundException;
 import com.skr.virtuallibrary.mapping.ModelMapper;
 import com.skr.virtuallibrary.repositories.BookRepository;
@@ -18,8 +19,8 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class GenreService {
 
     private final GenreRepository genreRepository;
@@ -62,6 +63,9 @@ public class GenreService {
     }
 
     public void deleteGenre(String id) {
+        if (!bookRepository.findAllByGenreIdListContains(id).isEmpty()) {
+            throw new GenreAssignedToBookException();
+        }
         genreRepository.deleteById(id);
     }
 
