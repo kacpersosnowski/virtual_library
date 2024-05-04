@@ -22,6 +22,13 @@ export const booksApi: BooksApi = {
     const books = parseBookItems(response.data.content);
     return books;
   },
+  getAllBooksWithParams: async (params) => {
+    const response = await axios.get<PagedResponse<Book>>(url, { params });
+    return {
+      totalElements: response.data.totalElements,
+      content: parseBookItems(response.data.content),
+    };
+  },
   getAllBooksForAdmin: async (params) => {
     const response = await axios.get<PagedResponse<Book>>(url, { params });
     return {

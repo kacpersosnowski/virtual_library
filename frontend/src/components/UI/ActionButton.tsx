@@ -7,7 +7,7 @@ type Props = {
   sx?: SxProps<Theme>;
   type?: "submit" | "reset" | "button";
   variant?: "contained" | "outlined";
-  color?: "primary" | "secondary";
+  color?: "primary" | "secondary" | "error";
   scaleOnHover?: number;
   onClick?: () => void;
 };

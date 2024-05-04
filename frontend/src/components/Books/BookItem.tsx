@@ -4,7 +4,7 @@ import BookCover from "./BookCover";
 import BookDetails from "./BookDetails/BookDetails";
 import { useAnimate } from "framer-motion";
 import Direction from "../../enums/Direction";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BOOK_HEIGHT, BOOK_WITDH } from "../../constants/common";
 import { BookItemData } from "../../config/api/books/books.types";
 
@@ -21,15 +21,51 @@ const BookItem: React.FC<Props> = (props) => {
   const [coverZIndex, setCoverZIndex] = useState(baseCoverZIndex);
 
   // Default animation - to the right
-  let moveProperties: { x?: number; y?: number } = { x: BOOK_WITDH };
+  const [moveProperties, setMoveProperties] = useState({ x: BOOK_WITDH } as {
+    x?: number;
+    y?: number;
+  });
 
-  if (props?.animationDirection === Direction.Left) {
-    moveProperties = { x: -BOOK_WITDH };
-  } else if (props?.animationDirection === Direction.Up) {
-    moveProperties = { y: -BOOK_HEIGHT };
-  } else if (props?.animationDirection === Direction.Down) {
-    moveProperties = { y: BOOK_HEIGHT };
-  }
+  const checkSpace = () => {
+    if (scope) {
+      const boxRect = scope.current?.getBoundingClientRect();
+      if (boxRect === undefined) {
+        return;
+      }
+      const windowWidth = window.innerWidth;
+
+      const spaceToRight = windowWidth - (boxRect.left + BOOK_WITDH);
+      if (
+        spaceToRight > BOOK_WITDH &&
+        props?.animationDirection === Direction.Left
+      ) {
+        setMoveProperties({ x: BOOK_WITDH });
+      } else if (props?.animationDirection === Direction.Left) {
+        setMoveProperties({ x: -BOOK_WITDH });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (props?.animationDirection === Direction.Left) {
+      setMoveProperties({ x: -BOOK_WITDH });
+    } else if (props?.animationDirection === Direction.Up) {
+      setMoveProperties({ y: -BOOK_HEIGHT });
+    } else if (props?.animationDirection === Direction.Down) {
+      setMoveProperties({ y: BOOK_HEIGHT });
+    }
+
+    if (scope) {
+      checkSpace();
+    }
+  }, [scope]);
+
+  useEffect(() => {
+    window.addEventListener("resize", checkSpace);
+    return () => {
+      window.removeEventListener("resize", checkSpace);
+    };
+  }, [checkSpace]);
 
   const mouseEnterHandler = () => {
     // Handle the last book so that book details were above the left book's cover

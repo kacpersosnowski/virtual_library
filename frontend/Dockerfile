@@ -6,7 +6,7 @@ WORKDIR /app
 USER node
 COPY --chown=node:node package.json .
 
-RUN npm config set fetch-retry-maxtimeout 600000 && dos2unix package.json && npm install --legacy-peer-deps
+RUN npm install --legacy-peer-deps
 
 COPY --chown=node:node . .
 
