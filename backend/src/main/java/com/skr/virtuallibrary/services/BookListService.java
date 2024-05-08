@@ -107,7 +107,8 @@ public class BookListService {
         if (!bookList.getUserId().equals(user.getId()) || !bookList.isEditable()) {
             throw new AccessForbiddenException(ACCESS_DENIED);
         }
-        if (bookListRepository.findAllByNameAndUserId(name, user.getId()).isPresent()) {
+        if (!bookList.getName().equals(name) &&
+                bookListRepository.findAllByNameAndUserId(name, user.getId()).isPresent()) {
             throw new BookListAlreadyExistsException(bookList.getName());
         }
 
