@@ -43,8 +43,12 @@ const BookDetailPage = () => {
         <Box
           sx={{ display: "flex", flexDirection: { xs: "column", md: "row" } }}
         >
-          <Box>
-            <Box component="img" src={book?.cover} width="70%"></Box>
+          <Box sx={{ flex: 1 }}>
+            <Box
+              component="img"
+              src={book?.cover}
+              sx={{ width: { xs: "100%", md: "70%" } }}
+            ></Box>
           </Box>
           <Box
             sx={{

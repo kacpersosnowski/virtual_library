@@ -7,8 +7,14 @@ import Typography from "@mui/material/Typography";
 import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import { Link } from "react-router-dom";
+import {
+  Link,
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
 
 import logo from "../../../assets/logo.png";
 import SearchForm from "../../Forms/common/SearchForm";
@@ -17,14 +23,51 @@ import mainPageMessages from "../../../messages/mainPageMessages";
 import { AuthContext } from "../../../store/AuthContext/AuthContext";
 import Profile from "../../Profile/Profile";
 import SidebarDrawer from "./SidebarDrawer";
+import { RootState } from "../../../store/redux";
+import { searchActions } from "../../../store/redux/slices/search-slice";
 
 const MainNavbar = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const searchText = useSelector(
+    (state: RootState) => state.search.searchText.searchBooks,
+  );
   const { t } = useTranslation();
   const { isAuthenticated } = React.useContext(AuthContext);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  React.useEffect(() => {
+    dispatch(
+      searchActions.setSearchText({
+        stateKey: "searchBooks",
+        searchText: searchParams.get("search") || "",
+      }),
+    );
+  }, [searchParams]);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
+  };
+
+  const handleSearchTextChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    dispatch(
+      searchActions.setSearchText({
+        stateKey: "searchBooks",
+        searchText: event.target.value,
+      }),
+    );
+  };
+
+  const handleSearchRedirect = (searchValue: string) => {
+    if (searchValue.trim().length > 0) {
+      navigate({
+        pathname: "books",
+        search: createSearchParams({ search: searchValue }).toString(),
+      });
+    }
   };
 
   const navItems = [
@@ -73,7 +116,12 @@ const MainNavbar = () => {
             Liber Mundi
           </Typography>
           <Box sx={{ display: "block", flexGrow: 1 }} />
-          <SearchForm id="search-books" />
+          <SearchForm
+            id="search-books"
+            value={searchText}
+            onChange={handleSearchTextChange}
+            onEnter={handleSearchRedirect}
+          />
           {!isAuthenticated && (
             <Box
               sx={{

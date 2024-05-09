@@ -146,6 +146,16 @@ const booksMessages: Message = {
     pl: "Zamknij pełny ekran (f)",
     en: "Exit (f)",
   },
+  searchResultsHeader: {
+    key: "books >> search_books >> header",
+    pl: "Wyniki wyszukiwania",
+    en: "Search results",
+  },
+  noSearchResults: {
+    key: "books >> search_books >> no_results",
+    pl: "Brak wyników",
+    en: "No results",
+  },
 };
 
 export default booksMessages;
