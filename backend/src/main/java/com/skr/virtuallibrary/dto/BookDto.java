@@ -42,4 +42,6 @@ public class BookDto {
 
     private double rateAverage;
 
+    private boolean readAuthenticatedOnly;
+
 }

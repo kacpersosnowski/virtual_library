@@ -4,6 +4,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.skr.virtuallibrary.entities.File;
+import com.skr.virtuallibrary.exceptions.AccessForbiddenException;
 import com.skr.virtuallibrary.exceptions.IncorrectContentTypeException;
 import com.skr.virtuallibrary.exceptions.InternalException;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +27,18 @@ public class FileService {
 
     private final GridFsOperations gridFsOperations;
 
-    public String addFile(MultipartFile upload, String expectedContentType) {
+    private final UserService userService;
+
+    public static final String META_AUTH_NAME = "requiresAuthentication";
+
+    public String addFile(MultipartFile upload, String expectedContentType, boolean requiresAuthentication) {
         if (!Objects.equals(upload.getContentType(), expectedContentType)) {
             throw new IncorrectContentTypeException("Incorrect content type: " + upload.getContentType());
         }
         try {
             DBObject metadata = new BasicDBObject();
             metadata.put("fileSize", upload.getSize());
+            metadata.put(META_AUTH_NAME, requiresAuthentication);
             Object fileID = gridFsTemplate.store(upload.getInputStream(), upload.getOriginalFilename(), upload.getContentType(), metadata);
             return fileID.toString();
         } catch (IOException ex) {
@@ -41,19 +47,24 @@ public class FileService {
     }
 
     public File getFile(String id, String expectedContentType) {
-        GridFSFile gridFSFile = gridFsTemplate.findOne( new Query(Criteria.where("_id").is(id)) );
+        GridFSFile gridFSFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(id)));
         File pdfFile = new File();
 
         if (gridFSFile != null && gridFSFile.getMetadata() != null) {
-            pdfFile.setFilename( gridFSFile.getFilename() );
+            if (gridFSFile.getMetadata().get(META_AUTH_NAME) != null
+                    && (Boolean) gridFSFile.getMetadata().get(META_AUTH_NAME)
+                    && !userService.isAuthenticated()) {
+                throw new AccessForbiddenException("User must be authenticated to view this file");
+            }
+            pdfFile.setFilename(gridFSFile.getFilename());
 
             String contentType = gridFSFile.getMetadata().get("_contentType").toString();
             if (!Objects.equals(contentType, expectedContentType)) {
                 throw new IncorrectContentTypeException("Incorrect content type: " + contentType);
             }
-            pdfFile.setFileType( contentType );
+            pdfFile.setFileType(contentType);
 
-            pdfFile.setFileSize( gridFSFile.getMetadata().get("fileSize").toString() );
+            pdfFile.setFileSize(gridFSFile.getMetadata().get("fileSize").toString());
         } else {
             throw new InternalException("Cannot read metadata from file with id: " + id);
         }
@@ -67,7 +78,7 @@ public class FileService {
     }
 
     public String getFilename(String id) {
-        GridFSFile gridFSFile = gridFsTemplate.findOne( new Query(Criteria.where("_id").is(id)) );
+        GridFSFile gridFSFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(id)));
         if (gridFSFile != null) {
             return gridFSFile.getFilename();
         } else {
