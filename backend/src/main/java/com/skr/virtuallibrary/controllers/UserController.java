@@ -2,6 +2,7 @@ package com.skr.virtuallibrary.controllers;
 
 import com.skr.virtuallibrary.controllers.requests.ChangePasswordRequest;
 import com.skr.virtuallibrary.controllers.requests.ResetPasswordRequest;
+import com.skr.virtuallibrary.controllers.responses.PagedResponse;
 import com.skr.virtuallibrary.dto.UpdateUserRequest;
 import com.skr.virtuallibrary.dto.UserDto;
 import com.skr.virtuallibrary.entities.enums.Language;
@@ -14,11 +15,17 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @RestController
@@ -43,6 +50,22 @@ public class UserController {
     @Operation(summary = "Get current user.")
     public UserDto getCurrentUser() {
         return modelMapper.toUserDto(userService.getCurrentUser());
+    }
+
+    @GetMapping
+    @Operation(summary = "Search users.")
+    public PagedResponse<UserDto> searchUsers(
+            @PathParam("searchPhrase") String searchPhrase,
+            @PathParam("page") Integer page
+    ) {
+        if (searchPhrase != null && !searchPhrase.isEmpty()) {
+            String decodedSearch = URLDecoder.decode(searchPhrase, StandardCharsets.UTF_8);
+            if (page != null) {
+                return userService.searchUsers(decodedSearch, page);
+            }
+            return userService.searchUsers(decodedSearch);
+        }
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No search phrase");
     }
 
     @PutMapping
