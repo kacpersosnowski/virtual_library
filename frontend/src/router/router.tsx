@@ -8,6 +8,7 @@ import authRoutes from "../pages/Auth/routes";
 import adminRoutes from "../pages/Admin/routes";
 import booksRoutes from "../pages/Books/routes";
 import profileRoutes from "../pages/Profile/routes";
+import bookListsRoutes from "../pages/BookLists/routes";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
       ...adminRoutes,
       ...booksRoutes,
       ...profileRoutes,
+      ...bookListsRoutes,
     ],
   },
 ]);

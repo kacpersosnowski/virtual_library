@@ -128,6 +128,7 @@ class GenreServiceTests {
         genreService.deleteGenre(idToDelete);
 
         // then
+        verify(bookRepository).findAllByGenreIdListContains(idToDelete);
         verify(genreRepository).deleteById(idToDelete);
     }
 

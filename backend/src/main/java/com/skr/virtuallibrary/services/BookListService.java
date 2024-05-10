@@ -4,7 +4,6 @@ import com.skr.virtuallibrary.dto.BookDto;
 import com.skr.virtuallibrary.dto.BookListDto;
 import com.skr.virtuallibrary.entities.BookList;
 import com.skr.virtuallibrary.entities.User;
-import com.skr.virtuallibrary.entities.enums.Language;
 import com.skr.virtuallibrary.exceptions.AccessForbiddenException;
 import com.skr.virtuallibrary.exceptions.BookListAlreadyExistsException;
 import com.skr.virtuallibrary.exceptions.BookListNotFoundException;
@@ -108,7 +107,8 @@ public class BookListService {
         if (!bookList.getUserId().equals(user.getId()) || !bookList.isEditable()) {
             throw new AccessForbiddenException(ACCESS_DENIED);
         }
-        if (bookListRepository.findAllByNameAndUserId(name, user.getId()).isPresent()) {
+        if (!bookList.getName().equals(name) &&
+                bookListRepository.findAllByNameAndUserId(name, user.getId()).isPresent()) {
             throw new BookListAlreadyExistsException(bookList.getName());
         }
 
@@ -128,20 +128,6 @@ public class BookListService {
         }
 
         bookListRepository.deleteById(id);
-    }
-
-    public void createToReadList(User user) {
-        BookList bookList = BookList.builder()
-                .userId(user.getId())
-                .name(toReadListName(user))
-                .editable(false)
-                .bookIds(List.of())
-                .build();
-        bookListRepository.save(bookList);
-    }
-
-    private String toReadListName(User user) {
-        return user.getLanguage().equals(Language.PL) ? "Do przeczytania" : "To Read";
     }
 
     private BookListDto toBookListDto(BookList bookList) {

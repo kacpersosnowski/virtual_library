@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useMutation, useQuery } from "react-query";
@@ -73,6 +73,10 @@ const AdminAuthorsTable = () => {
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [searchText]);
 
   const handleDeleteDialogOpen = (author: Author) => {
     setAuthorToDelete(author);

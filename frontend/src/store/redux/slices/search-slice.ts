@@ -5,12 +5,20 @@ interface SearchState {
     booksTable: string;
     authorsTable: string;
     genresTable: string;
+    booksForList: string;
   };
 }
 
 const searchSlice = createSlice({
   name: "search",
-  initialState: { searchText: { booksTable: "" } } as SearchState,
+  initialState: {
+    searchText: {
+      booksTable: "",
+      authorsTable: "",
+      genresTable: "",
+      booksForList: "",
+    },
+  } as SearchState,
   reducers: {
     setSearchText(
       state,
@@ -24,7 +32,11 @@ const searchSlice = createSlice({
   },
 });
 
-export type searchStateKey = "booksTable" | "authorsTable" | "genresTable";
+export type searchStateKey =
+  | "booksTable"
+  | "authorsTable"
+  | "genresTable"
+  | "booksForList";
 
 export const searchActions = searchSlice.actions;
 

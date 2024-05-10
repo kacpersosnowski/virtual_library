@@ -52,6 +52,7 @@ public class UserController {
             @RequestPart(required = false, name = "profilePicture") MultipartFile profilePicture
     ) {
         if (profilePicture != null) {
+            String profilePictureId = fileService.addFile(profilePicture, "image/");
             String profilePictureId = fileService.addFile(profilePicture, "image/png", false);
             return userService.updateUser(request, profilePictureId);
         }
@@ -63,7 +64,7 @@ public class UserController {
     public UserDto changePassword(@Valid @RequestBody ChangePasswordRequest request) {
         return userService.changePassword(request);
     }
-  
+
     @PostMapping("/reset-password")
     @Operation(summary = "Reset password.")
     public ResponseEntity<Object> resetPassword(@RequestBody @Email String email) {

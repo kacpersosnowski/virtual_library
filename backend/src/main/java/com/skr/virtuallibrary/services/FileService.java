@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +26,24 @@ public class FileService {
 
     private final GridFsOperations gridFsOperations;
 
+    public String addFile(MultipartFile upload, String expectedContentType) {
+        if (upload != null) {
+            final String contentType = upload.getContentType();
+            if (contentType == null) {
+                throw new IncorrectContentTypeException("Content type is null");
+            } else if (!contentType.startsWith(expectedContentType)) {
+                throw new IncorrectContentTypeException("Incorrect content type: " + upload.getContentType());
+            }
+            try {
+                DBObject metadata = new BasicDBObject();
+                metadata.put("fileSize", upload.getSize());
+                Object fileID = gridFsTemplate.store(upload.getInputStream(), upload.getOriginalFilename(), upload.getContentType(), metadata);
+                return fileID.toString();
+            } catch (IOException ex) {
+                throw new InternalException("Error occurred while saving file", ex);
+            }
+        } else {
+            throw new InternalException("Uploaded file is null");
     private final UserService userService;
 
     public static final String META_AUTH_NAME = "requiresAuthentication";
@@ -59,7 +76,7 @@ public class FileService {
             pdfFile.setFilename(gridFSFile.getFilename());
 
             String contentType = gridFSFile.getMetadata().get("_contentType").toString();
-            if (!Objects.equals(contentType, expectedContentType)) {
+            if (!contentType.startsWith(expectedContentType)) {
                 throw new IncorrectContentTypeException("Incorrect content type: " + contentType);
             }
             pdfFile.setFileType(contentType);
