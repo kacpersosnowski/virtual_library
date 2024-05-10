@@ -4,6 +4,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.skr.virtuallibrary.entities.File;
+import com.skr.virtuallibrary.exceptions.AccessForbiddenException;
 import com.skr.virtuallibrary.exceptions.IncorrectContentTypeException;
 import com.skr.virtuallibrary.exceptions.InternalException;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,11 @@ public class FileService {
 
     private final GridFsOperations gridFsOperations;
 
-    public String addFile(MultipartFile upload, String expectedContentType) {
+    private final UserService userService;
+
+    public static final String META_AUTH_NAME = "requiresAuthentication";
+
+    public String addFile(MultipartFile upload, String expectedContentType, boolean requiresAuthentication) {
         if (upload != null) {
             final String contentType = upload.getContentType();
             if (contentType == null) {
@@ -36,6 +41,7 @@ public class FileService {
             try {
                 DBObject metadata = new BasicDBObject();
                 metadata.put("fileSize", upload.getSize());
+                metadata.put(META_AUTH_NAME, requiresAuthentication);
                 Object fileID = gridFsTemplate.store(upload.getInputStream(), upload.getOriginalFilename(), upload.getContentType(), metadata);
                 return fileID.toString();
             } catch (IOException ex) {
@@ -51,6 +57,11 @@ public class FileService {
         File pdfFile = new File();
 
         if (gridFSFile != null && gridFSFile.getMetadata() != null) {
+            if (gridFSFile.getMetadata().get(META_AUTH_NAME) != null
+                    && (Boolean) gridFSFile.getMetadata().get(META_AUTH_NAME)
+                    && !userService.isAuthenticated()) {
+                throw new AccessForbiddenException("User must be authenticated to view this file");
+            }
             pdfFile.setFilename(gridFSFile.getFilename());
 
             String contentType = gridFSFile.getMetadata().get("_contentType").toString();

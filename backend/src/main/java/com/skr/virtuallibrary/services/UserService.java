@@ -61,6 +61,10 @@ public class UserService {
         return findUserByUsername(authentication.getName());
     }
 
+    public boolean isAuthenticated() {
+        return SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+    }
+
     public void addUser(User user) {
         User newUser = userRepository.save(user);
         createToReadList(newUser);

@@ -40,4 +40,6 @@ public class Book {
 
     private double rateAverage = 0;
 
+    private boolean readAuthenticatedOnly;
+
 }
