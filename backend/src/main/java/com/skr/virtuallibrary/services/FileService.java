@@ -26,7 +26,11 @@ public class FileService {
 
     private final GridFsOperations gridFsOperations;
 
-    public String addFile(MultipartFile upload, String expectedContentType) {
+    private final UserService userService;
+
+    public static final String META_AUTH_NAME = "requiresAuthentication";
+
+    public String addFile(MultipartFile upload, String expectedContentType, boolean requiresAuthentication) {
         if (upload != null) {
             final String contentType = upload.getContentType();
             if (contentType == null) {
@@ -37,6 +41,7 @@ public class FileService {
             try {
                 DBObject metadata = new BasicDBObject();
                 metadata.put("fileSize", upload.getSize());
+                metadata.put(META_AUTH_NAME, requiresAuthentication);
                 Object fileID = gridFsTemplate.store(upload.getInputStream(), upload.getOriginalFilename(), upload.getContentType(), metadata);
                 return fileID.toString();
             } catch (IOException ex) {
@@ -44,22 +49,6 @@ public class FileService {
             }
         } else {
             throw new InternalException("Uploaded file is null");
-    private final UserService userService;
-
-    public static final String META_AUTH_NAME = "requiresAuthentication";
-
-    public String addFile(MultipartFile upload, String expectedContentType, boolean requiresAuthentication) {
-        if (!Objects.equals(upload.getContentType(), expectedContentType)) {
-            throw new IncorrectContentTypeException("Incorrect content type: " + upload.getContentType());
-        }
-        try {
-            DBObject metadata = new BasicDBObject();
-            metadata.put("fileSize", upload.getSize());
-            metadata.put(META_AUTH_NAME, requiresAuthentication);
-            Object fileID = gridFsTemplate.store(upload.getInputStream(), upload.getOriginalFilename(), upload.getContentType(), metadata);
-            return fileID.toString();
-        } catch (IOException ex) {
-            throw new InternalException("Error occurred while saving file", ex);
         }
     }
 

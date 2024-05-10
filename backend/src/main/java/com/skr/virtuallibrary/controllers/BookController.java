@@ -67,9 +67,7 @@ public class BookController {
             @RequestPart("cover") MultipartFile bookCover,
             @RequestPart("content") MultipartFile bookContent
     ) {
-        String bookCoverId = fileService.addFile(bookCover, "image/");
-        String bookContentId = fileService.addFile(bookContent, "application/pdf");
-        String bookCoverId = fileService.addFile(bookCover, "image/png", false);
+        String bookCoverId = fileService.addFile(bookCover, "image/", false);
         String bookContentId = fileService.addFile(bookContent, "application/pdf", bookDto.isReadAuthenticatedOnly());
         bookDto.setBookCoverId(bookCoverId);
         bookDto.setBookContentId(bookContentId);
@@ -90,8 +88,8 @@ public class BookController {
             @RequestPart("cover") MultipartFile bookCover,
             @RequestPart("content") MultipartFile bookContent
     ) {
-        String bookCoverId = fileService.addFile(bookCover, "image/");
-        String bookContentId = fileService.addFile(bookContent, "application/pdf");
+        String bookCoverId = fileService.addFile(bookCover, "image/", false);
+        String bookContentId = fileService.addFile(bookContent, "application/pdf", bookDto.isReadAuthenticatedOnly());
         bookDto.setBookCoverId(bookCoverId);
         bookDto.setBookContentId(bookContentId);
         return bookService.updateBook(id, bookDto);
