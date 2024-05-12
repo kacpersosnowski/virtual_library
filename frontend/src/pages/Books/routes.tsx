@@ -3,6 +3,7 @@ import { RouteObject } from "react-router-dom";
 import BookDetailPage from "./BookDetailPage";
 import ReadBookPage from "./ReadBookPage";
 import BookCategoryListsPage from "./BookCategoryListsPage";
+import BooksSearchPage from "./BooksSearchPage";
 
 const routes: RouteObject[] = [
   {
@@ -16,6 +17,10 @@ const routes: RouteObject[] = [
   {
     path: "/books-by-category",
     element: <BookCategoryListsPage />,
+  },
+  {
+    path: "/books",
+    element: <BooksSearchPage />,
   },
 ];
 

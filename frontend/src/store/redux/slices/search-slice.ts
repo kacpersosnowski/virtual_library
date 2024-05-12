@@ -6,6 +6,7 @@ interface SearchState {
     authorsTable: string;
     genresTable: string;
     booksForList: string;
+    searchBooks: string;
   };
 }
 
@@ -17,6 +18,7 @@ const searchSlice = createSlice({
       authorsTable: "",
       genresTable: "",
       booksForList: "",
+      searchBooks: "",
     },
   } as SearchState,
   reducers: {
@@ -36,7 +38,8 @@ export type searchStateKey =
   | "booksTable"
   | "authorsTable"
   | "genresTable"
-  | "booksForList";
+  | "booksForList"
+  | "searchBooks";
 
 export const searchActions = searchSlice.actions;
 
