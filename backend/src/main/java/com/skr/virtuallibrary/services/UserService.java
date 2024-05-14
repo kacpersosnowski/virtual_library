@@ -152,6 +152,7 @@ public class UserService {
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setLanguage(request.getLanguage());
+        user.setPublicAccount(request.isPublicAccount());
         if (profilePictureId != null) {
             user.setProfilePictureId(profilePictureId);
         }

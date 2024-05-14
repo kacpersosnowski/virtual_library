@@ -18,4 +18,6 @@ public class UpdateUserRequest {
     @NotNull
     private Language language;
 
+    private boolean publicAccount;
+
 }

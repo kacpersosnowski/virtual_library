@@ -37,6 +37,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .authority(Authority.USER)
                 .language(registerRequest.getLanguage())
+                .publicAccount(true)
                 .build();
         userService.addUser(user);
         return jwtService.generateTokens(user);
@@ -72,6 +73,7 @@ public class AuthenticationService {
                 .password(tempUser.getPassword())
                 .authority(Authority.USER)
                 .language(tempUser.getLanguage())
+                .publicAccount(true)
                 .build();
         userService.addUser(user);
         userService.deleteUnregisteredUser(tempUser);

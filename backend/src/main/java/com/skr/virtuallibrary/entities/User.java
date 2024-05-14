@@ -41,7 +41,7 @@ public class User implements UserDetails {
 
     private String profilePictureId;
 
-    private boolean publicAccount = true;
+    private boolean publicAccount;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
