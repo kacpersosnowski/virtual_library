@@ -98,11 +98,16 @@ public class UserService {
         List<User> users = new ArrayList<>();
 
         for (String phrase : searchPhrases) {
-            Query query = new Query().addCriteria(new Criteria().orOperator(
-                    Criteria.where("username").regex(phrase, "i"),
-                    Criteria.where("firstName").regex(phrase, "i"),
-                    Criteria.where("lastName").regex(phrase, "i")
-            ));
+            Query query = new Query().addCriteria(
+                    new Criteria().andOperator(
+                            Criteria.where("publicAccount").is(true),
+                            new Criteria().orOperator(
+                                    Criteria.where("username").regex(phrase, "i"),
+                                    Criteria.where("firstName").regex(phrase, "i"),
+                                    Criteria.where("lastName").regex(phrase, "i")
+                            )
+                    )
+            );
             users.addAll(mongoTemplate.find(query, User.class));
         }
         return new PagedResponse<>(
@@ -120,10 +125,13 @@ public class UserService {
         Criteria[] criteria = new Criteria[searchPhrases.length];
 
         for (int i = 0; i < searchPhrases.length; i++) {
-            criteria[i] = new Criteria().orOperator(
-                    Criteria.where("username").regex(searchPhrases[i], "i"),
-                    Criteria.where("firstName").regex(searchPhrases[i], "i"),
-                    Criteria.where("lastName").regex(searchPhrases[i], "i")
+            criteria[i] = new Criteria().andOperator(
+                    Criteria.where("publicAccount").is(true),
+                    new Criteria().orOperator(
+                            Criteria.where("username").regex(searchPhrases[i], "i"),
+                            Criteria.where("firstName").regex(searchPhrases[i], "i"),
+                            Criteria.where("lastName").regex(searchPhrases[i], "i")
+                    )
             );
         }
         Query query = new Query().addCriteria(new Criteria().orOperator(criteria));

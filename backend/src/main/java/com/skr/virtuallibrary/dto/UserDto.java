@@ -35,4 +35,6 @@ public class UserDto {
 
     private String profilePictureId;
 
+    private boolean publicAccount;
+
 }
