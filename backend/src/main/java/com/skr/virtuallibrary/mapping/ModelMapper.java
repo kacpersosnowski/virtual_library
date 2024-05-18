@@ -31,6 +31,8 @@ public interface ModelMapper {
 
     User toUserEntity(UserDto userDto);
 
+    SearchedUserDto toSearchedUserDto(User user);
+
     @Mapping(target = "created", source = "review.auditData.createdDate")
     @Mapping(target = "lastModified", source = "review.auditData.lastModifiedDate")
     @Mapping(target = "author", source = "user")

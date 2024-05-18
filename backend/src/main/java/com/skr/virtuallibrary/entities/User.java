@@ -41,6 +41,8 @@ public class User implements UserDetails {
 
     private String profilePictureId;
 
+    private boolean publicAccount;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(authority.name()));
