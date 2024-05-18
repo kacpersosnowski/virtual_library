@@ -51,6 +51,16 @@ const usersMessages: Message = {
     pl: "Pokaż profil użytkownika",
     en: "Show user's profile",
   },
+  userDetailsProfileHeader: {
+    key: "users_profile >> header",
+    pl: "Profil użytkownika",
+    en: "User's profile",
+  },
+  userDetailsProfileListsHeader: {
+    key: "users_profile >> lists >> header",
+    pl: "Listy użytkownika",
+    en: "User's lists",
+  },
 };
 
 export default usersMessages;

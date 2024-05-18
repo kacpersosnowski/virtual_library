@@ -3,6 +3,7 @@ import axios from "axios";
 import { UpdateUserDTO, UserData, UsersApi } from "./users.types";
 import { parseUserFormDataForUpdate } from "./users.parsers";
 import { BACKEND_BASE_URL } from "../../../constants/api";
+import bookListsApi from "../bookLists/bookLists";
 // import { PagedResponse } from "../common/common.types";
 
 const url = "/users";
@@ -58,6 +59,25 @@ export const usersApi: UsersApi = {
           profilePictureId: null,
         },
       ],
+    };
+  },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getUserDetails: async (id) => {
+    function wait(milliseconds: number) {
+      return new Promise((resolve) => setTimeout(resolve, milliseconds));
+    }
+    await wait(1000);
+    const bookLists = await bookListsApi.getUserBookLists(id);
+    return {
+      id: "6586c730167d96419b938015",
+      username: "Rotar07",
+      firstName: "Sebastian",
+      lastName: "Jędrzejewski",
+      email: "sebastian.jedrzejewski12@gmail.com",
+      authority: "ADMIN",
+      language: "PL",
+      profilePictureId: "663b3489f667103a0164336b",
+      bookLists,
     };
   },
   changeUserLanguage: async (language: string) => {

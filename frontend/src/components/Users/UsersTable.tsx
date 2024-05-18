@@ -116,7 +116,7 @@ const UsersTable = () => {
                   title={t(usersMessages.usersTableProfileTooltip.key)}
                   arrow
                 >
-                  <IconButton onClick={() => navigate(`/user/${user.id}`)}>
+                  <IconButton onClick={() => navigate(`/users/${user.id}`)}>
                     <InfoIcon />
                   </IconButton>
                 </Tooltip>
