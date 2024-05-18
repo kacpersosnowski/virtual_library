@@ -19,6 +19,7 @@ import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import GroupIcon from "@mui/icons-material/Group";
 
 import { AuthContext } from "../../../store/AuthContext/AuthContext";
 import Profile from "../../Profile/Profile";
@@ -29,6 +30,7 @@ import adminMessages from "../../../messages/adminMessages";
 import useIsAdmin from "../../../hooks/useIsAdmin";
 import profileMessages from "../../../messages/profileMessages";
 import bookListsMessages from "../../../messages/bookListsMessages";
+import usersMessages from "../../../messages/usersMessages";
 
 type Props = {
   isOpen: boolean;
@@ -135,6 +137,16 @@ const SidebarDrawer: React.FC<Props> = (props) => {
                   <ListItemText
                     primary={t(bookListsMessages.listsNavTitle.key)}
                   />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton
+                  onClick={clickNavItemHandler.bind(this, "/users")}
+                >
+                  <ListItemIcon>
+                    <GroupIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={t(usersMessages.usersNavTitle.key)} />
                 </ListItemButton>
               </ListItem>
             </>

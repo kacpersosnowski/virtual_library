@@ -9,6 +9,7 @@ import adminRoutes from "../pages/Admin/routes";
 import booksRoutes from "../pages/Books/routes";
 import profileRoutes from "../pages/Profile/routes";
 import bookListsRoutes from "../pages/BookLists/routes";
+import usersRoutes from "../pages/Users/routes";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
       ...booksRoutes,
       ...profileRoutes,
       ...bookListsRoutes,
+      ...usersRoutes,
     ],
   },
 ]);

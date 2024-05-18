@@ -3,6 +3,7 @@ import axios from "axios";
 import { UpdateUserDTO, UserData, UsersApi } from "./users.types";
 import { parseUserFormDataForUpdate } from "./users.parsers";
 import { BACKEND_BASE_URL } from "../../../constants/api";
+// import { PagedResponse } from "../common/common.types";
 
 const url = "/users";
 const languageUrl = `${url}/language`;
@@ -13,6 +14,51 @@ export const usersApi: UsersApi = {
   getUserData: async () => {
     const response = await axios.get<UserData>(meUrl);
     return response.data;
+  },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getUsers: async (params) => {
+    // const response = await axios.get<PagedResponse<UserData>>(url, { params });
+    // return response.data;
+    console.log(params);
+    function wait(milliseconds: number) {
+      return new Promise((resolve) => setTimeout(resolve, milliseconds));
+    }
+    await wait(1000);
+    return {
+      totalElements: 3,
+      content: [
+        {
+          id: "6586c730167d96419b938015",
+          username: "Rotar07",
+          firstName: "Sebastian",
+          lastName: "Jędrzejewski",
+          email: "sebastian.jedrzejewski12@gmail.com",
+          authority: "ADMIN",
+          language: "PL",
+          profilePictureId: "663b3489f667103a0164336b",
+        },
+        {
+          id: "6586c730167d96419b938016",
+          username: "Rotar07",
+          firstName: "Sebastian",
+          lastName: "Jędrzejewski",
+          email: "sebastian.jedrzejewski12@gmail.com",
+          authority: "ADMIN",
+          language: "PL",
+          profilePictureId: "663b3489f667103a0164336b",
+        },
+        {
+          id: "6586c730167d96419b938017",
+          username: "Rotar07",
+          firstName: "Sebastian",
+          lastName: "Jędrzejewski",
+          email: "sebastian.jedrzejewski12@gmail.com",
+          authority: "ADMIN",
+          language: "PL",
+          profilePictureId: null,
+        },
+      ],
+    };
   },
   changeUserLanguage: async (language: string) => {
     const user = await usersApi.getUserData();
