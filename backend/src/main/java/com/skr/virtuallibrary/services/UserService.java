@@ -3,6 +3,7 @@ package com.skr.virtuallibrary.services;
 import com.skr.virtuallibrary.controllers.requests.ChangePasswordRequest;
 import com.skr.virtuallibrary.controllers.requests.ResetPasswordRequest;
 import com.skr.virtuallibrary.controllers.responses.PagedResponse;
+import com.skr.virtuallibrary.dto.SearchedUserDto;
 import com.skr.virtuallibrary.dto.UpdateUserRequest;
 import com.skr.virtuallibrary.dto.UserDto;
 import com.skr.virtuallibrary.entities.BookList;
@@ -93,7 +94,7 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User could not be found with token: " + token));
     }
 
-    public PagedResponse<UserDto> searchUsers(String searchPhrase) {
+    public PagedResponse<SearchedUserDto> searchUsers(String searchPhrase) {
         String[] searchPhrases = searchPhrase.trim().split(" ");
         List<User> users = new ArrayList<>();
 
@@ -111,11 +112,11 @@ public class UserService {
             users.addAll(mongoTemplate.find(query, User.class));
         }
         return new PagedResponse<>(
-                users.stream().map(modelMapper::toUserDto).distinct().toList()
+                users.stream().map(modelMapper::toSearchedUserDto).distinct().toList()
         );
     }
 
-    public PagedResponse<UserDto> searchUsers(String searchPhrase, Integer page) {
+    public PagedResponse<SearchedUserDto> searchUsers(String searchPhrase, Integer page) {
         if (page < 0) {
             throw new IllegalPageNumberException();
         }
@@ -141,7 +142,7 @@ public class UserService {
 
         return new PagedResponse<>(
                 totalElements,
-                userPage.stream().map(modelMapper::toUserDto).distinct().toList()
+                userPage.stream().map(modelMapper::toSearchedUserDto).distinct().toList()
         );
     }
 

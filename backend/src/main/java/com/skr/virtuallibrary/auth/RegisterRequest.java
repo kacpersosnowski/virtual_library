@@ -28,4 +28,6 @@ public class RegisterRequest {
     @NotNull(message = "Language should not be null")
     private Language language;
 
+    private boolean publicAccount;
+
 }

@@ -37,7 +37,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .authority(Authority.USER)
                 .language(registerRequest.getLanguage())
-                .publicAccount(true)
+                .publicAccount(registerRequest.isPublicAccount())
                 .build();
         userService.addUser(user);
         return jwtService.generateTokens(user);
@@ -51,6 +51,7 @@ public class AuthenticationService {
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .language(registerRequest.getLanguage())
+                .publicAccount(registerRequest.isPublicAccount())
                 .expirationDate(LocalDate.now().plusDays(2L))
                 .build();
         userService.addUnregisteredUser(temporaryUser);
@@ -73,7 +74,7 @@ public class AuthenticationService {
                 .password(tempUser.getPassword())
                 .authority(Authority.USER)
                 .language(tempUser.getLanguage())
-                .publicAccount(true)
+                .publicAccount(tempUser.isPublicAccount())
                 .build();
         userService.addUser(user);
         userService.deleteUnregisteredUser(tempUser);

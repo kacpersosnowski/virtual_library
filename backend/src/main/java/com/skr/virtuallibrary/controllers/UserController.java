@@ -3,6 +3,7 @@ package com.skr.virtuallibrary.controllers;
 import com.skr.virtuallibrary.controllers.requests.ChangePasswordRequest;
 import com.skr.virtuallibrary.controllers.requests.ResetPasswordRequest;
 import com.skr.virtuallibrary.controllers.responses.PagedResponse;
+import com.skr.virtuallibrary.dto.SearchedUserDto;
 import com.skr.virtuallibrary.dto.UpdateUserRequest;
 import com.skr.virtuallibrary.dto.UserDto;
 import com.skr.virtuallibrary.entities.enums.Language;
@@ -54,7 +55,7 @@ public class UserController {
 
     @GetMapping
     @Operation(summary = "Search users.")
-    public PagedResponse<UserDto> searchUsers(
+    public PagedResponse<SearchedUserDto> searchUsers(
             @PathParam("searchPhrase") String searchPhrase,
             @PathParam("page") Integer page
     ) {

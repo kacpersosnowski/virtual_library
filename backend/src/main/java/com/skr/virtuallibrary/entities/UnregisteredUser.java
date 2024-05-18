@@ -36,4 +36,6 @@ public class UnregisteredUser {
 
     private LocalDate expirationDate;
 
+    private boolean publicAccount;
+
 }
