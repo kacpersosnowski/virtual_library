@@ -36,6 +36,12 @@ public class BookListController {
         return bookListService.createBookList(bookListDto);
     }
 
+    @GetMapping("/user/{userId}")
+    @Operation(summary = "Get user's all book lists.")
+    public List<BookListDto> getUsersBookList(@PathVariable String userId) {
+        return bookListService.getBookLists(userId);
+    }
+
     @PatchMapping("/add/{listId}/{bookId}")
     @Operation(summary = "Add book to list.")
     public BookListDto addBookToList(@PathVariable String listId, @PathVariable String bookId) {

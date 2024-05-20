@@ -50,6 +50,12 @@ public class BookListService {
         return toBookListDto(bookList);
     }
 
+    public List<BookListDto> getBookLists(String userId) {
+        User user = userService.findUserById(userId);
+        List<BookList> bookList = bookListRepository.findAllByUserId(user.getId());
+        return bookList.stream().map(this::toBookListDto).toList();
+    }
+
     public BookListDto createBookList(BookListDto bookListDto) {
         User user = userService.getCurrentUser();
         if (bookListRepository.findAllByNameAndUserId(bookListDto.getName(), user.getId()).isPresent()) {
