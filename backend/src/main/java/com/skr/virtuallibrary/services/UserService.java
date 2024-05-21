@@ -88,6 +88,13 @@ public class UserService {
         unregisteredUserRepository.save(unregisteredUser);
     }
 
+    public SearchedUserDto findById(String id) {
+        return userRepository.findById(id)
+                .filter(User::isPublicAccount)
+                .map(modelMapper::toSearchedUserDto)
+                .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %s could not be found", id)));
+    }
+
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User could not be found with username: " + username));

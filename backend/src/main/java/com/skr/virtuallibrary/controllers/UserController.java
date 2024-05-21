@@ -53,6 +53,12 @@ public class UserController {
         return modelMapper.toUserDto(userService.getCurrentUser());
     }
 
+    @GetMapping("/{id}")
+    @Operation(summary = "Get user profile by id.")
+    public SearchedUserDto getUserById(@Parameter @PathVariable String id) {
+        return userService.findById(id);
+    }
+
     @GetMapping
     @Operation(summary = "Search users.")
     public PagedResponse<SearchedUserDto> searchUsers(
