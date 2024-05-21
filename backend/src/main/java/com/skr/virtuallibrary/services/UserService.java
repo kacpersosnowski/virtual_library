@@ -93,6 +93,11 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User could not be found with username: " + username));
     }
 
+    public User findUserById(String id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MSG + id));
+    }
+
     public UnregisteredUser findUnregisteredUserByToken(String token) {
         return unregisteredUserRepository.findByRegistrationToken(token)
                 .orElseThrow(() -> new UserNotFoundException("User could not be found with token: " + token));
