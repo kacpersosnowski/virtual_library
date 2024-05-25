@@ -4,6 +4,7 @@ import { UpdateUserDTO, UserData, UsersApi } from "./users.types";
 import { parseUserFormDataForUpdate } from "./users.parsers";
 import { BACKEND_BASE_URL } from "../../../constants/api";
 import bookListsApi from "../bookLists/bookLists";
+import { PagedResponse } from "../common/common.types";
 // import { PagedResponse } from "../common/common.types";
 
 const url = "/users";
@@ -16,69 +17,21 @@ export const usersApi: UsersApi = {
     const response = await axios.get<UserData>(meUrl);
     return response.data;
   },
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getUsers: async (params) => {
-    // const response = await axios.get<PagedResponse<UserData>>(url, { params });
-    // return response.data;
-    console.log(params);
-    function wait(milliseconds: number) {
-      return new Promise((resolve) => setTimeout(resolve, milliseconds));
-    }
-    await wait(1000);
+    const response = await axios.get<PagedResponse<UserData>>(url, { params });
+    const me = await usersApi.getUserData();
+    const id = me.id;
     return {
-      totalElements: 3,
-      content: [
-        {
-          id: "6586c730167d96419b938015",
-          username: "Rotar07",
-          firstName: "Sebastian",
-          lastName: "Jędrzejewski",
-          email: "sebastian.jedrzejewski12@gmail.com",
-          authority: "ADMIN",
-          language: "PL",
-          profilePictureId: "663b3489f667103a0164336b",
-        },
-        {
-          id: "6586c730167d96419b938016",
-          username: "Rotar07",
-          firstName: "Sebastian",
-          lastName: "Jędrzejewski",
-          email: "sebastian.jedrzejewski12@gmail.com",
-          authority: "ADMIN",
-          language: "PL",
-          profilePictureId: "663b3489f667103a0164336b",
-        },
-        {
-          id: "6586c730167d96419b938017",
-          username: "Rotar07",
-          firstName: "Sebastian",
-          lastName: "Jędrzejewski",
-          email: "sebastian.jedrzejewski12@gmail.com",
-          authority: "ADMIN",
-          language: "PL",
-          profilePictureId: null,
-        },
-      ],
+      totalElements: response.data.totalElements,
+      content: response.data.content.filter((user) => user.id !== id),
     };
   },
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getUserDetails: async (id) => {
-    function wait(milliseconds: number) {
-      return new Promise((resolve) => setTimeout(resolve, milliseconds));
-    }
-    await wait(1000);
     const bookLists = await bookListsApi.getUserBookLists(id);
-    return {
-      id: "6586c730167d96419b938015",
-      username: "Rotar07",
-      firstName: "Sebastian",
-      lastName: "Jędrzejewski",
-      email: "sebastian.jedrzejewski12@gmail.com",
-      authority: "ADMIN",
-      language: "PL",
-      profilePictureId: "663b3489f667103a0164336b",
-      bookLists,
-    };
+    const response = await axios.get<UserData>(`${url}/${id}`);
+    const user = response.data;
+    user.bookLists = bookLists;
+    return user;
   },
   changeUserLanguage: async (language: string) => {
     const user = await usersApi.getUserData();
