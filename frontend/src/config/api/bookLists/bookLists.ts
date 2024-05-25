@@ -17,6 +17,10 @@ export const bookListsApi: BookListsApi = {
     }
     return bookLists;
   },
+  getUserBookLists: async (userId) => {
+    const response = await axios.get<BookList[]>(`${url}/user/${userId}`);
+    return parseBookLists(response.data);
+  },
   getBookList: async (id) => {
     const response = await axios.get<BookList>(`${url}/${id}`);
     return parseBookList(response.data);

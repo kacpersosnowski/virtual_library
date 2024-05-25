@@ -3,6 +3,9 @@ import axios from "axios";
 import { UpdateUserDTO, UserData, UsersApi } from "./users.types";
 import { parseUserFormDataForUpdate } from "./users.parsers";
 import { BACKEND_BASE_URL } from "../../../constants/api";
+import bookListsApi from "../bookLists/bookLists";
+import { PagedResponse } from "../common/common.types";
+// import { PagedResponse } from "../common/common.types";
 
 const url = "/users";
 const languageUrl = `${url}/language`;
@@ -13,6 +16,22 @@ export const usersApi: UsersApi = {
   getUserData: async () => {
     const response = await axios.get<UserData>(meUrl);
     return response.data;
+  },
+  getUsers: async (params) => {
+    const response = await axios.get<PagedResponse<UserData>>(url, { params });
+    const me = await usersApi.getUserData();
+    const id = me.id;
+    return {
+      totalElements: response.data.totalElements,
+      content: response.data.content.filter((user) => user.id !== id),
+    };
+  },
+  getUserDetails: async (id) => {
+    const bookLists = await bookListsApi.getUserBookLists(id);
+    const response = await axios.get<UserData>(`${url}/${id}`);
+    const user = response.data;
+    user.bookLists = bookLists;
+    return user;
   },
   changeUserLanguage: async (language: string) => {
     const user = await usersApi.getUserData();

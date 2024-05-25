@@ -10,6 +10,7 @@ import ActionButton from "../UI/ActionButton";
 
 type Props = {
   lists: BookListDTO[];
+  readonlyMode?: boolean;
 };
 
 const UserBookLists: React.FC<Props> = (props) => {
@@ -32,12 +33,12 @@ const UserBookLists: React.FC<Props> = (props) => {
                 <UserBookListHeader
                   text={bookList.name}
                   listId={bookList.id}
-                  sx={{ pt: 0 }}
-                  isEditable={index !== 0}
+                  sx={{ pt: 0, mt: props.readonlyMode && "2rem" }}
+                  isEditable={props.readonlyMode ? false : index !== 0}
                 />
               }
               listSx={{ mb: 0 }}
-              displayFooter
+              displayFooter={!props.readonlyMode}
               footerText={t(bookListsMessages.manageBooksButton.key)}
               footerButtonSx={{
                 zIndex: 10,
@@ -55,7 +56,7 @@ const UserBookLists: React.FC<Props> = (props) => {
               text={bookList.name}
               listId={bookList.id}
               sx={{ pt: 0 }}
-              isEditable={index !== 0}
+              isEditable={props.readonlyMode ? false : index !== 0}
             />
             <Box>
               <Typography variant="h5" sx={{ mt: "1rem" }}>

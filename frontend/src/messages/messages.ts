@@ -7,6 +7,7 @@ import mainPageMessages from "./mainPageMessages";
 import validationMessages from "./validationMessages";
 import profileMessages from "./profileMessages";
 import bookListsMessages from "./bookListsMessages";
+import usersMessages from "./usersMessages";
 
 const messages = [
   mainPageMessages,
@@ -18,6 +19,7 @@ const messages = [
   commonMessages,
   profileMessages,
   bookListsMessages,
+  usersMessages,
 ];
 
 export default messages;

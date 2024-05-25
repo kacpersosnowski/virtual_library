@@ -36,6 +36,7 @@ export type CreateBookListDTO = {
 
 export type BookListsApi = {
   getAllBookLists: () => Promise<BookListDTO[]>;
+  getUserBookLists: (userId: string) => Promise<BookListDTO[]>;
   getBookList: (id: string) => Promise<BookListDTO>;
   changeBookListName: (data: UpdateBookListNameData) => Promise<void>;
   addBookToList: (data: AddRemoveBookFromListData) => Promise<BookList>;
