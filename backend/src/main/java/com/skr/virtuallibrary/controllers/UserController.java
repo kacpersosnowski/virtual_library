@@ -19,11 +19,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -54,7 +52,7 @@ public class UserController {
     }
 
     @GetMapping
-    @Operation(summary = "Search users.")
+    @Operation(summary = "Get and search for users.")
     public PagedResponse<SearchedUserDto> searchUsers(
             @PathParam("searchPhrase") String searchPhrase,
             @PathParam("page") Integer page
@@ -66,7 +64,11 @@ public class UserController {
             }
             return userService.searchUsers(decodedSearch);
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No search phrase");
+
+        if (page != null) {
+            return userService.findAllUsers(page);
+        }
+        return userService.findAllUsers();
     }
 
     @PutMapping

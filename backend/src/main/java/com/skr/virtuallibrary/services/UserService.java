@@ -47,6 +47,8 @@ public class UserService {
 
     public static final String USER_NOT_FOUND_MSG = "User could not be found with id: ";
 
+    public static final String PUBLIC_FIELD = "publicAccount";
+
     private final PasswordEncoder passwordEncoder;
 
     private final EmailService emailService;
@@ -103,6 +105,31 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User could not be found with token: " + token));
     }
 
+    public PagedResponse<SearchedUserDto> findAllUsers() {
+        return new PagedResponse<>(
+                userRepository.findAll().stream()
+                        .filter(User::isPublicAccount)
+                        .map(modelMapper::toSearchedUserDto).toList()
+        );
+    }
+
+    public PagedResponse<SearchedUserDto> findAllUsers(Integer page) {
+        if (page < 0) {
+            throw new IllegalPageNumberException();
+        }
+
+        Pageable pageable = PageRequest.of(page, 10);
+        Query query = new Query().addCriteria(Criteria.where(PUBLIC_FIELD).is(true));
+
+        long totalElements = mongoTemplate.count(query, User.class);
+        List<User> userPage = mongoTemplate.find(query.with(pageable), User.class);
+
+        return new PagedResponse<>(
+                totalElements,
+                userPage.stream().map(modelMapper::toSearchedUserDto).toList()
+        );
+    }
+
     public PagedResponse<SearchedUserDto> searchUsers(String searchPhrase) {
         String[] searchPhrases = searchPhrase.trim().split(" ");
         List<User> users = new ArrayList<>();
@@ -110,7 +137,7 @@ public class UserService {
         for (String phrase : searchPhrases) {
             Query query = new Query().addCriteria(
                     new Criteria().andOperator(
-                            Criteria.where("publicAccount").is(true),
+                            Criteria.where(PUBLIC_FIELD).is(true),
                             new Criteria().orOperator(
                                     Criteria.where("username").regex(phrase, "i"),
                                     Criteria.where("firstName").regex(phrase, "i"),
@@ -136,7 +163,7 @@ public class UserService {
 
         for (int i = 0; i < searchPhrases.length; i++) {
             criteria[i] = new Criteria().andOperator(
-                    Criteria.where("publicAccount").is(true),
+                    Criteria.where(PUBLIC_FIELD).is(true),
                     new Criteria().orOperator(
                             Criteria.where("username").regex(searchPhrases[i], "i"),
                             Criteria.where("firstName").regex(searchPhrases[i], "i"),
