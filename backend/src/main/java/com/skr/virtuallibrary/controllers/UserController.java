@@ -53,14 +53,20 @@ public class UserController {
         return modelMapper.toUserDto(userService.getCurrentUser());
     }
 
+    @GetMapping("/{id}")
+    @Operation(summary = "Get user profile by id.")
+    public SearchedUserDto getUserById(@Parameter @PathVariable String id) {
+        return userService.findById(id);
+    }
+
     @GetMapping
     @Operation(summary = "Search users.")
     public PagedResponse<SearchedUserDto> searchUsers(
-            @PathParam("searchPhrase") String searchPhrase,
+            @PathParam("search") String search,
             @PathParam("page") Integer page
     ) {
-        if (searchPhrase != null && !searchPhrase.isEmpty()) {
-            String decodedSearch = URLDecoder.decode(searchPhrase, StandardCharsets.UTF_8);
+        if (search != null && !search.isEmpty()) {
+            String decodedSearch = URLDecoder.decode(search, StandardCharsets.UTF_8);
             if (page != null) {
                 return userService.searchUsers(decodedSearch, page);
             }
