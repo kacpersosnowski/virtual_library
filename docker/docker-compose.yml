@@ -50,6 +50,7 @@ services:
     container_name: prometheus
     networks:
       - net_backend
+      - net_frontend
     ports:
       - "9090:9090"
     volumes:
