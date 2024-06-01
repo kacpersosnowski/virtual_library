@@ -5,12 +5,12 @@ import { parseUserFormDataForUpdate } from "./users.parsers";
 import { BACKEND_BASE_URL } from "../../../constants/api";
 import bookListsApi from "../bookLists/bookLists";
 import { PagedResponse } from "../common/common.types";
-// import { PagedResponse } from "../common/common.types";
 
 const url = "/users";
 const languageUrl = `${url}/language`;
 const meUrl = `${url}/me`;
 const profilePictureUrl = `/files/image`;
+const deleteProfilePictureUrl = `${url}/profile-picture`;
 
 export const usersApi: UsersApi = {
   getUserData: async () => {
@@ -68,5 +68,8 @@ export const usersApi: UsersApi = {
     const fileName = fileNameResponse.data;
     const imageFile = new File([blob], fileName, { type: blob.type });
     return imageFile;
+  },
+  deleteProfilePicture: async () => {
+    axios.patch(deleteProfilePictureUrl, { profilePictureId: null });
   },
 };

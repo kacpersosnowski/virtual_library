@@ -14,6 +14,7 @@ export const parseUserFormDataForUpdate = (data: UpdateUserDTO) => {
     firstName: data.firstName,
     lastName: data.lastName,
     language: data.language,
+    publicAccount: data.publicAccount,
   };
   formData.append(
     "user",

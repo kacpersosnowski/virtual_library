@@ -60,6 +60,11 @@ const UserDetails = () => {
         >
           <DefaultAvatarOrProfilePicture
             user={user}
+            avatarSx={{
+              width: "14rem",
+              height: "14rem",
+              fontSize: "7rem",
+            }}
             profilePictureSx={{
               width: "14rem",
               height: "14rem",
@@ -72,21 +77,25 @@ const UserDetails = () => {
             <ListItem>
               <ListItemText
                 primary={user.username}
-                secondary={"Nazwa użytkownika"}
+                secondary={t(usersMessages.userDetailsUsernamePrompt.key)}
                 primaryTypographyProps={{ fontSize: "2rem" }}
               />
             </ListItem>
             <ListItem>
               <ListItemText
-                primary={user.firstName || "Brak danych"}
-                secondary={"Imię"}
+                primary={
+                  user.firstName || t(usersMessages.userDetailsNoData.key)
+                }
+                secondary={t(usersMessages.userDetailsFirstNamePrompt.key)}
                 primaryTypographyProps={{ fontSize: "2rem" }}
               />
             </ListItem>
             <ListItem>
               <ListItemText
-                primary={user.lastName || "Brak danych"}
-                secondary={"Nazwisko"}
+                primary={
+                  user.lastName || t(usersMessages.userDetailsNoData.key)
+                }
+                secondary={t(usersMessages.userDetailsLastNamePrompt.key)}
                 primaryTypographyProps={{ fontSize: "2rem" }}
               />
             </ListItem>

@@ -10,6 +10,7 @@ export type UserData = {
   authority: string;
   language: string;
   profilePictureId: string;
+  publicAccount: boolean;
   bookLists?: BookListDTO[];
 };
 
@@ -18,6 +19,7 @@ export type UpdateUserDTO = {
   lastName: string;
   language: string;
   email: string;
+  publicAccount: boolean;
   profilePicture?: File;
 };
 
@@ -28,4 +30,5 @@ export type UsersApi = {
   changeUserLanguage: (language: string) => Promise<UserData>;
   updateUser: (user: UpdateUserDTO) => Promise<UserData>;
   getUserProfilePicture: () => Promise<File>;
+  deleteProfilePicture: () => Promise<void>;
 };

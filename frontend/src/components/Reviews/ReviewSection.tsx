@@ -33,7 +33,7 @@ const ReviewsSection = () => {
           {t(booksMessages.bookReviewsAddFormLogin.key)}
         </ActionButton>
       )}
-      <ReviewsList />
+      {isAuthenticated && <ReviewsList />}
     </Box>
   );
 };

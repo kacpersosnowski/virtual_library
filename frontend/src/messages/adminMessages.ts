@@ -66,6 +66,11 @@ const adminMessages: Message = {
     pl: "Język",
     en: "Language",
   },
+  addBookFormReadAuthenticatedOnly: {
+    key: "admin_panel >> add_book_form >> read_authenticated_only",
+    pl: "Czy czytanie tylko dla zalogowanych",
+    en: "Is reading only for logged-in users",
+  },
   addBookFormCover: {
     key: "admin_panel >> add_book_form >> cover",
     pl: "Okładka:",
@@ -80,6 +85,11 @@ const adminMessages: Message = {
     key: "admin_panel >> add_book_form >> cover_choose_file",
     pl: "Wybierz plik",
     en: "Choose file",
+  },
+  addBookFormContent: {
+    key: "admin_panel >> add_book_form >> content",
+    pl: "Treść:",
+    en: "Book content:",
   },
   addBookFormSubmitButton: {
     key: "admin_panel >> add_book_form >> submit_button",

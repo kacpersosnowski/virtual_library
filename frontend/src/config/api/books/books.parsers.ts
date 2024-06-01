@@ -57,6 +57,7 @@ export const parseBookItemForDetails = (dataItem: Book): ReadBookDTO => {
     },
     cover: `${BACKEND_BASE_URL}/files/image/${dataItem.bookCoverId}`,
     bookContentId: dataItem.bookContentId,
+    readAuthenticatedOnly: dataItem.readAuthenticatedOnly,
   };
 };
 
@@ -73,6 +74,7 @@ export const parseBookFormDataForCreate = (data: CreateBookDTO) => {
     language: data.language,
     rateAverage: data?.rateAverage || 0,
     rateCount: data?.rateCount || 0,
+    readAuthenticatedOnly: data.readAuthenticatedOnly,
   };
   formData.append(
     "book",

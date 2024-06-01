@@ -72,8 +72,8 @@ const RegisterForm = () => {
   }, [isSuccess]);
 
   const errorMessage =
-    error?.response?.status === 409
-      ? t(validationMessages.emailAlreadyExists.key)
+    error?.response?.status === 404
+      ? t(validationMessages.emailUsernameAlreadyExists.key)
       : t(errorMessages.somethingWentWrongError.key);
 
   return (

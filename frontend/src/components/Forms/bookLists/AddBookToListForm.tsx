@@ -264,6 +264,7 @@ const AddBookToListForm: React.FC<Props> = (props) => {
                   listId: props.list.id,
                 });
               }}
+              disabled={booksToAdd.length === 0}
             >
               {t(bookListsMessages.addChosenBooksToListButton.key)}
             </ActionButton>
