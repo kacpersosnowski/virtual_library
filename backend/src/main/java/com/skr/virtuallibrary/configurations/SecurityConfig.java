@@ -63,6 +63,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/files/image/**").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
 
+                                .requestMatchers("/actuator/**").permitAll()
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .requestMatchers("/error").anonymous()
 

@@ -17,6 +17,7 @@ services:
 
   backend:
     build: ../backend
+    container_name: backend
     networks:
       - net_backend
       - net_frontend
@@ -43,6 +44,28 @@ services:
       CHOKIDAR_USEPOLLING: "true"
     depends_on:
       - backend
+
+  prometheus:
+    image: prom/prometheus:v2.44.0
+    container_name: prometheus
+    networks:
+      - net_backend
+      - net_frontend
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus-docker.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:9.5.2
+    container_name: grafana
+    networks:
+      - net_backend
+    ports:
+      - "3001:3000"
+    restart: unless-stopped
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
 
 volumes:
   node_modules:
