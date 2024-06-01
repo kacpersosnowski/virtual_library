@@ -34,7 +34,13 @@ const Checkbox: React.FC<Props> = (props) => {
       }}
     >
       <FormControlLabel
-        control={<MUICheckbox id={props.id} {...formik.getFieldProps(id)} />}
+        control={
+          <MUICheckbox
+            id={props.id}
+            {...formik.getFieldProps(id)}
+            checked={formik.values[id]}
+          />
+        }
         label={label}
       />
       {errorMessage && (

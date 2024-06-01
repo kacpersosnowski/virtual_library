@@ -56,6 +56,26 @@ const usersMessages: Message = {
     pl: "Profil użytkownika",
     en: "User's profile",
   },
+  userDetailsUsernamePrompt: {
+    key: "users_profile >> username_prompt",
+    pl: "Nazwa użytkownika",
+    en: "Username",
+  },
+  userDetailsFirstNamePrompt: {
+    key: "users_profile >> first_name_prompt",
+    pl: "Imię",
+    en: "First name",
+  },
+  userDetailsLastNamePrompt: {
+    key: "users_profile >> last_name_prompt",
+    pl: "Nazwisko",
+    en: "Last name",
+  },
+  userDetailsNoData: {
+    key: "users_profile >> no_data",
+    pl: "Brak danych",
+    en: "No data",
+  },
   userDetailsProfileListsHeader: {
     key: "users_profile >> lists >> header",
     pl: "Listy użytkownika",

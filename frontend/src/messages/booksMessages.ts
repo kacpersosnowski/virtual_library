@@ -31,6 +31,11 @@ const booksMessages: Message = {
     pl: "Czytaj",
     en: "Read",
   },
+  readBookAccess: {
+    key: "books >> book_details >> read_access",
+    pl: "Dostęp do czytania tylko dla zalogowanych użytkowników",
+    en: "Access to reading only for logged-in users",
+  },
   saveBookOnList: {
     key: "books >> book_details >> save_on_list",
     pl: "Zapisz",

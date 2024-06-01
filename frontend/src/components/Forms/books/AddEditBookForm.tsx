@@ -30,6 +30,7 @@ import { Author } from "../../../config/api/authors/authors.types";
 import { Genre } from "../../../config/api/genres/genres.types";
 import AddGenrePopover from "../genres/AddGenrePopover";
 import { LANGUAGES } from "../../../constants/languages";
+import Checkbox from "../common/Checkbox";
 
 type Props = {
   initialValues?: CreateBookDTO;
@@ -40,7 +41,8 @@ const AddEditBookForm: React.FC<Props> = (props) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const filePickerRef = useRef(null);
+  const coverPickerRef = useRef(null);
+  const contentPickerRef = useRef(null);
 
   const {
     data: authors,
@@ -69,7 +71,8 @@ const AddEditBookForm: React.FC<Props> = (props) => {
         snackbarActions.show(t(adminMessages.addBookFormSuccessMessage.key)),
       );
       formik.handleReset(null);
-      filePickerRef.current.resetPreview();
+      coverPickerRef.current.resetPreview();
+      contentPickerRef.current.resetPreview();
     },
   });
   const {
@@ -96,6 +99,7 @@ const AddEditBookForm: React.FC<Props> = (props) => {
       language: "PL",
       cover: null,
       content: null,
+      readAuthenticatedOnly: false,
     } as CreateBookDTO);
 
   const formik = useFormikLanguage({
@@ -254,18 +258,25 @@ const AddEditBookForm: React.FC<Props> = (props) => {
         formik={formik}
         items={languagesToChoose}
       />
+      <Checkbox
+        id="readAuthenticatedOnly"
+        label={t(adminMessages.addBookFormReadAuthenticatedOnly.key)}
+        formik={formik}
+        sx={{ width: "auto" }}
+      />
       <FilePicker
         id="cover"
         title={t(adminMessages.addBookFormCover.key)}
         formik={formik}
         previewEnabled
-        ref={filePickerRef}
+        ref={coverPickerRef}
       />
       <FilePicker
         id="content"
-        title="Treść:"
+        title={t(adminMessages.addBookFormContent.key)}
         formik={formik}
         acceptedFormats="application/pdf"
+        ref={contentPickerRef}
       />
       {(isCreatingLoading || isUpdatingLoading) && <LoadingSpinner />}
       {!isCreatingLoading && !isUpdatingLoading && (

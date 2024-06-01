@@ -36,6 +36,7 @@ const FilePicker = React.forwardRef((props: Props, ref) => {
       return {
         resetPreview() {
           setPreviewImage(null);
+          setSelectedFile(null);
         },
       };
     },

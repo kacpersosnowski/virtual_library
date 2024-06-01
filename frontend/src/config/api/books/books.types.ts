@@ -19,6 +19,7 @@ export type Book = {
   rateCount: number;
   bookCoverId: string;
   bookContentId: string;
+  readAuthenticatedOnly: boolean;
 };
 
 export type BookItemData = {
@@ -41,6 +42,7 @@ export type ReadBookDTO = {
   cover: string;
   bookContentId: string;
   rating: BookRating;
+  readAuthenticatedOnly: boolean;
 };
 
 export type CreateBookDTO = {
@@ -54,6 +56,7 @@ export type CreateBookDTO = {
   rateCount?: number;
   cover: File;
   content: File;
+  readAuthenticatedOnly: boolean;
 };
 
 export type UpdateBookData = {

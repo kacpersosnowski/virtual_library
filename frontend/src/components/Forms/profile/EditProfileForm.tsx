@@ -17,6 +17,7 @@ import ErrorMessage from "../../UI/ErrorMessage";
 import errorMessages from "../../../messages/errorMessages";
 import { snackbarActions } from "../../../store/redux/slices/snackbar-slice";
 import { queryClient } from "../../../config/api";
+import Checkbox from "../common/Checkbox";
 
 type Props = {
   user: UserData;
@@ -40,6 +41,13 @@ const EditProfileForm: React.FC<Props> = (props) => {
       queryClient.invalidateQueries(["user"]);
     },
   });
+  const {
+    mutate: deleteProfilePicture,
+    isLoading: isDeletingLoading,
+    isError: isDeletingError,
+  } = useMutation({
+    mutationFn: usersApi.deleteProfilePicture,
+  });
 
   const { user, profilePictureFile } = props;
 
@@ -50,6 +58,7 @@ const EditProfileForm: React.FC<Props> = (props) => {
       email: user.email,
       firstName: user.firstName || "",
       lastName: user.lastName || "",
+      publicAccount: user.publicAccount,
     },
     validationSchema: Yup.object({
       username: Yup.string().required(t(validationMessages.fieldRequired.key)),
@@ -60,9 +69,13 @@ const EditProfileForm: React.FC<Props> = (props) => {
         firstName: values.firstName,
         lastName: values.lastName,
         language: user.language,
+        publicAccount: values.publicAccount,
         profilePicture: values.profilePicture,
       };
       updateUser(userData);
+      if (!userData.profilePicture) {
+        deleteProfilePicture();
+      }
     },
   });
 
@@ -118,15 +131,21 @@ const EditProfileForm: React.FC<Props> = (props) => {
             formik={formik}
             sx={{ width: { xs: "100%", md: "80%" } }}
           />
+          <Checkbox
+            id="publicAccount"
+            label={t(profileMessages.profileFormPublicAccount.key)}
+            formik={formik}
+            sx={{ width: "auto" }}
+          />
         </Box>
       </Box>
-      {isLoading && <LoadingSpinner />}
-      {!isLoading && (
+      {(isLoading || isDeletingLoading) && <LoadingSpinner />}
+      {!isLoading && !isDeletingLoading && (
         <ActionButton type="submit" sx={{ mt: "1.5rem" }}>
           {t(profileMessages.profileFormSubmitButton.key)}
         </ActionButton>
       )}
-      {isError && (
+      {(isError || isDeletingError) && (
         <ErrorMessage message={t(errorMessages.somethingWentWrongError.key)} />
       )}
     </Box>

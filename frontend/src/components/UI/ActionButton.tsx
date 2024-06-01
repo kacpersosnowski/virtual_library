@@ -8,6 +8,7 @@ type Props = {
   type?: "submit" | "reset" | "button";
   variant?: "contained" | "outlined";
   color?: "primary" | "secondary" | "error";
+  disabled?: boolean;
   scaleOnHover?: number;
   onClick?: () => void;
 };
@@ -19,6 +20,7 @@ const ActionButton: React.FC<PropsWithChildren<Props>> = (props) => {
       type={props.type}
       variant={props.variant || "contained"}
       color={props.color || "secondary"}
+      disabled={props.disabled ? props.disabled : false}
       component={motion.button}
       whileHover={{
         scale: props.scaleOnHover || 1.1,

@@ -31,6 +31,11 @@ const profileMessages: Message = {
     pl: "Nazwisko",
     en: "Last name",
   },
+  profileFormPublicAccount: {
+    key: "profile >> form >> public_account",
+    pl: "Czy konto publiczne",
+    en: "Is public account",
+  },
   profileFormPictureButton: {
     key: "profile >> form >> picture_button",
     pl: "Wybierz zdjęcie",

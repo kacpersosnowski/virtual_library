@@ -48,6 +48,7 @@ const BookForm = () => {
       rateAverage: book.rateAverage,
       cover: bookCoverFile,
       content: bookContentFile,
+      readAuthenticatedOnly: book.readAuthenticatedOnly,
     };
   }
 

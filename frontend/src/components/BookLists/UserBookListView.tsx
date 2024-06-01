@@ -190,6 +190,7 @@ const UserBookListView: React.FC<Props> = (props) => {
                   ? () => setIsDeleteDialogOpen(true)
                   : null
               }
+              disabled={booksToDelete?.length === 0}
             >
               {t(bookListsMessages.removeChosenBooksButton.key)}
             </ActionButton>
