@@ -61,6 +61,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/authors/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/genres/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/files/image/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/files/content/**").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
 
                                 .requestMatchers("/actuator/**").permitAll()
