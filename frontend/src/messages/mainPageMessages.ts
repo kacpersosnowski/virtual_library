@@ -8,13 +8,13 @@ const mainPageMessages: Message = {
   },
   bannerHeader: {
     key: "main_page >> banner >> header",
-    pl: "Witaj!",
-    en: "Hello!",
+    pl: "Odkryj Świat E-Booków z Nami!",
+    en: "Discover the World of E-Books with Us!",
   },
   bannerText: {
     key: "main_page >> banner >> text",
-    pl: "(Polski) Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam varius, odio et bibendum dapibus, eros enim consectetur lectus, ac consequat diam augue nec velit. Aenean tellus tortor, aliquam quis tellus et, malesuada elementum dui. Aliquam gravida est sed auctor suscipit. Nulla id molestie sapien. Donec mattis pulvinar bibendum. Vivamus a consectetur nisi. In et diam a turpis lobortis pharetra. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;",
-    en: "(English) Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam varius, odio et bibendum dapibus, eros enim consectetur lectus, ac consequat diam augue nec velit. Aenean tellus tortor, aliquam quis tellus et, malesuada elementum dui. Aliquam gravida est sed auctor suscipit. Nulla id molestie sapien. Donec mattis pulvinar bibendum. Vivamus a consectetur nisi. In et diam a turpis lobortis pharetra. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;",
+    pl: "Wejdź do naszej biblioteki pełnej fascynujących e-booków i zacznij czytać od razu! Niezależnie od tego, czy jesteś miłośnikiem powieści, literatury faktu, czy książek specjalistycznych, znajdziesz tu coś dla siebie. Nasza strona oferuje szeroki wybór tytułów – od bestsellerów po klasyki literatury – oraz intuicyjny interfejs, który pozwala szybko znaleźć interesujące Cię książki. Nasze e-booki są dostępne na wszystkich urządzeniach, więc możesz czytać w domu, w podróży, gdzie tylko chcesz. Dołącz do naszej społeczności i odkryj radość z czytania na nowo! 🌟📚",
+    en: "Step into our library full of fascinating e-books and start reading right away! Whether you're a fan of novels, non-fiction, or specialist literature, you'll find something for yourself here. Our site offers a wide selection of titles – from bestsellers to literary classics – and an intuitive interface that lets you quickly find the books you're interested in. Our e-books are available on all devices, so you can read at home, on the go, wherever you want. Join our community and rediscover the joy of reading! 🌟📚",
   },
   buttonsLogin: {
     key: "main_page >> buttons >> login",
