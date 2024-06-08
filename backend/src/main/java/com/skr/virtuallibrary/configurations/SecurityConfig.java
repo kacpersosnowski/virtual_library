@@ -43,7 +43,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/users/me").authenticated()
                                 .requestMatchers(HttpMethod.PATCH, "/users/**").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/users").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/users").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/users/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/users/reset-password").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/users/finalize-password-reset").permitAll()
 
