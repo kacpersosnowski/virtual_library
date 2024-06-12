@@ -1,7 +1,7 @@
 import { Button, Theme } from "@mui/material";
 import { SxProps } from "@mui/system";
 import { motion } from "framer-motion";
-import { PropsWithChildren } from "react";
+import { ReactNode, PropsWithChildren } from "react";
 
 type Props = {
   sx?: SxProps<Theme>;
@@ -10,6 +10,7 @@ type Props = {
   color?: "primary" | "secondary" | "error";
   disabled?: boolean;
   scaleOnHover?: number;
+  startIcon?: ReactNode;
   onClick?: () => void;
 };
 
@@ -21,6 +22,7 @@ const ActionButton: React.FC<PropsWithChildren<Props>> = (props) => {
       variant={props.variant || "contained"}
       color={props.color || "secondary"}
       disabled={props.disabled ? props.disabled : false}
+      startIcon={props.startIcon}
       component={motion.button}
       whileHover={{
         scale: props.scaleOnHover || 1.1,
