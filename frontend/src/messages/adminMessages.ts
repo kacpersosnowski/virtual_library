@@ -6,6 +6,31 @@ const adminMessages: Message = {
     pl: "Panel admina",
     en: "Admin panel",
   },
+  welcomeHeader: {
+    key: "admin_panel >> home >> welcome_header",
+    pl: "Witaj w Panelu Administratora!",
+    en: "Welcome to the Admin Panel!",
+  },
+  statisticsBooks: {
+    key: "admin_panel >> home >> statistics_books",
+    pl: "Książki",
+    en: "Books",
+  },
+  statisticsAuthors: {
+    key: "admin_panel >> home >> statistics_authors",
+    pl: "Autorzy",
+    en: "Authors",
+  },
+  statisticsGenres: {
+    key: "admin_panel >> home >> statistics_genres",
+    pl: "Gatunki",
+    en: "Genres",
+  },
+  externalStatisticsButton: {
+    key: "admin_panel >> home >> external_statistics_button",
+    pl: "Zobacz dokładniejsze statystyki",
+    en: "View detailed statistics",
+  },
   homeTab: {
     key: "admin_panel >> tab >> home",
     pl: "Strona główna",

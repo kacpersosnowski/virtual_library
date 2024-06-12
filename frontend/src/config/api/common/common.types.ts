@@ -12,3 +12,13 @@ export type BookRating = {
   rateCount: number;
   rateAverage: number;
 };
+
+export type Statistics = {
+  booksCount: number;
+  authorsCount: number;
+  genresCount: number;
+};
+
+export type CommonApi = {
+  getStatistics: () => Promise<Statistics>;
+};
